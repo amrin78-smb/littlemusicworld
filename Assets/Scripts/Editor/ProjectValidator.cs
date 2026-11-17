@@ -40,6 +40,24 @@ namespace LittleMusicWorld.EditorTools
                 if (AssetDatabase.LoadAssetAtPath<SceneAsset>(s.path) == null) Fail("build scene missing: " + s.path);
             if (EditorBuildSettings.scenes.Length == 0) Fail("no scenes in build settings");
 
+            // Every serialisable component must live in a file of the same name, or Unity cannot map scene data to it
+            // in the player ("level1 is corrupted! Position out of bounds" crash, 2026-11-18). Runtime-only classes
+            // (added with AddComponent and never saved) are listed explicitly.
+            var runtimeOnly = new System.Collections.Generic.HashSet<string> { "MiniGame", "RhythmMatchGame", "SoundDetectiveGame",
+                "FollowBeatGame", "MemoryGame", "HighLowGame", "WhoIsPlayingGame", "MelodyBuilderGame" };
+            var scripts = new System.Collections.Generic.HashSet<System.Type>();
+            foreach (string guid in AssetDatabase.FindAssets("t:MonoScript", new[] { "Assets/Scripts" }))
+            {
+                var ms = AssetDatabase.LoadAssetAtPath<MonoScript>(AssetDatabase.GUIDToAssetPath(guid));
+                if (ms != null && ms.GetClass() != null) scripts.Add(ms.GetClass());
+            }
+            foreach (System.Type t in typeof(LittleMusicWorld.Audio.MusicalAudioEngine).Assembly.GetTypes())
+            {
+                bool serialisable = typeof(MonoBehaviour).IsAssignableFrom(t) || typeof(ScriptableObject).IsAssignableFrom(t);
+                if (!serialisable || t.IsNested || runtimeOnly.Contains(t.Name)) continue;
+                if (!scripts.Contains(t)) Fail($"{t.FullName} is not in a file named {t.Name}.cs (scenes using it break in builds)");
+            }
+
             Debug.Log($"[LMW Validate] {(errors == 0 ? "OK" : errors + " problem(s)")}");
             return errors == 0;
         }

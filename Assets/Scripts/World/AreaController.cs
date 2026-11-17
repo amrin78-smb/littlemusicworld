@@ -12,17 +12,6 @@ using UnityEngine.UI;
 
 namespace LittleMusicWorld.World
 {
-    /// <summary>An instrument placed in an area. Tap it to play it; the camera moves to <see cref="view"/>.</summary>
-    public sealed class InstrumentStation : MonoBehaviour
-    {
-        public string instrumentId;
-        public Transform view;          // camera pose while playing this instrument
-        public InstrumentModel3D model;
-        public Transform bounce;        // bobs gently to invite a tap until discovered
-
-        public InstrumentDefinition Definition => Services.Instruments?.Get(instrumentId);
-    }
-
     /// <summary>
     /// Area flow shared by Piano Paradise, Drum Valley, String Town and Wind Village:
     /// overview (Melo introduces the area, instruments bob to invite a tap) → tap an instrument → the camera glides to
@@ -77,6 +66,14 @@ namespace LittleMusicWorld.World
             }
             Services.Discover(Services.Save?.Data.progress.visitedAreas, areaId);
             Invoke(nameof(Intro), 0.5f);
+            string st = DeviceArgs.Get("lmw_station");
+            if (int.TryParse(st, out int si) && si >= 0 && si < stations.Length) StartCoroutine(EnterLater(stations[si]));
+        }
+
+        private System.Collections.IEnumerator EnterLater(InstrumentStation s)
+        {
+            yield return new WaitForSeconds(2.5f);
+            Enter(s);
         }
 
         private void Intro()

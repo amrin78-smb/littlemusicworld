@@ -80,8 +80,7 @@ namespace LittleMusicWorld.Gameplay
             UpdateSongCard();
             Services.Discover(Services.Save?.Data.progress.visitedAreas, SceneFlow.OrchestraPark);
             // Start with two friends on stage so pressing Play immediately makes music.
-            ToggleSeat(0);
-            ToggleSeat(1);
+            for (int i = 0; i < Mathf.Min(2, seats.Length); i++) ToggleSeat(i);
             Invoke(nameof(Intro), 0.4f);
         }
 
@@ -124,7 +123,7 @@ namespace LittleMusicWorld.Gameplay
 
         private void ToggleSeat(int i)
         {
-            if (Playing) return;
+            if (Playing || i < 0 || i >= seats.Length) return;
             Seat s = seats[i];
             MusicianController m = s.musician;
             if (!Unlocked(m))

@@ -76,7 +76,7 @@ namespace LittleMusicWorld.EditorTools
             PlayerSettings.SplashScreen.animationMode = PlayerSettings.SplashScreen.AnimationMode.Dolly;
             PlayerSettings.SplashScreen.drawMode = PlayerSettings.SplashScreen.DrawMode.AllSequential;
             PlayerSettings.SplashScreen.overlayOpacity = 0f;
-            var logo = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Branding/Splash_Logo.png");
+            var logo = WorldBuilder.LoadSprite("Assets/Art/Branding/Splash_Logo.png");
             if (logo != null)
             {
                 PlayerSettings.SplashScreen.logos = new[]

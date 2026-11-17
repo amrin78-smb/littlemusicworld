@@ -7,6 +7,7 @@ if [ ! -f "Assets/TextMesh Pro/Resources/TMP Settings.asset" ]; then
   PKG=$(ls Library/PackageCache/com.unity.ugui@*/"Package Resources/TMP Essential Resources.unitypackage" 2>/dev/null | head -1)
   [ -n "$PKG" ] && python3 -I Tools/extract_unitypackage.py "$PKG" .
 fi
+Tools/sync_art.sh
 mkdir -p Assets/Resources/Voice && cp Tools/voice/voice_lines.json Assets/Resources/Voice/voice_lines.json
 Tools/unity_batch.sh LittleMusicWorld.EditorTools.ProjectSetup.RunBatch setup
 code=$?

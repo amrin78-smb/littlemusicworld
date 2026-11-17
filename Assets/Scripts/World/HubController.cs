@@ -6,18 +6,6 @@ using UnityEngine.InputSystem;
 
 namespace LittleMusicWorld.World
 {
-    /// <summary>An entrance to a musical area. Tapping it (or walking into it) sends Melo there and loads the area.</summary>
-    public sealed class AreaPortal : MonoBehaviour
-    {
-        public string sceneName;
-        public string voiceKey;
-        public Transform approach;   // where Melo stops before entering
-        public bool open = true;
-        public Color tint = Color.white;
-
-        public Vector3 ApproachPoint => approach != null ? approach.position : transform.position;
-    }
-
     /// <summary>
     /// Hub navigation for small children: tap anywhere on the ground and Melo walks there; tap an area gate and Melo
     /// walks to it, announces the area and the area loads. Drags never trigger movement (so a child exploring the
@@ -36,6 +24,8 @@ namespace LittleMusicWorld.World
         private float downTime;
         private bool pressing;
         private AreaPortal pending;
+        private readonly System.Collections.Generic.Queue<Vector3> route = new System.Collections.Generic.Queue<Vector3>();
+        private const float BandstandRadius = 3.3f;
         private Vector3 camVel;
 
         private void Start()
@@ -116,7 +106,8 @@ namespace LittleMusicWorld.World
                 Vector3 flat = new Vector3(target.x, 0f, target.z);
                 if (flat.magnitude > walkRadius) flat = flat.normalized * walkRadius;
                 pending = null;
-                melo.WalkTo(flat);
+                if (flat.magnitude < BandstandRadius) flat = flat.normalized * BandstandRadius;
+                Route(flat);
                 ShowMarker(flat);
                 UI.UISound.Plink(79, 50);
             }
@@ -131,13 +122,33 @@ namespace LittleMusicWorld.World
                 return;
             }
             pending = portal;
-            melo.WalkTo(portal.ApproachPoint);
+            Route(portal.ApproachPoint);
             ShowMarker(portal.ApproachPoint);
             UI.UISound.Plink(84, 70);
         }
 
+        /// <summary>Walks around the bandstand: if the straight line crosses it, go via a point on its rim.</summary>
+        private void Route(Vector3 to)
+        {
+            route.Clear();
+            Vector3 from = melo.transform.position;
+            Vector3 a = new Vector3(from.x, 0, from.z), b = new Vector3(to.x, 0, to.z);
+            Vector3 ab = b - a;
+            float t = ab.sqrMagnitude > 0.001f ? Mathf.Clamp01(Vector3.Dot(-a, ab) / ab.sqrMagnitude) : 0f;
+            Vector3 closest = a + ab * t;
+            if (closest.magnitude < BandstandRadius && t > 0f && t < 1f)
+            {
+                Vector3 side = closest.sqrMagnitude > 0.01f ? closest.normalized : Vector3.Cross(ab, Vector3.up).normalized;
+                Vector3 via = side * (BandstandRadius + 0.6f);
+                route.Enqueue(new Vector3(via.x, to.y, via.z));
+            }
+            route.Enqueue(to);
+            melo.WalkTo(route.Dequeue());
+        }
+
         private void OnArrived()
         {
+            if (route.Count > 0) { melo.WalkTo(route.Dequeue()); return; }
             if (pending == null) return;
             AreaPortal p = pending;
             pending = null;

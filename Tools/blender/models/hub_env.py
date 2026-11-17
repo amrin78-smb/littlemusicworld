@@ -25,7 +25,7 @@ stone_dark = M.get("stone_dark", "#E8D2B0", rough=0.85)
 white = M.get("white", "#FFFBF3", rough=0.45)
 gold = M.get("gold", "#F2C14E", rough=0.3)
 coral = M.get("coral", "#FF6F5B", rough=0.5)
-roof = M.get("roof", "#FFFBF3", rough=0.5, kind="stripes", a="#FF6F5B", b="#FFF4E0", scale=5.0)
+roof = M.get("roof", "#FF7A65", rough=0.45, kind="plain")
 ink = M.get("ink", "#2E2A4A", rough=0.35)
 ivory = M.get("ivory", "#FFFBF3", rough=0.35)
 wood = M.get("wood", "#C68B59", rough=0.6, kind="wood", a="#D9A06B", b="#A8683E", scale=6.0)
@@ -49,7 +49,7 @@ def model(name):
 # ------------------------------------------------------------------ Bandstand (landmark)
 bs = model("Bandstand")
 bs.add(L.cyl("Base", 2.55, 0.42, (0, 0.21, 0), axis="y", segs=48, bevel=0.06), "Body", "P", stone)
-bs.add(L.cyl("BaseTrim", 2.6, 0.08, (0, 0.38, 0), axis="y", segs=48, bevel=0.03), "Body", "P", gold)
+bs.add(L.tube_arc("BaseTrim", 2.57, 0.05, (0, 0.38, 0), 0, 360, segs=64, ring=8, euler=(90, 0, 0)), "Body", "P", gold)
 for i in range(3):  # front steps
     bs.add(L.rbox(f"Step{i}", (1.6, 0.14, 0.35), (0, 0.07 + i * 0.14 - 0.0, -2.75 + i * 0.22), 0.05), "Body", "P", stone_dark)
 cols = 8

@@ -19,7 +19,7 @@ import numpy as np
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 MODEL_DIR = REPO + "/Blender/Exports"
-TEX_DIR = REPO + "/Assets/Art/Textures"
+TEX_DIR = REPO + "/Blender/Exports/Art/Textures"
 LOG_DIR = REPO + "/Logs/Blender"
 RENDER_DIR = REPO + "/Blender/Renders"
 SOURCE_DIR = REPO + "/Blender/SourceModels"
@@ -989,7 +989,10 @@ def circle(radius, segs=10, cx=0.0, cy=0.0):
 # ================================================================================================================
 # Little Music World additions: outline extrusion, pivots, FBX export with baked atlas, LODs, preview renders.
 # ================================================================================================================
-ART_DIR = REPO + "/Assets/Art"
+# Exports are STAGED here and copied into Assets/ by Tools/sync_art.sh (run by setup.sh), so Blender never writes
+# into the Unity project while Unity is importing or building (that corrupted a build once).
+STAGE = REPO + "/Blender/Exports"
+ART_DIR = STAGE + "/Art"
 
 
 def catmull(points, steps=6, closed=True):

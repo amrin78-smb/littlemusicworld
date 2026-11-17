@@ -160,7 +160,7 @@ namespace LittleMusicWorld.EditorTools
             Scene s = SceneBuilder.NewScene();
             Camera cam = World("#FFE0D6", "#FFEDE6", new Vector3(0, 3.0f, -8.2f), new Vector3(0, 0.9f, 0.6f), 40f);
             Place("Hub/Plaza", new Vector3(0, 0, 0.8f), 0, 0.72f);
-            GameObject shell = Place("Hub/GateOrchestra", new Vector3(0, 0, 3.6f), 0, 1.45f) ?? Place("Hub/Bandstand", new Vector3(0, 0, 5.5f), 0, 1f);
+            GameObject shell = Place("Hub/GateOrchestra", new Vector3(0, 0, 4.4f), 0, 1.05f) ?? Place("Hub/Bandstand", new Vector3(0, 0, 5.5f), 0, 1f);
             Place("Hub/LampNote", new Vector3(-5.2f, 0.12f, 1.5f), 90f);
             Place("Hub/LampNote", new Vector3(5.2f, 0.12f, 1.5f), -90f);
             Place("Hub/FlowerBed", new Vector3(-4.2f, 0.12f, -1.6f));

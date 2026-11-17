@@ -25,8 +25,8 @@ import lmw_blender as L  # noqa: E402
 
 REPO = L.REPO
 FONT = REPO + "/Assets/Art/UI/Fonts/Fredoka-SemiBold.ttf"
-BRAND = REPO + "/Assets/Art/Branding"
-RES = REPO + "/Assets/Resources/Brand"
+BRAND = L.STAGE + "/Art/Branding"
+RES = L.STAGE + "/Resources/Brand"
 os.makedirs(BRAND, exist_ok=True)
 os.makedirs(RES, exist_ok=True)
 PITCH = ["#FF5A5F", "#FFA62B", "#FFE156", "#8BD346", "#2EC4B6", "#5B7CFA", "#D46CE0"]

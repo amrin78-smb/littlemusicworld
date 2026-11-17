@@ -19,6 +19,7 @@ Tools/blender/build_assets.sh [GrandPiano Melo HubEnv …] [--preview]
 | Animation | scripted clips sampled at 30 fps from pose functions (Idle, Walk, Wave, Dance, Celebrate, Sing, Talk, Sleep, Point, React) |
 | LOD | decimated `_LOD1` copies for large props (trees, bandstand) → Unity LODGroup |
 | Export | FBX, `axis_forward=Z, axis_up=Y` (verified with the `AxisTest` model), all actions baked |
+| Staging | exports go to `Blender/Exports/{Art,Resources}`; `Tools/sync_art.sh` (run by `setup.sh`) copies changed files into `Assets/` — Blender never writes into the project while Unity imports/builds |
 | Source | `Blender/SourceModels/<name>.blend` |
 | Review | `Blender/Renders/<name>_*.png` (Cycles previews) and `Tools/shots.sh` (Unity scene renders) |
 

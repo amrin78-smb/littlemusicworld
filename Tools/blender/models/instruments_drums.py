@@ -56,12 +56,12 @@ def drum(m, node, r, depth, centre, axis, shell, hoop=chrome, lugs=6):
 
 
 def stand(m, node, x, z, height, legs=3, top=None):
-    m.add(L.cyl(f"{node}Pole", 0.014, height, (x, height / 2, z), axis="y", segs=10, bevel=0.004), node, "P", chrome)
+    m.add(L.cyl(f"{node}Pole", 0.014, height, (x, height / 2, z), axis="y", segs=10, bevel=0.004), "Body", "P", chrome)
     for i in range(legs):
         a = i / legs * math.tau + 0.3
         ex, ez = x + math.cos(a) * 0.22, z + math.sin(a) * 0.22
-        m.add(L.sweep(f"{node}Leg{i}", [(x, 0.28, z), (ex, 0.01, ez)], L.circle(0.01, 6)), node, "P", chrome)
-        m.add(L.sphere(f"{node}Foot{i}", 0.018, (ex, 0.012, ez), segs=8, rings=5), node, "P", ink)
+        m.add(L.sweep(f"{node}Leg{i}", [(x, 0.28, z), (ex, 0.01, ez)], L.circle(0.01, 6)), "Body", "P", chrome)
+        m.add(L.sphere(f"{node}Foot{i}", 0.018, (ex, 0.012, ez), segs=8, rings=5), "Body", "P", ink)
 
 
 def cymbal(m, node, r, centre, tilt=10):

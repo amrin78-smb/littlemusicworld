@@ -4,7 +4,7 @@ Newest first. Each milestone lists features, assets, systems, tools, tests (actu
 
 ---
 
-## Milestone 1 — Vertical slice (in progress, 2026-11-18)
+## Milestone 1 — Vertical slice (complete, 2026-11-18)
 
 ### Built so far
 - **Audio engine** (`MusicalAudioEngine`): sampler with lock-free command ring, sample-accurate scheduling anchored
@@ -46,6 +46,16 @@ Newest first. Each milestone lists features, assets, systems, tools, tests (actu
   needing guard samples, vibrato loops cancelling under long crossfades.
 - Keyboard did not span 20:9 screens → stretched to screen width.
 - Blender: outline inset sign, lid prop, Melo belly/face patches (per-face → procedural smooth mask).
+
+### Device verification (S23 Ultra, release APK)
+- Launch → Unity Personal splash (sky blue) → branded Boot → Main Menu renders (logo, Melo, bandstand, Play).
+- Piano Paradise: grand piano framed above the 15-key multi-touch keyboard; Back/Songs/parent gear present.
+- Installed launcher icon is the custom Melo icon (App info), "No permissions required", "No data used".
+- Two launch crashes found and fixed during verification:
+  1. a build made while Blender wrote into `Assets/` → exports are now staged in `Blender/Exports` and synced by setup;
+  2. "level1 is corrupted! Position out of bounds": MonoBehaviours declared in files with other names
+     (e.g. `MainMenuController` in `MenuUI.cs`) cannot be deserialised by the player → one class per file, and the
+     validator now fails the setup if this ever happens again.
 
 ### Open
 - Redmi A3 measurements need the owner's device.

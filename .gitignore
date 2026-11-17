@@ -25,3 +25,4 @@ Tools/.venv/
 # Blender autosaves / backups
 *.blend1
 *.blend2
+/Blender/Exports/

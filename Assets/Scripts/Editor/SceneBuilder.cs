@@ -49,6 +49,7 @@ namespace LittleMusicWorld.EditorTools
             skin.iconListen = UISprites.Get("IconListen"); skin.iconCheck = UISprites.Get("IconCheck"); skin.iconTrash = UISprites.Get("IconTrash");
             skin.iconUp = UISprites.Get("IconUp"); skin.iconDown = UISprites.Get("IconDown"); skin.iconLock = UISprites.Get("IconLock");
             skin.font = UIKit.Font();
+            foreach (string b in new[] { "Logo", "LoadingBackground", "Note" }) WorldBuilder.LoadSprite($"Assets/Resources/Brand/{b}.png");
             EditorUtility.SetDirty(skin);
         }
 

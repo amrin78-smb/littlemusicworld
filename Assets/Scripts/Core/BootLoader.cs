@@ -19,7 +19,8 @@ namespace LittleMusicWorld.Core
             t += Time.unscaledDeltaTime;
             if (started || t < holdSeconds || Services.Scenes == null) return;
             started = true;
-            Services.Scenes.Load(firstScene, 0.3f);
+            string jump = DeviceArgs.Get("lmw_scene");
+            Services.Scenes.Load(string.IsNullOrEmpty(jump) ? firstScene : jump, 0.3f);
         }
     }
 }

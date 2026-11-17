@@ -23,7 +23,8 @@ namespace LittleMusicWorld.EditorTools
         public static string[] BuiltAreas = { SceneFlow.PianoParadise, SceneFlow.DrumValley, SceneFlow.StringTown, SceneFlow.WindVillage,
             SceneFlow.OrchestraPark, SceneFlow.MusicStudio, SceneFlow.RhythmCarnival };
         private static readonly string[] HubProps =
-            { "Bandstand", "GatePiano", "LampNote", "TreeRound", "TreeBlossom", "Bush", "FlowerBed", "Bench", "Plaza", "PathSegment" };
+            { "Bandstand", "GatePiano", "GateDrums", "GateStrings", "GateWind", "GateOrchestra", "GateStudio", "GateCarnival",
+              "LampNote", "TreeRound", "TreeBlossom", "Bush", "FlowerBed", "Bench", "Plaza", "PathSegment" };
 
         // ------------------------------------------------------------------ prefabs from Blender exports
 
@@ -32,7 +33,7 @@ namespace LittleMusicWorld.EditorTools
             Material hub = ArtLibrary.AtlasMaterial("HubProps", true, 1.2f);
             foreach (string n in HubProps)
                 ArtLibrary.Prop($"Assets/Art/Environments/Hub/{n}.fbx", $"{P}/Hub/{n}.prefab", hub,
-                    collider: n == "Bandstand" || n == "GatePiano" || n == "Bench" || n == "FlowerBed");
+                    collider: n == "Bandstand" || n.StartsWith("Gate") || n == "Bench" || n == "FlowerBed");
             ArtLibrary.Prop("Assets/Art/Environments/Hub/HubGround.fbx", $"{P}/Hub/HubGround.prefab", ArtLibrary.AtlasMaterial("HubGround", false));
             ArtLibrary.Prop("Assets/Art/Instruments/GrandPiano.fbx", $"{P}/Instruments/GrandPiano.prefab", ArtLibrary.AtlasMaterial("GrandPiano"),
                 collider: false, isStatic: false);
@@ -198,6 +199,7 @@ namespace LittleMusicWorld.EditorTools
             Button play = UIKit.Pebble("Play", c.transform, new Vector2(1f, 0f), new Vector2(-330, 250), new Vector2(380, 320), "#FF5A8A", "IconPlay", 0.6f);
             UIKit.Bubble(c.transform, new Vector2(0f, 0f), new Vector2(620, 170), 900);
             ParentArea(c);
+            new GameObject("Ambient Music").AddComponent<Audio.AmbientMusic>();
             var ctrl = new GameObject("Main Menu").AddComponent<MainMenuController>();
             E.Set(ctrl, "play", play);
             E.Set(ctrl, "melo", melo);
@@ -259,7 +261,9 @@ namespace LittleMusicWorld.EditorTools
                 }
                 // Lamps between routes, benches facing the bandstand.
                 Quaternion mid = Quaternion.Euler(0, ang + 180f / 7f, 0);
-                Place("Hub/LampNote", mid * Vector3.forward * 7.7f + Vector3.up * 0.0f, ang + 90, 1, world);
+                float midAng = ang + 180f / 7f;
+                if (Mathf.Abs(Mathf.DeltaAngle(midAng, 180f)) > 30f) // keep the camera's line to Melo clear
+                    Place("Hub/LampNote", mid * Vector3.forward * 7.7f, ang + 90, 1, world);
                 if (i % 2 == 1) Place("Hub/Bench", mid * Vector3.forward * 9.2f, ang + 180f / 7f + 180f, 1, world);
             }
             // Tree ring, kept clear of the routes.
@@ -299,6 +303,7 @@ namespace LittleMusicWorld.EditorTools
             UIKit.Bubble(c.transform, new Vector2(0.5f, 1f), new Vector2(0, -110), 1000);
             ActivityBuilder.AddStickerBook(c);
             ParentArea(c);
+            new GameObject("Ambient Music").AddComponent<Audio.AmbientMusic>();
             var hub = new GameObject("Hub").AddComponent<HubController>();
             E.Set(hub, "melo", melo);
             E.Set(hub, "cam", cam);
