@@ -27,6 +27,10 @@ namespace LittleMusicWorld.Audio
         public event Action<int, NoteEvent> NoteVisual; // track index, note
         public event Action<int> BeatTick;              // whole-beat index, on the beat
         public event Action Finished;
+        /// <summary>Raised when a looping sequence wraps to beat 0 (at the scheduling horizon).</summary>
+        public event Action Looped;
+        /// <summary>DSP time at which the current pass of the loop started (for recording timestamps).</summary>
+        public double PassStartDsp => BeatToDsp(0);
 
         public readonly List<SequenceTrack> Tracks = new List<SequenceTrack>();
         public bool IsPlaying { get; private set; }
@@ -147,7 +151,8 @@ namespace LittleMusicWorld.Audio
                     anchorBeat = 0;
                     horizonBeat = (now + LookAhead - anchorDsp) * bpm / 60.0;
                     scheduledUntilBeat = 0;
-                    foreach (SequenceTrack t in Tracks) t.nextIndex = 0;
+                    Looped?.Invoke();
+                    foreach (SequenceTrack t in Tracks) { t.events.Sort((a, b) => a.beat.CompareTo(b.beat)); t.nextIndex = 0; }
                 }
             }
 

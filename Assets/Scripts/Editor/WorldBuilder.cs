@@ -19,6 +19,9 @@ namespace LittleMusicWorld.EditorTools
     public static class WorldBuilder
     {
         private const string P = ArtLibrary.PrefabFolder;
+        /// <summary>Areas that exist as scenes; routes to the others end in flower beds until their milestone.</summary>
+        public static string[] BuiltAreas = { SceneFlow.PianoParadise, SceneFlow.DrumValley, SceneFlow.StringTown, SceneFlow.WindVillage,
+            SceneFlow.OrchestraPark, SceneFlow.MusicStudio, SceneFlow.RhythmCarnival };
         private static readonly string[] HubProps =
             { "Bandstand", "GatePiano", "LampNote", "TreeRound", "TreeBlossom", "Bush", "FlowerBed", "Bench", "Plaza", "PathSegment" };
 
@@ -60,7 +63,8 @@ namespace LittleMusicWorld.EditorTools
         {
             GameObject m = Place("Characters/Melo", pos, rotY);
             m.name = "Melo";
-            return m.GetComponent<MascotController>() ?? m.AddComponent<MascotController>();
+            var mc = m.GetComponent<MascotController>();
+            return mc != null ? mc : m.AddComponent<MascotController>();
         }
 
         // ------------------------------------------------------------------ shared UI pieces
@@ -68,7 +72,7 @@ namespace LittleMusicWorld.EditorTools
         private static Canvas Hud(string name) => SceneBuilder.MakeCanvas(name, 10);
 
         /// <summary>Hold-to-open gear + parent settings panel (with credits).</summary>
-        private static void ParentArea(Canvas c)
+        internal static void ParentArea(Canvas c)
         {
             Button gear = UIKit.Pebble("ParentGear", c.transform, new Vector2(1, 1), new Vector2(-95, -95), new Vector2(120, 120), "#E8DCCB", "IconGear",
                 0.6f, UIKit.Ink);
@@ -225,18 +229,23 @@ namespace LittleMusicWorld.EditorTools
                 float ang = i * 360f / 7f;
                 Quaternion q = Quaternion.Euler(0, ang, 0);
                 Vector3 dir = q * Vector3.forward;
-                bool piano = i == 0;
+                string[] areaScenes = { SceneFlow.PianoParadise, SceneFlow.DrumValley, SceneFlow.StringTown, SceneFlow.WindVillage,
+                    SceneFlow.OrchestraPark, SceneFlow.MusicStudio, SceneFlow.RhythmCarnival };
+                string[] areaVoices = { "area_piano", "area_drums", "area_strings", "area_wind", "area_orchestra", "area_studio", "area_carnival" };
+                string[] gates = { "GatePiano", "GateDrums", "GateStrings", "GateWind", "GateOrchestra", "GateStudio", "GateCarnival" };
+                bool piano = System.Array.IndexOf(BuiltAreas, areaScenes[i]) >= 0;
                 int tiles = piano ? 2 : 1;
                 for (int t = 0; t < tiles; t++) Place("Hub/PathSegment", dir * (7f + t * 4f) + Vector3.up * 0.02f, ang, 1, world);
                 if (piano)
                 {
-                    GameObject gate = Place("Hub/GatePiano", dir * 15.4f, ang, 1, world);
+                    string gateModel = AssetDatabase.LoadAssetAtPath<GameObject>($"{P}/Hub/{gates[i]}.prefab") != null ? gates[i] : "GatePiano";
+                    GameObject gate = Place("Hub/" + gateModel, dir * 15.4f, ang, 1, world);
                     var col = gate.AddComponent<BoxCollider>();
                     col.center = new Vector3(0, 2.4f, 0);
                     col.size = new Vector3(5f, 5f, 1.6f);
                     var portal = gate.AddComponent<AreaPortal>();
-                    portal.sceneName = SceneFlow.PianoParadise;
-                    portal.voiceKey = "area_piano";
+                    portal.sceneName = areaScenes[i];
+                    portal.voiceKey = areaVoices[i];
                     var approach = new GameObject("Approach").transform;
                     approach.SetParent(gate.transform, false);
                     approach.localPosition = new Vector3(0, 0, -1.6f);
@@ -288,6 +297,7 @@ namespace LittleMusicWorld.EditorTools
             Button home = UIKit.Pebble("Home", c.transform, new Vector2(0, 1), new Vector2(110, -100), new Vector2(160, 150), "#FFC93C", "IconHome");
             home.gameObject.AddComponent<SceneButton>().scene = SceneFlow.MainMenu;
             UIKit.Bubble(c.transform, new Vector2(0.5f, 1f), new Vector2(0, -110), 1000);
+            ActivityBuilder.AddStickerBook(c);
             ParentArea(c);
             var hub = new GameObject("Hub").AddComponent<HubController>();
             E.Set(hub, "melo", melo);
@@ -296,114 +306,5 @@ namespace LittleMusicWorld.EditorTools
             return SceneBuilder.Save(s, "Hub");
         }
 
-        // ------------------------------------------------------------------ Piano Paradise
-
-        public static string BuildPianoParadise()
-        {
-            Scene s = SceneBuilder.NewScene();
-            Camera cam = SceneBuilder.MakeCamera(E.Hex("#D9CCFF"), new Vector3(0.2f, 2.45f, -3.9f), new Vector3(30, -3, 0), 46f);
-            SceneBuilder.MakeSun(new Vector3(50, -25, 0), 1.1f);
-            Atmosphere(E.Hex("#E6DDFF"), 12f, 45f);
-            Place("Hub/HubGround", Vector3.zero);
-            Place("Hub/Plaza", Vector3.zero);
-            GameObject piano = Place("Instruments/GrandPiano", new Vector3(0, 0.12f, 0.35f), 0f);
-            var model = piano.AddComponent<PianoModel3D>();
-            Place("Hub/TreeBlossom", new Vector3(-4.2f, 0, 4.5f), 20f, 1.1f);
-            Place("Hub/TreeBlossom", new Vector3(4.6f, 0, 5.2f), 200f, 1.2f);
-            Place("Hub/TreeRound", new Vector3(-7.5f, 0, 8f), 90f, 1.3f);
-            Place("Hub/TreeRound", new Vector3(8f, 0, 9f), 10f, 1.4f);
-            Place("Hub/LampNote", new Vector3(-2.6f, 0.12f, 2.2f), 120f);
-            Place("Hub/LampNote", new Vector3(2.8f, 0.12f, 2.0f), 30f);
-            Place("Hub/FlowerBed", new Vector3(3.4f, 0.12f, -0.4f));
-            Place("Hub/Bench", new Vector3(-0.2f, 0.12f, 4.4f), 180f);
-            MascotController melo = PlaceMelo(new Vector3(-1.55f, 0.12f, -0.55f), 150f);
-
-            Canvas c = Hud("Piano Canvas");
-            RectTransform kbArea = UIKit.Rect("Keyboard", c.transform, new Vector2(0.5f, 0f), Vector2.zero, Vector2.zero);
-            kbArea.anchorMin = new Vector2(0f, 0f);
-            kbArea.anchorMax = new Vector2(1f, 0f);
-            kbArea.pivot = new Vector2(0.5f, 0f);
-            kbArea.offsetMin = new Vector2(60, 28);
-            kbArea.offsetMax = new Vector2(-60, 28 + 470);
-            var kb = kbArea.gameObject.AddComponent<KeyboardSurface>();
-            E.Set(kb, "area", kbArea);
-            E.Set(kb, "whiteKeySprite", UISprites.Get("KeyWhite"));
-            E.Set(kb, "blackKeySprite", UISprites.Get("KeyBlack"));
-            E.Set(kb, "dotSprite", UISprites.Get("Circle"));
-            E.Set(kb, "glowSprite", UISprites.Get("GlowRect"));
-
-            var act = new GameObject("Piano Activity").AddComponent<PianoActivity>();
-            E.Set(act, "keyboard", kb);
-            string[] cols = { "#3B3F6B", "#9C5B3A", "#2EC4B6" };
-            var buttons = new Button[3];
-            for (int i = 0; i < 3; i++)
-                buttons[i] = UIKit.Pebble("Instrument" + i, c.transform, new Vector2(0.5f, 1f), new Vector2(-200 + i * 200, -95), new Vector2(170, 150), cols[i], "Note");
-            E.SetArray(act, "instrumentButtons", buttons);
-            E.Set(act, "octaveDown", UIKit.Pebble("OctaveDown", c.transform, new Vector2(0f, 0f), new Vector2(110, 590), new Vector2(150, 130), "#FFC93C", "IconDown"));
-            E.Set(act, "octaveUp", UIKit.Pebble("OctaveUp", c.transform, new Vector2(1f, 0f), new Vector2(-110, 590), new Vector2(150, 130), "#FFC93C", "IconUp"));
-            E.Set(act, "demoButton", (Button)null);
-            Text stats = SceneBuilder.Label("Stats", c.transform, new Vector2(0.5f, 1f), new Vector2(0, -190), new Vector2(1500, 40), 24, UIKit.Ink);
-            E.Set(act, "statsLabel", stats);
-
-            Button home = UIKit.Pebble("Home", c.transform, new Vector2(0, 1), new Vector2(110, -100), new Vector2(160, 150), "#FFC93C", "IconHome");
-            Button songs = UIKit.Pebble("Songs", c.transform, new Vector2(1, 1), new Vector2(-300, -100), new Vector2(170, 150), "#FF5A8A", "IconStar");
-            Button free = UIKit.Pebble("Free", c.transform, new Vector2(1, 1), new Vector2(-480, -100), new Vector2(170, 150), "#8BD346", "Note");
-            Button listen = UIKit.Pebble("Listen", c.transform, new Vector2(0.5f, 1f), new Vector2(520, -95), new Vector2(150, 140), "#5B7CFA", "IconListen");
-            RectTransform bar = UIKit.Rect("Progress", c.transform, new Vector2(0.5f, 1f), new Vector2(0, -205), new Vector2(720, 40));
-            UIKit.Image("Track", bar, "Panel", new Color(1, 1, 1, 0.75f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(720, 40));
-            Image fill = UIKit.Image("Fill", bar, "Panel", E.Hex("#FFC93C"), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(700, 26));
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-            fill.sprite = UISprites.Get("Circle");
-
-            // Song picker overlay
-            RectTransform panel = UIKit.Stretch("Song Panel", c.transform);
-            UIKit.Image("Dim", panel, null, new Color(0.18f, 0.16f, 0.29f, 0.55f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(4000, 3000), true);
-            UIKit.Image("Card", panel, "Panel", UIKit.Cream, new Vector2(0.5f, 0.5f), new Vector2(0, -20), new Vector2(1600, 820));
-            var tiers = new Button[4];
-            string[] tierCols = { "#8BD346", "#2EC4B6", "#5B7CFA", "#D46CE0" };
-            for (int t = 0; t < 4; t++)
-            {
-                tiers[t] = UIKit.Pebble("Tier" + t, panel, new Vector2(0.5f, 0.5f), new Vector2(-360 + t * 240, 290), new Vector2(200, 130), tierCols[t], null);
-                for (int d = 0; d <= t; d++)
-                    UIKit.Image("Dot", tiers[t].transform, "Circle", Color.white, new Vector2(0.5f, 0.5f), new Vector2((d - t * 0.5f) * 34f, 6), new Vector2(26, 26));
-            }
-            RectTransform grid = UIKit.Rect("Cards", panel, new Vector2(0.5f, 0.5f), new Vector2(0, -90), new Vector2(1480, 520));
-            var gl = grid.gameObject.AddComponent<GridLayoutGroup>();
-            gl.cellSize = new Vector2(230, 230);
-            gl.spacing = new Vector2(34, 34);
-            gl.childAlignment = TextAnchor.MiddleCenter;
-            gl.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gl.constraintCount = 5;
-            Button closeSongs = UIKit.Pebble("CloseSongs", panel, new Vector2(0.5f, 0.5f), new Vector2(720, 330), new Vector2(130, 120), "#8BD346", "Note");
-
-            UIKit.Bubble(c.transform, new Vector2(0f, 1f), new Vector2(720, -300), 860);
-
-            var guideGo = new GameObject("Melody Guide");
-            MelodyGuide guide = guideGo.AddComponent<MelodyGuide>();
-            var ctrl = new GameObject("Piano Paradise").AddComponent<PianoParadiseController>();
-            E.Set(ctrl, "activity", act);
-            E.Set(ctrl, "guide", guide);
-            E.Set(ctrl, "piano3D", model);
-            E.Set(ctrl, "melo", melo);
-            E.Set(ctrl, "homeButton", home);
-            E.Set(ctrl, "songsButton", songs);
-            E.Set(ctrl, "freeButton", free);
-            E.Set(ctrl, "listenButton", listen);
-            E.Set(ctrl, "songPanel", panel.gameObject);
-            E.Set(ctrl, "cardGrid", grid);
-            E.SetArray(ctrl, "tierButtons", tiers);
-            E.Set(ctrl, "cardSprite", UISprites.Get("Pebble"));
-            E.Set(ctrl, "starSprite", UISprites.Get("IconStar"));
-            E.Set(ctrl, "dotSprite", UISprites.Get("Circle"));
-            var icons = new List<Object>();
-            foreach (string n in new[] { "IconStar", "IconLamb", "IconBell", "IconBun", "IconSun", "IconBoat", "IconHeart" }) icons.Add(UISprites.Get(n));
-            E.SetArray(ctrl, "songIcons", icons.ToArray());
-            E.Set(ctrl, "progressBar", bar);
-            E.Set(ctrl, "progressFill", fill);
-            UnityEditor.Events.UnityEventTools.AddBoolPersistentListener(closeSongs.onClick, panel.gameObject.SetActive, false);
-            ParentArea(c);
-            return SceneBuilder.Save(s, "PianoParadise");
-        }
     }
 }

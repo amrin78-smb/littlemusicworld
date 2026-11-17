@@ -149,9 +149,10 @@ namespace LittleMusicWorld.Instruments
                 int target = f.surface.HitTest(p);
                 if (target != f.target)
                 {
-                    f.surface.Release(f.target, finger);
+                    // Keep tracking the finger through gaps (between strings/keys) so a strum or glissando
+                    // continues onto the next target.
+                    if (f.target >= 0) f.surface.Release(f.target, finger);
                     if (target >= 0) f.surface.Press(target, finger, p);
-                    else { fingers.Remove(finger); return; }
                     f.target = target;
                 }
             }

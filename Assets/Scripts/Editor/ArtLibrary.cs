@@ -93,9 +93,7 @@ namespace LittleMusicWorld.EditorTools
         {
             var src = AssetDatabase.LoadAssetAtPath<GameObject>(fbxPath);
             if (src == null) { Debug.LogError("[LMW Art] missing " + fbxPath); return null; }
-            var go = (GameObject)PrefabUtility.InstantiatePrefab(src);
-            PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            go.name = Path.GetFileNameWithoutExtension(prefabPath);
+            GameObject go = Wrap(src, Path.GetFileNameWithoutExtension(prefabPath));
             foreach (Renderer r in go.GetComponentsInChildren<Renderer>())
             {
                 r.sharedMaterial = mat;
@@ -116,19 +114,35 @@ namespace LittleMusicWorld.EditorTools
             return E.SavePrefab(go, prefabPath);
         }
 
+        /// <summary>
+        /// FBX roots carry Unity's axis-conversion rotation (measured: (270,180,0) with an identity world result), so
+        /// every prefab gets a clean identity root and the model lives underneath — placing/rotating the prefab can
+        /// never undo the conversion.
+        /// </summary>
+        private static GameObject Wrap(GameObject src, string name)
+        {
+            var root = new GameObject(name);
+            var inst = (GameObject)PrefabUtility.InstantiatePrefab(src);
+            PrefabUtility.UnpackPrefabInstance(inst, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+            inst.transform.SetParent(root.transform, false);
+            return root;
+        }
+
         private static void BuildLods(GameObject go, float lod0, float cull)
         {
             var lod1 = go.GetComponentsInChildren<Renderer>().Where(r => r.name.EndsWith("_LOD1")).ToArray();
             if (lod1.Length == 0) return;
             var lod0r = go.GetComponentsInChildren<Renderer>().Where(r => !r.name.EndsWith("_LOD1")).ToArray();
-            var group = go.AddComponent<LODGroup>();
+            // The FBX importer already builds a LODGroup from _LOD0/_LOD1 names; reuse it and set our thresholds.
+            LODGroup group = go.GetComponentInChildren<LODGroup>();
+            if (group == null) group = go.AddComponent<LODGroup>();
             group.SetLODs(new[] { new LOD(lod0, lod0r), new LOD(cull, lod1) });
             group.RecalculateBounds();
         }
 
         // ------------------------------------------------------------------ characters
 
-        public static readonly string[] LoopClips = { "Idle", "Walk", "Wave", "Dance", "Sing", "Talk", "Sleep" };
+        public static readonly string[] LoopClips = { "Idle", "Walk", "Wave", "Dance", "Sing", "Talk", "Sleep", "Rest" };
 
         /// <summary>Character prefab with an Animator controller holding one state per FBX clip (crossfaded from code).</summary>
         public static GameObject Character(string fbxPath, string prefabPath, Material mat)
@@ -136,6 +150,7 @@ namespace LittleMusicWorld.EditorTools
             string ctrlPath = Path.ChangeExtension(prefabPath, null) + "_Animator.controller";
             ConfigureClips(fbxPath);
             var clips = AssetDatabase.LoadAllAssetsAtPath(fbxPath).OfType<AnimationClip>().Where(c => !c.name.StartsWith("__preview")).ToList();
+            E.EnsureFolder(Path.GetDirectoryName(ctrlPath));
             if (File.Exists(ctrlPath)) AssetDatabase.DeleteAsset(ctrlPath);
             AnimatorController ctrl = AnimatorController.CreateAnimatorControllerAtPath(ctrlPath);
             AnimatorStateMachine sm = ctrl.layers[0].stateMachine;
@@ -148,10 +163,10 @@ namespace LittleMusicWorld.EditorTools
                 if (state == "Idle") sm.defaultState = s;
             }
             var src = AssetDatabase.LoadAssetAtPath<GameObject>(fbxPath);
-            var go = (GameObject)PrefabUtility.InstantiatePrefab(src);
-            PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            go.name = Path.GetFileNameWithoutExtension(prefabPath);
-            Animator anim = go.GetComponent<Animator>() ?? go.AddComponent<Animator>();
+            GameObject go = Wrap(src, Path.GetFileNameWithoutExtension(prefabPath));
+            GameObject model = go.transform.GetChild(0).gameObject;   // clip paths are relative to the FBX root
+            Animator anim = model.GetComponent<Animator>();
+            if (anim == null) anim = model.AddComponent<Animator>();
             anim.runtimeAnimatorController = ctrl;
             anim.applyRootMotion = false;
             foreach (SkinnedMeshRenderer r in go.GetComponentsInChildren<SkinnedMeshRenderer>())
@@ -181,7 +196,7 @@ namespace LittleMusicWorld.EditorTools
             foreach (ModelImporterClipAnimation c in clips)
             {
                 string state = ClipState(c.name);
-                c.loopTime = LoopClips.Contains(state);
+                c.loopTime = LoopClips.Contains(state) || state.StartsWith("Hold");
                 c.loopPose = false;
                 c.name = state;
             }

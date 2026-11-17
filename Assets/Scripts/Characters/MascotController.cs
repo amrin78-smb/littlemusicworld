@@ -10,7 +10,6 @@ namespace LittleMusicWorld.Characters
     /// while a voice line plays, and reacts to music — a hop for single notes, dancing while lots of notes play.
     /// One-shot clips (Celebrate, Point, React) return to the base state automatically.
     /// </summary>
-    [RequireComponent(typeof(Animator))]
     public sealed class MascotController : MonoBehaviour
     {
         public enum Base { Idle, Dance, Sleep, Sing }
@@ -37,7 +36,7 @@ namespace LittleMusicWorld.Characters
 
         private void Awake()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
         }

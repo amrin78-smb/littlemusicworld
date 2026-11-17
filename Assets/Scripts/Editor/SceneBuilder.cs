@@ -22,14 +22,35 @@ namespace LittleMusicWorld.EditorTools
         {
             E.EnsureFolder(SceneFolder);
             WorldBuilder.BuildPrefabs();
-            string boot = WorldBuilder.BuildBoot();
-            string menu = WorldBuilder.BuildMainMenu();
-            string hub = WorldBuilder.BuildHub();
-            string piano = WorldBuilder.BuildPianoParadise();
-            ProjectConfigurator.ConfigureBuildScenes(boot, menu, hub, piano);
+            AreaBuilder.BuildInstrumentPrefabs();
+            ActivityBuilder.BuildAnimalPrefabs();
+            PortraitRenderer.RenderAll();
+            BuildSkin();
+            var scenes = new System.Collections.Generic.List<string> { WorldBuilder.BuildBoot(), WorldBuilder.BuildMainMenu(), WorldBuilder.BuildHub() };
+            scenes.AddRange(AreaBuilder.BuildAll());
+            scenes.Add(ActivityBuilder.BuildOrchestra());
+            scenes.Add(ActivityBuilder.BuildStudio());
+            scenes.Add(ActivityBuilder.BuildCarnival());
+            ProjectConfigurator.ConfigureBuildScenes(scenes.ToArray());
         }
 
         // ------------------------------------------------------------------ shared pieces
+
+        /// <summary>Resources/UISkin: sprites + font for UI built at runtime.</summary>
+        public static void BuildSkin()
+        {
+            var skin = E.LoadOrCreateSO<LittleMusicWorld.UI.UISkin>("Assets/Resources/UISkin.asset");
+            skin.pebble = UISprites.Get("Pebble"); skin.panel = UISprites.Get("Panel"); skin.circle = UISprites.Get("Circle");
+            skin.ring = UISprites.Get("Ring"); skin.glow = UISprites.Get("Glow"); skin.glowRect = UISprites.Get("GlowRect");
+            skin.keyWhite = UISprites.Get("KeyWhite"); skin.keyBlack = UISprites.Get("KeyBlack"); skin.note = UISprites.Get("Note");
+            skin.sparkle = UISprites.Get("Sparkle");
+            skin.iconPlay = UISprites.Get("IconPlay"); skin.iconStop = UISprites.Get("IconStop"); skin.iconRecord = UISprites.Get("IconRecord");
+            skin.iconBack = UISprites.Get("IconBack"); skin.iconHome = UISprites.Get("IconHome"); skin.iconStar = UISprites.Get("IconStar");
+            skin.iconListen = UISprites.Get("IconListen"); skin.iconCheck = UISprites.Get("IconCheck"); skin.iconTrash = UISprites.Get("IconTrash");
+            skin.iconUp = UISprites.Get("IconUp"); skin.iconDown = UISprites.Get("IconDown"); skin.iconLock = UISprites.Get("IconLock");
+            skin.font = UIKit.Font();
+            EditorUtility.SetDirty(skin);
+        }
 
         public static Scene NewScene() => EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 

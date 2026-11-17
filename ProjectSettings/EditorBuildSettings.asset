@@ -9,8 +9,32 @@ EditorBuildSettings:
     path: Assets/Scenes/Boot.unity
     guid: 03b7249401ce6404c95d2e6d26598167
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: fa971de654135ac3790faac47e1aaf3e
+  - enabled: 1
+    path: Assets/Scenes/Hub.unity
+    guid: 0e5b7219913296f7f9fad6d86de585ad
+  - enabled: 1
     path: Assets/Scenes/PianoParadise.unity
     guid: a40a9680ec18f9131b5a0c45e50dd0b8
+  - enabled: 1
+    path: Assets/Scenes/DrumValley.unity
+    guid: b5f2ffddbcb22c4b6bf5599b9d408f58
+  - enabled: 1
+    path: Assets/Scenes/StringTown.unity
+    guid: 5d0d6a9cec81945d9ab4cf5b1524ae8d
+  - enabled: 1
+    path: Assets/Scenes/WindVillage.unity
+    guid: de8d7cbbf11579f71987aad6cd3d34ff
+  - enabled: 1
+    path: Assets/Scenes/OrchestraPark.unity
+    guid: 83353d205fd099aff9bb542cc78d39b4
+  - enabled: 1
+    path: Assets/Scenes/MusicStudio.unity
+    guid: 3a38520e448ec115fa5f0bc7393653a6
+  - enabled: 1
+    path: Assets/Scenes/RhythmCarnival.unity
+    guid: ae1d597a635d377e295962aec6197569
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

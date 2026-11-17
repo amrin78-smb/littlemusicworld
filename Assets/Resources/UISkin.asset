@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c6ef1599a8361477ac3afdac15a6b1a, type: 3}
+  m_Name: UISkin
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.UI.UISkin
+  pebble: {fileID: 21300000, guid: b953c8bbbbf6cb712a5e1aea8ea0624e, type: 3}
+  panel: {fileID: 21300000, guid: 97563d9d081d01a228c3448996f7639f, type: 3}
+  circle: {fileID: 21300000, guid: 72f2a7195474da342bf8c960dad731c1, type: 3}
+  ring: {fileID: 21300000, guid: a1bdcde3dcaa9eac78cc2cb6ddaf76fb, type: 3}
+  glow: {fileID: 21300000, guid: f1a605c5fb99ee57faf6be79a2692901, type: 3}
+  glowRect: {fileID: 21300000, guid: 5b60d4fc28d5f6ec7b3c3320d9624968, type: 3}
+  keyWhite: {fileID: 21300000, guid: 6ea0a7051e397242596fdfe7feb57c83, type: 3}
+  keyBlack: {fileID: 21300000, guid: 450eb4122ba2c7591996ac90b360d4e2, type: 3}
+  note: {fileID: 21300000, guid: b2b4a68bc5f7ac0ae8e701130234a033, type: 3}
+  sparkle: {fileID: 21300000, guid: 022ebb768d39380ebb9dc5d9f596d6d1, type: 3}
+  iconPlay: {fileID: 21300000, guid: b6fb5fbfd90dd11f6b0da7acef72e431, type: 3}
+  iconStop: {fileID: 21300000, guid: 8c809cf1c3fb7912db5c9f0e93fe64ef, type: 3}
+  iconRecord: {fileID: 21300000, guid: b1cc6154c15609a5893f1764f3d52642, type: 3}
+  iconBack: {fileID: 21300000, guid: a57cf6c8445701847acd926d2702b6f4, type: 3}
+  iconHome: {fileID: 21300000, guid: 09b9c5dfccad153618d21b09eb10064a, type: 3}
+  iconStar: {fileID: 21300000, guid: cbb37e7d9dc168e02a1c0a7cc87fd11f, type: 3}
+  iconListen: {fileID: 21300000, guid: f60176c97b79a1150be38028d025099b, type: 3}
+  iconCheck: {fileID: 21300000, guid: e9b6bfe7d5d9235b991465ff9595964e, type: 3}
+  iconTrash: {fileID: 21300000, guid: 273791a8b0c89bfd8a943e3579bcde6a, type: 3}
+  iconUp: {fileID: 21300000, guid: bdebe27e1efa4e4fc90150db855cc757, type: 3}
+  iconDown: {fileID: 21300000, guid: 1d97b6144dcd2906695038d2e623e838, type: 3}
+  iconLock: {fileID: 21300000, guid: 839c0dd1a1242f89a821ccb544327f06, type: 3}
+  font: {fileID: 11400000, guid: fbcc943216e24f54fbeed7b517d19f1d, type: 2}

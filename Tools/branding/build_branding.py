@@ -145,13 +145,18 @@ def scene_setup(res_x, res_y, samples=64):
     sc.view_settings.view_transform = "Standard"
     sc.world.use_nodes = True
     bg = sc.world.node_tree.nodes["Background"]
-    bg.inputs["Color"].default_value = L.lin("#CFEAFF")
-    bg.inputs["Strength"].default_value = 0.85
+    bg.inputs["Color"].default_value = L.lin("#FFF4E6")
+    bg.inputs["Strength"].default_value = 0.75
     key = bpy.data.objects.new("Key", bpy.data.lights.new("Key", "SUN"))
     key.data.energy = 3.2
     key.data.angle = math.radians(12)
     key.rotation_euler = (math.radians(50), math.radians(-18), math.radians(-20))
     sc.collection.objects.link(key)
+    fill = bpy.data.objects.new("Fill", bpy.data.lights.new("Fill", "SUN"))
+    fill.data.energy = 1.2
+    fill.data.color = (1.0, 0.92, 0.85)
+    fill.rotation_euler = (math.radians(70), math.radians(30), math.radians(140))
+    sc.collection.objects.link(fill)
     cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam"))
     sc.collection.objects.link(cam)
     sc.camera = cam
@@ -251,40 +256,69 @@ def look(cam, pos, target, lens=50):
 
 
 # ================================================================================================ 1. logo
+def word3d(text, size, pos, colours, extrude, bevel, outline=0.06):
+    """One text object (proper kerning) with a material per character, plus an ink sticker outline behind it."""
+    mats = [glossy(f"W_{text}_{i}", c, 0.22) for i, c in enumerate(colours)]
+    ob = text3d(text, size, pos, mats[0], extrude, bevel)
+    for m in mats[1:]:
+        ob.data.materials.append(m)
+    ci = 0
+    for i, ch in enumerate(text):
+        if ch == " ":
+            continue
+        ob.data.body_format[i].material_index = ci % len(mats)
+        ci += 1
+    ink = text3d(text, size, (pos[0], pos[1] + 0.08, pos[2]), glossy("Ink_" + text, "#2E2A4A", 0.4), extrude * 0.6, bevel + outline)
+    return ob, ink
+
+
+def fit_ortho(cam, objs, margin=0.06, aspect=16 / 9):
+    """Orthographic front camera (looking +Y) framing the objects' bounds."""
+    bpy.context.view_layer.update()
+    xs, zs = [], []
+    for o in objs:
+        for c in o.bound_box:
+            w = o.matrix_world @ Vector(c)
+            xs.append(w.x)
+            zs.append(w.z)
+    cx, cz = (min(xs) + max(xs)) / 2, (min(zs) + max(zs)) / 2
+    w, h = max(xs) - min(xs), max(zs) - min(zs)
+    cam.data.type = "ORTHO"
+    cam.data.ortho_scale = max(w, h * aspect) * (1 + 2 * margin)
+    cam.location = (cx, -20, cz)
+    cam.rotation_euler = (math.radians(90), 0, 0)
+
+
+def crop_to_content(a, aspect, pad=0.03):
+    """Crops transparent margins, then centres the content on a canvas of the given aspect ratio."""
+    ys, xs = np.nonzero(a[..., 3] > 0.02)
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    c = a[y0:y1, x0:x1]
+    h, w = c.shape[:2]
+    W = int(max(w, h * aspect) * (1 + 2 * pad))
+    H = int(W / aspect)
+    out = np.zeros((H, W, 4), np.float32)
+    out[(H - h) // 2:(H - h) // 2 + h, (W - w) // 2:(W - w) // 2 + w] = c
+    return resize(out, 2400, 1350) if W != 2400 else out
+
+
 def build_logo():
     sc, cam = scene_setup(2400, 1350, samples=48)
-    cream = glossy("Cream", "#FFF4E0", 0.35)
-    # "Little" — cream sticker letters on ink outline
-    text3d("Little", 0.95, (-1.25, 0, 1.25), cream, 0.14, 0.04)
-    outline_text("Little", 0.95, (-1.25, 0, 1.25), 0.14, 0.04, 0.05)
-    # "Music World" — each letter a pitch colour (do-re-mi rainbow)
-    word = "Music World"
-    x = -3.05
-    adv = {"M": 1.02, "u": 0.66, "s": 0.55, "i": 0.33, "c": 0.58, " ": 0.32, "W": 1.08, "o": 0.66, "r": 0.47, "l": 0.33,
-           "d": 0.68}
-    ci = 0
-    for ch in word:
-        w = adv.get(ch, 0.6) * 1.2
-        if ch != " ":
-            col = PITCH[ci % len(PITCH)]
-            ci += 1
-            bob = 0.06 * math.sin(ci * 1.3)
-            ob = text3d(ch, 1.25, (x + w / 2, 0, -0.05 + bob), glossy("L_" + ch + str(ci), col, 0.22), 0.18, 0.045)
-            ob.rotation_euler.y = math.radians(4 * math.sin(ci * 2.1))
-            outline_text(ch, 1.25, (x + w / 2, 0, -0.05 + bob), 0.18, 0.045, 0.06).rotation_euler.y = ob.rotation_euler.y
-        x += w
-    gold = glossy("Gold", "#F2C14E", 0.2)
-    note3d((2.95, -0.1, 1.25), 1.1, gold, 10)
-    note3d((-3.15, -0.1, 0.95), 0.75, glossy("Pink", "#FF5A8A", 0.25), -15)
-    import_melo((0.65, 0.25, 0.62), rot_z=math.radians(168), scale=0.95, action="Wave", frame=12)
-    look(cam, (0.0, -11.5, 0.75), (0.0, 0, 0.55), lens=60)
+    objs = []
+    objs += word3d("Little", 1.0, (-0.9, 0, 1.3), ["#FFF4E0"], 0.14, 0.04)
+    objs += word3d("Music World", 1.35, (0, 0, -0.05), PITCH, 0.2, 0.05)
+    objs += note3d((3.65, -0.1, 1.05), 1.05, glossy("Gold", "#F2C14E", 0.2), 10)
+    objs += note3d((-3.85, -0.1, 0.75), 0.7, glossy("Pink", "#FF5A8A", 0.25), -15)
+    melo = import_melo((1.75, 0.3, 0.72), rot_z=math.radians(168), scale=1.15, action="Wave", frame=12)
+    if melo is not None:
+        objs += [o for o in bpy.data.objects if o.type == "MESH" and o.parent == melo]
+    fit_ortho(cam, objs, margin=0.04)
     tmp = BRAND + "/_logo_render.png"
     render(tmp)
-    a = load_rgba(tmp)
+    a = crop_to_content(load_rgba(tmp), 16 / 9, pad=0.03)
     os.remove(tmp)
     save_rgba(a, BRAND + "/Logo_Master.png")
-    small = resize(a, 1600, 900)
-    save_rgba(small, RES + "/Logo.png")
+    save_rgba(resize(a, 1600, 900), RES + "/Logo.png")
     save_rgba(resize(a, 1200, 675), BRAND + "/Splash_Logo.png")
     L.save_source("Branding_Logo")
     return a
@@ -295,9 +329,9 @@ def build_icon():
     sc, cam = scene_setup(1024, 1024, samples=64)
     import_melo((0, 0, 0), rot_z=math.radians(18), scale=1.0, action="Sing", frame=8)
     gold = glossy("Gold", "#F2C14E", 0.2)
-    note3d((-0.42, 0.25, 0.95), 0.5, gold, -10)
+    note3d((-0.46, 0.2, 0.92), 0.42, gold, -10)
     # Melo faces Unity +Z = Blender +Y; camera in front (Blender +Y side) looking back.
-    look(cam, (0.25, 3.2, 0.95), (0.0, 0.0, 0.62), lens=78)
+    look(cam, (0.3, 2.6, 0.82), (0.0, 0.0, 0.66), lens=85)
     tmp = BRAND + "/_icon_fg.png"
     render(tmp)
     fg = load_rgba(tmp)

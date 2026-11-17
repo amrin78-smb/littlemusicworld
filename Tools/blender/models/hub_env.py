@@ -104,6 +104,93 @@ for i in range(4):
     gp.add(L.rbox(f"SignKeyB{i}", (0.1, 0.2, 0.05), (-0.39 + i * 0.26, 3.52, -0.41), 0.02), "Body", "P", ink)
 gp.add(L.sphere("SignNote", 0.12, (0, 3.83, -0.37), scale=(1.3, 1, 0.5), segs=12, rings=8), "Body", "P", gold)
 
+# ------------------------------------------------------------------ themed gates for the other six areas
+def arch_path(r=1.9, base=3.3, h=1.25, n=13):
+    return [(math.cos(math.pi * i / (n - 1)) * r, base + math.sin(math.pi * i / (n - 1)) * h, 0.0) for i in range(n)]
+
+
+def sign(m, colour, emblem):
+    m.add(L.rbox("Sign", (1.6, 0.8, 0.14), (0, 3.55, -0.28), 0.12), "Body", "P", M.get("sign" + colour, colour, rough=0.5))
+    emblem(m)
+
+
+red = M.get("drumred", "#E2553F", rough=0.3)
+apricot = M.get("apricot", "#F4A259", rough=0.35)
+honey = M.get("honey", "#C68B59", rough=0.45, kind="wood", a="#D9A06B", b="#A8683E", scale=5.0)
+mint = M.get("mint", "#5CC8B5", rough=0.4)
+sky = M.get("skyblue", "#8ECAE6", rough=0.4)
+stage_red = M.get("stagered", "#C0392B", rough=0.6)
+violet = M.get("violet", "#7B5CD6", rough=0.35)
+pink = M.get("pink", "#FF7BAC", rough=0.35)
+candy = M.get("candy", "#FF5A8A", rough=0.4, kind="stripes", a="#FF5A8A", b="#FFF4E0", scale=6.0)
+lemon = M.get("lemon", "#FFD23F", rough=0.4)
+
+g = model("GateDrums")
+for sx in (-1, 1):
+    for k in range(3):
+        g.add(L.cyl(f"Drum{sx}{k}", 0.48 - k * 0.04, 0.9, (sx * 1.9, 0.45 + k * 0.95, 0), axis="y", segs=28, bevel=0.05), "Body", "P", red if k % 2 == 0 else apricot)
+        g.add(L.cyl(f"Head{sx}{k}", 0.46 - k * 0.04, 0.04, (sx * 1.9, 0.92 + k * 0.95, 0), axis="y", segs=28, bevel=0.015), "Body", "P", white)
+g.add(L.sweep("Arch", arch_path(), L.circle(0.32, 16), ref=(0, 0, 1)), "Body", "P", red)
+for i, (x, y, z) in enumerate(arch_path(n=9)[1:-1]):
+    g.add(L.tube_arc(f"Hoop{i}", 0.34, 0.035, (x, y, z), 0, 360, segs=20, ring=6, euler=(0, 90, math.degrees(math.atan2(y - 3.3, x)) + 90)), "Body", "P", gold)
+sign(g, "#F4A259", lambda m: [m.add(L.cyl(f"Stick{i}", 0.04, 0.7, (-0.15 + 0.3 * i, 3.6, -0.38), axis="y", segs=8, bevel=0.01,
+                                            euler=(0, 0, 35 - 70 * i)), "Body", "P", wood) for i in range(2)])
+
+g = model("GateStrings")
+for sx in (-1, 1):
+    g.add(L.rbox(f"Neck{sx}", (0.55, 3.4, 0.4), (sx * 1.9, 1.7, 0), 0.12), "Body", "P", honey)
+    for f in range(6):
+        g.add(L.rbox(f"Fret{sx}{f}", (0.58, 0.05, 0.08), (sx * 1.9, 0.5 + f * 0.5, -0.2), 0.02), "Body", "P", gold)
+g.add(L.sweep("Arch", arch_path(), L.circle(0.3, 16), ref=(0, 0, 1)), "Body", "P", honey)
+for i in range(6):
+    g.add(L.cyl(f"Str{i}", 0.018, 3.6, (-0.4 + i * 0.16, 3.0, -0.12), axis="x", segs=6, bevel=0.0, euler=(0, 0, 90)), "Body", "P", white)
+sign(g, "#F2C14E", lambda m: m.add(L.cyl("Hole", 0.24, 0.05, (0, 3.55, -0.36), axis="z", segs=24, bevel=0.01), "Body", "P", ink))
+
+g = model("GateWind")
+for sx in (-1, 1):
+    for k in range(3):
+        g.add(L.cyl(f"Pipe{sx}{k}", 0.16, 2.8 + k * 0.35, (sx * (1.6 + k * 0.32), (2.8 + k * 0.35) / 2, 0), axis="y", segs=16, bevel=0.03),
+              "Body", "P", sky if k % 2 else mint)
+        g.add(L.lathe(f"Bell{sx}{k}", [(0.16, 0.0), (0.2, 0.15), (0.34, 0.3), (0.0, 0.3)], (sx * (1.6 + k * 0.32), 2.8 + k * 0.35, 0),
+                      axis="y", segs=20), "Body", "P", gold)
+g.add(L.sweep("Arch", arch_path(r=1.75, base=3.5), L.circle(0.22, 16), ref=(0, 0, 1)), "Body", "P", gold)
+sign(g, "#5CC8B5", lambda m: m.add(L.lathe("Horn", [(0.04, 0.0), (0.05, 0.3), (0.2, 0.45), (0.0, 0.45)], (-0.25, 3.55, -0.38), axis="x", segs=20),
+                                   "Body", "P", gold))
+
+g = model("GateOrchestra")
+for sx in (-1, 1):
+    g.add(L.lathe(f"Col{sx}", [(0.0, 0.0), (0.32, 0.0), (0.24, 0.2), (0.2, 3.0), (0.32, 3.2), (0.0, 3.2)], (sx * 1.9, 0, 0), axis="y", segs=20),
+          "Body", "P", white)
+    for k in range(5):
+        g.add(L.sphere(f"Curtain{sx}{k}", 0.3, (sx * (1.45 - k * 0.05), 2.7 - k * 0.12, -0.15), scale=(0.5, 2.2, 0.4), segs=12, rings=8),
+              "Body", "P", stage_red)
+shell = [(math.cos(math.pi * i / 12) * 2.3, 3.2 + math.sin(math.pi * i / 12) * 1.5, 0.0) for i in range(13)]
+g.add(L.sweep("Shell", shell, L.circle(0.26, 14), ref=(0, 0, 1)), "Body", "P", gold)
+for i in range(1, 12, 2):
+    x, y, z = shell[i]
+    g.add(L.sphere(f"Lantern{i}", 0.16, (x, y - 0.35, -0.1), segs=12, rings=8), "Body", "P", lamp)
+sign(g, "#C0392B", lambda m: m.add(L.sphere("Star", 0.18, (0, 3.6, -0.38), scale=(1, 1, 0.4), segs=5, rings=4), "Body", "P", gold))
+
+g = model("GateStudio")
+for sx in (-1, 1):
+    g.add(L.cyl(f"Cup{sx}", 0.7, 0.5, (sx * 1.9, 0.95, 0), axis="x", segs=28, bevel=0.15), "Body", "P", violet)
+    g.add(L.cyl(f"Pad{sx}", 0.52, 0.2, (sx * 1.6, 0.95, 0), axis="x", segs=24, bevel=0.08), "Body", "P", pink)
+    g.add(L.rbox(f"Post{sx}", (0.3, 1.9, 0.3), (sx * 1.9, 2.4, 0), 0.1), "Body", "P", violet)
+g.add(L.sweep("Band", arch_path(r=1.9, base=3.3, h=1.4), L.circle(0.24, 14), ref=(0, 0, 1)), "Body", "P", violet)
+sign(g, "#FF7BAC", lambda m: m.add(L.sphere("Rec", 0.16, (0, 3.55, -0.38), scale=(1, 1, 0.4), segs=16, rings=8), "Body", "P",
+                                   M.get("recred", "#FF3B3B", rough=0.3, emit=0.6)))
+
+g = model("GateCarnival")
+for sx in (-1, 1):
+    g.add(L.cyl(f"Pole{sx}", 0.22, 3.4, (sx * 1.9, 1.7, 0), axis="y", segs=16, bevel=0.04), "Body", "P", candy)
+    g.add(L.sphere(f"Ball{sx}", 0.3, (sx * 1.9, 3.55, 0), segs=16, rings=10), "Body", "P", lemon)
+g.add(L.sweep("Arch", arch_path(h=1.5), L.circle(0.28, 16), ref=(0, 0, 1)), "Body", "P", candy)
+for i, (x, y, z) in enumerate(arch_path(n=11)[1:-1]):
+    g.add(L.cyl(f"Flag{i}", 0.2, 0.02, (x, y - 0.38, -0.05), axis="z", segs=3, bevel=0.0), "Body", "P",
+          [lemon, pink, sky, mint][i % 4])
+sign(g, "#FFD23F", lambda m: [m.add(L.sphere(f"Balloon{i}", 0.13, (-0.2 + 0.2 * i, 3.6 + 0.05 * (i % 2), -0.38), scale=(1, 1.2, 1), segs=12,
+                                             rings=8), "Body", "P", [pink, sky, mint][i]) for i in range(3)])
+
 # ------------------------------------------------------------------ Lamp post with a note-shaped head
 lp = model("LampNote")
 lp.add(L.cyl("LampBase", 0.24, 0.2, (0, 0.1, 0), axis="y", segs=18, bevel=0.05), "Body", "P", ink)
@@ -172,6 +259,7 @@ for sx in (-1, 1):
 
 # ------------------------------------------------------------------ bake shared atlas, export each prop
 group = L.Group("HubProps", [m for m in models])
+group.ao_distance = 0.8
 tex, em = L.bake(group, size=2048, ao_samples=40, tex_dir=L.ART_DIR + "/Textures")
 mat = L.final_material("M_HubProps", tex, em, 1.0)
 for obj, node, slot in group.parts:
@@ -192,17 +280,18 @@ L.reset()
 M = L.Mats()
 gm = L.Model("HubGround")
 grass = M.get("grass", "#7CCB5A", rough=0.9, kind="foliage", a="#5FB54E", b="#8FD86A", scale=0.08)
-bm_obj = L.cyl("GroundDisc", 38.0, 0.2, (0, -0.1, 0), axis="y", segs=96, bevel=0.0)
-sub = bm_obj.modifiers.new("Sub", "SUBSURF")
-sub.levels = 2
-sub.subdivision_type = "SIMPLE"
-L._bake_modifiers(bm_obj, None, weighted=False)
-for v in bm_obj.data.vertices:  # rolling hills that rise past the playable radius (hide the horizon)
+import bmesh
+from mathutils import Vector
+bm = bmesh.new()
+bmesh.ops.create_grid(bm, x_segments=72, y_segments=72, size=40.0)   # 80 m square grid, Blender XY = Unity XZ
+for v in bm.verts:
     x, z = v.co.x, v.co.y
     r = math.hypot(x, z)
-    if v.co.z > -0.05:
-        lift = max(0.0, r - 17.0) ** 1.6 * 0.12 + 0.6 * math.sin(x * 0.35) * math.cos(z * 0.3) * max(0.0, (r - 15) / 20)
-        v.co.z += lift
+    # flat playable area, then soft rolling hills that rise past ~17 m and hide the horizon
+    lift = max(0.0, r - 17.0) ** 1.6 * 0.12 + 0.6 * math.sin(x * 0.35) * math.cos(z * 0.3) * max(0.0, (r - 15) / 20)
+    v.co.z = lift
+bm_obj = L._link("GroundGrid", bm, recalc=False)  # open plane: keep create_grid's upward normals
+L._bake_modifiers(bm_obj, None, weighted=False)
 gm.add(bm_obj, "Body", "P", grass)
 tex2, em2 = L.bake(gm, size=1024, ao_samples=16, tex_dir=L.ART_DIR + "/Textures")
 mat2 = L.final_material("M_HubGround", tex2)

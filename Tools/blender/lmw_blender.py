@@ -374,7 +374,11 @@ class Model:
         return (w.x + x, w.y + y, w.z + z)
 
 
-def _link(name, bm):
+def _link(name, bm, recalc=True):
+    # Outward normals for every closed shape (bmesh primitives such as create_cone can come out inward, which Cycles
+    # previews hide but Unity's back-face culling exposes).
+    if recalc and bm.faces:
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
     bm.free()
@@ -612,6 +616,27 @@ def bake(model, size=1024, ao_samples=64, tex_dir=None):
     scene.world.light_settings.distance = getattr(model, "ao_distance", 1.2)  # AO reach (m)
 
     objs = [p[0] for p in model.parts if p[0] not in model.nobake]
+    # Faces that sit on the ground facing straight down are never seen: drop them (more atlas space for the rest).
+    if getattr(model, "cull_bottom", True):
+        lowest = min((o.matrix_world @ v.co).z for o in objs for v in o.data.vertices) if objs else 0.0
+        for o in objs:
+            mw = o.matrix_world
+            n3 = mw.to_3x3()
+            bm = bmesh.new()
+            bm.from_mesh(o.data)
+            kill = [f for f in bm.faces if (n3 @ f.normal).normalized().z < -0.97 and (mw @ f.calc_center_median()).z < lowest + 0.03]
+            if kill and len(kill) < len(bm.faces):
+                bmesh.ops.delete(bm, geom=kill, context="FACES")
+                bm.to_mesh(o.data)
+            bm.free()
+    # Grouped models are spread far apart while baking so they never shadow (AO) each other, then put back.
+    offsets = []
+    if hasattr(model, "models"):
+        for i, m in enumerate(model.models):
+            off = Vector((i * 40.0, 0.0, 0.0))
+            for o, node, slot in m.parts:
+                o.matrix_world.translation += off
+                offsets.append((o, off))
     meshes = []
     uv_objs = []
     for o in objs:
@@ -654,6 +679,8 @@ def bake(model, size=1024, ao_samples=64, tex_dir=None):
         out[key] = np.array(im.pixels[:], dtype=np.float32).reshape(size, size, 4)
         print(f"[LMW] baked {key}")
 
+    for o, off in offsets:
+        o.matrix_world.translation -= off
     col = out["color"][:, :, :3]
     ao = np.clip(out["ao"][:, :, :1], 0, 1)
     # Light 3x3 blur hides AO sampling noise; soft toy-like contact shadows.

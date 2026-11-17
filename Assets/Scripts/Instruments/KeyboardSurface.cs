@@ -66,6 +66,16 @@ namespace LittleMusicWorld.Instruments
         private readonly Dictionary<int, int> fingerNote = new Dictionary<int, int>();
         private Camera uiCamera;
 
+        /// <summary>For keyboards built at runtime (InstrumentPanel).</summary>
+        public void SetSprites(RectTransform keyArea, Sprite white, Sprite black, Sprite dot, Sprite glow)
+        {
+            area = keyArea;
+            whiteKeySprite = white;
+            blackKeySprite = black;
+            dotSprite = dot;
+            glowSprite = glow;
+        }
+
         public void Configure(InstrumentDefinition def, int low, int whiteKeys)
         {
             Instrument = def;

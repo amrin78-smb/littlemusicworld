@@ -54,6 +54,7 @@ namespace LittleMusicWorld.EditorTools
             EditorUserBuildSettings.buildAppBundle = false;
 
             ConfigureSplash();
+            ConfigureIcons();
             ConfigureAndroidGraphics();
             ConfigureAudio();
 
@@ -87,6 +88,48 @@ namespace LittleMusicWorld.EditorTools
             try { PlayerSettings.SplashScreen.show = true; } catch (Exception) { /* Personal: always shown */ }
             Debug.Log($"[LMW] Splash: show={PlayerSettings.SplashScreen.show}, advanced license={PlayerSettings.advancedLicense}, " +
                       $"logos={PlayerSettings.SplashScreen.logos?.Length ?? 0}");
+        }
+
+        /// <summary>
+        /// Launcher icons from Tools/branding output: adaptive (background + foreground layers, API 26+), round and
+        /// legacy (square) for older launchers. Also the default (all-platform) icon.
+        /// </summary>
+        public static void ConfigureIcons()
+        {
+            Texture2D master = Tex("Assets/Art/Branding/Icon_Master.png");
+            Texture2D bg = Tex("Assets/Art/Branding/Icon_Background.png");
+            Texture2D fg = Tex("Assets/Art/Branding/Icon_Foreground.png");
+            if (master == null || bg == null || fg == null) { Debug.LogWarning("[LMW] Branding icons missing; run Tools/branding/build_branding.sh"); return; }
+            PlayerSettings.SetIcons(NamedBuildTarget.Unknown, new[] { master }, IconKind.Any);
+            var android = NamedBuildTarget.Android;
+            foreach (PlatformIconKind kind in new[] { UnityEditor.Android.AndroidPlatformIconKind.Adaptive,
+                         UnityEditor.Android.AndroidPlatformIconKind.Round, UnityEditor.Android.AndroidPlatformIconKind.Legacy })
+            {
+                PlatformIcon[] icons = PlayerSettings.GetPlatformIcons(android, kind);
+                foreach (PlatformIcon icon in icons)
+                {
+                    if (kind == UnityEditor.Android.AndroidPlatformIconKind.Adaptive) icon.SetTextures(bg, fg);
+                    else icon.SetTexture(master);
+                }
+                PlayerSettings.SetPlatformIcons(android, kind, icons);
+            }
+            Debug.Log("[LMW] Android icons: adaptive (bg+fg), round, legacy configured.");
+        }
+
+        private static Texture2D Tex(string path)
+        {
+            var ti = AssetImporter.GetAtPath(path) as TextureImporter;
+            if (ti == null) return null;
+            if (ti.textureType != TextureImporterType.Default || ti.mipmapEnabled || !ti.alphaIsTransparency || ti.textureCompression != TextureImporterCompression.Uncompressed)
+            {
+                ti.textureType = TextureImporterType.Default;
+                ti.mipmapEnabled = false;
+                ti.alphaIsTransparency = true;
+                ti.textureCompression = TextureImporterCompression.Uncompressed;
+                ti.npotScale = TextureImporterNPOTScale.None;
+                ti.SaveAndReimport();
+            }
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
 
         public static void ConfigureAndroidGraphics()

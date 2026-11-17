@@ -1,30 +1,267 @@
 {
-  "note": "Single source for Melo's words: speech-bubble text AND voice clips (Resources/Voice/<lang>/<key>). Edit, then run Tools/voice/generate_voice.sh and Tools/setup.sh.",
-  "languages": ["en", "th"],
-  "voices": { "en": "kokoro:af_heart", "th": "vachana:th_f_2" },
-  "speed": { "en": 0.88, "th": 0.9 },
-  "lines": [
-    { "key": "hello",            "en": "Hi! I'm Melo! Let's make music together!",        "th": "สวัสดีจ้ะ! ฉันชื่อเมโล มาเล่นดนตรีด้วยกันนะ!" },
-    { "key": "menu_play",        "en": "Tap the big button to play!",                    "th": "แตะปุ่มใหญ่เพื่อเริ่มเล่นเลย!" },
-    { "key": "hub_welcome",      "en": "Welcome to Music World! Where shall we go?",     "th": "ยินดีต้อนรับสู่โลกดนตรี! ไปที่ไหนดีนะ?" },
-    { "key": "hub_tap_path",     "en": "Tap a path and I'll walk there!",                "th": "แตะทางเดิน แล้วฉันจะเดินไปเอง!" },
-    { "key": "area_piano",       "en": "Piano Paradise! Let's play the piano!",          "th": "สวรรค์เปียโน! มาเล่นเปียโนกันเถอะ!" },
-    { "key": "area_drums",       "en": "Drum Valley! Boom, boom, boom!",                 "th": "หุบเขากลอง! ตูม ตูม ตูม!" },
-    { "key": "area_strings",     "en": "String Town! Strum and pluck!",                  "th": "เมืองเครื่องสาย! ดีดและเกากันเลย!" },
-    { "key": "area_wind",        "en": "Wind Village! Toot toot!",                       "th": "หมู่บ้านเครื่องเป่า! ปู๊น ปู๊น!" },
-    { "key": "area_orchestra",   "en": "Orchestra Park! Let's put on a show!",           "th": "สวนวงออร์เคสตรา! มาแสดงดนตรีกันเถอะ!" },
-    { "key": "area_studio",      "en": "The Music Studio! Let's make a song!",           "th": "ห้องอัดเพลง! มาแต่งเพลงกันเถอะ!" },
-    { "key": "area_carnival",    "en": "Rhythm Carnival! Let's play music games!",       "th": "งานรื่นเริงจังหวะ! มาเล่นเกมดนตรีกัน!" },
-    { "key": "piano_free",       "en": "Press the keys! Low notes here, high notes there!", "th": "กดคีย์เลย! เสียงต่ำอยู่ทางนี้ เสียงสูงอยู่ทางโน้น!" },
-    { "key": "piano_pick_song",  "en": "Pick a song and I'll show you how!",             "th": "เลือกเพลงสิ แล้วฉันจะสอนให้!" },
-    { "key": "follow_watch",     "en": "Listen and watch the keys!",                     "th": "ฟังและดูคีย์นะ!" },
-    { "key": "follow_turn",      "en": "Your turn! Press the shining key!",              "th": "ถึงตาหนูแล้ว! กดคีย์ที่ส่องแสงเลย!" },
-    { "key": "follow_hint",      "en": "This one! The shiny key!",                       "th": "อันนี้จ้ะ! คีย์ที่ส่องแสง!" },
-    { "key": "follow_good",      "en": "Yes!",                                           "th": "ใช่แล้ว!" },
-    { "key": "follow_done",      "en": "You played it! Wonderful!",                      "th": "หนูเล่นได้แล้ว! เก่งมากเลย!" },
-    { "key": "listen_song",      "en": "Now listen to the whole song!",                  "th": "ทีนี้มาฟังเพลงทั้งเพลงกัน!" },
-    { "key": "new_instrument",   "en": "You found a new instrument!",                    "th": "หนูเจอเครื่องดนตรีใหม่แล้ว!" },
-    { "key": "great_job",        "en": "Great job!",                                     "th": "เก่งมาก!" },
-    { "key": "bye",              "en": "See you soon!",                                  "th": "แล้วเจอกันนะ!" }
-  ]
+ "note": "Single source for Melo's words: speech-bubble text AND voice clips (Resources/Voice/<lang>/<key>). Edit, then run Tools/voice/generate_voice.sh and Tools/setup.sh.",
+ "languages": [
+  "en",
+  "th"
+ ],
+ "voices": {
+  "en": "kokoro:af_heart",
+  "th": "vachana:th_f_2"
+ },
+ "speed": {
+  "en": 0.88,
+  "th": 0.9
+ },
+ "lines": [
+  {
+   "key": "hello",
+   "en": "Hi! I'm Melo! Let's make music together!",
+   "th": "สวัสดีจ้ะ! ฉันชื่อเมโล มาเล่นดนตรีด้วยกันนะ!"
+  },
+  {
+   "key": "menu_play",
+   "en": "Tap the big button to play!",
+   "th": "แตะปุ่มใหญ่เพื่อเริ่มเล่นเลย!"
+  },
+  {
+   "key": "hub_welcome",
+   "en": "Welcome to Music World! Where shall we go?",
+   "th": "ยินดีต้อนรับสู่โลกดนตรี! ไปที่ไหนดีนะ?"
+  },
+  {
+   "key": "hub_tap_path",
+   "en": "Tap a path and I'll walk there!",
+   "th": "แตะทางเดิน แล้วฉันจะเดินไปเอง!"
+  },
+  {
+   "key": "area_piano",
+   "en": "Piano Paradise! Let's play the piano!",
+   "th": "สวรรค์เปียโน! มาเล่นเปียโนกันเถอะ!"
+  },
+  {
+   "key": "area_drums",
+   "en": "Drum Valley! Boom, boom, boom!",
+   "th": "หุบเขากลอง! ตูม ตูม ตูม!"
+  },
+  {
+   "key": "area_strings",
+   "en": "String Town! Strum and pluck!",
+   "th": "เมืองเครื่องสาย! ดีดและเกากันเลย!"
+  },
+  {
+   "key": "area_wind",
+   "en": "Wind Village! Toot toot!",
+   "th": "หมู่บ้านเครื่องเป่า! ปู๊น ปู๊น!"
+  },
+  {
+   "key": "area_orchestra",
+   "en": "Orchestra Park! Let's put on a show!",
+   "th": "สวนวงออร์เคสตรา! มาแสดงดนตรีกันเถอะ!"
+  },
+  {
+   "key": "area_studio",
+   "en": "The Music Studio! Let's make a song!",
+   "th": "ห้องอัดเพลง! มาแต่งเพลงกันเถอะ!"
+  },
+  {
+   "key": "area_carnival",
+   "en": "Rhythm Carnival! Let's play music games!",
+   "th": "งานรื่นเริงจังหวะ! มาเล่นเกมดนตรีกัน!"
+  },
+  {
+   "key": "piano_free",
+   "en": "Press the keys! Low notes here, high notes there!",
+   "th": "กดคีย์เลย! เสียงต่ำอยู่ทางนี้ เสียงสูงอยู่ทางโน้น!"
+  },
+  {
+   "key": "piano_pick_song",
+   "en": "Pick a song and I'll show you how!",
+   "th": "เลือกเพลงสิ แล้วฉันจะสอนให้!"
+  },
+  {
+   "key": "follow_watch",
+   "en": "Listen and watch the keys!",
+   "th": "ฟังและดูคีย์นะ!"
+  },
+  {
+   "key": "follow_turn",
+   "en": "Your turn! Press the shining key!",
+   "th": "ถึงตาหนูแล้ว! กดคีย์ที่ส่องแสงเลย!"
+  },
+  {
+   "key": "follow_hint",
+   "en": "This one! The shiny key!",
+   "th": "อันนี้จ้ะ! คีย์ที่ส่องแสง!"
+  },
+  {
+   "key": "follow_good",
+   "en": "Yes!",
+   "th": "ใช่แล้ว!"
+  },
+  {
+   "key": "follow_done",
+   "en": "You played it! Wonderful!",
+   "th": "หนูเล่นได้แล้ว! เก่งมากเลย!"
+  },
+  {
+   "key": "listen_song",
+   "en": "Now listen to the whole song!",
+   "th": "ทีนี้มาฟังเพลงทั้งเพลงกัน!"
+  },
+  {
+   "key": "new_instrument",
+   "en": "You found a new instrument!",
+   "th": "หนูเจอเครื่องดนตรีใหม่แล้ว!"
+  },
+  {
+   "key": "great_job",
+   "en": "Great job!",
+   "th": "เก่งมาก!"
+  },
+  {
+   "key": "bye",
+   "en": "See you soon!",
+   "th": "แล้วเจอกันนะ!"
+  },
+  {
+   "key": "orchestra_pick",
+   "en": "Tap an animal to invite them to the stage!",
+   "th": "แตะสัตว์เพื่อเชิญขึ้นเวทีเลย!"
+  },
+  {
+   "key": "orchestra_change",
+   "en": "Tap a musician to change their instrument!",
+   "th": "แตะนักดนตรีเพื่อเปลี่ยนเครื่องดนตรีนะ!"
+  },
+  {
+   "key": "orchestra_play",
+   "en": "Pick a song, then press play!",
+   "th": "เลือกเพลง แล้วกดเล่นเลย!"
+  },
+  {
+   "key": "orchestra_bravo",
+   "en": "Bravo! What a wonderful concert!",
+   "th": "เยี่ยมมาก! คอนเสิร์ตสุดยอดเลย!"
+  },
+  {
+   "key": "orchestra_find_fox",
+   "en": "Find the violin in String Town to meet Fox!",
+   "th": "ไปหาไวโอลินที่เมืองเครื่องสาย แล้วจะได้เจอจิ้งจอกนะ!"
+  },
+  {
+   "key": "orchestra_find_elephant",
+   "en": "Find the trumpet in Wind Village to meet Elephant!",
+   "th": "ไปหาทรัมเป็ตที่หมู่บ้านเครื่องเป่า แล้วจะได้เจอช้างนะ!"
+  },
+  {
+   "key": "orchestra_find_cat",
+   "en": "Find the guitar in String Town to meet Cat!",
+   "th": "ไปหากีตาร์ที่เมืองเครื่องสาย แล้วจะได้เจอแมวนะ!"
+  },
+  {
+   "key": "orchestra_find_penguin",
+   "en": "Find the maracas in Drum Valley to meet Penguin!",
+   "th": "ไปหามาราคัสที่หุบเขากลอง แล้วจะได้เจอเพนกวินนะ!"
+  },
+  {
+   "key": "orchestra_find_bear",
+   "en": "Find the drums in Drum Valley to meet Bear!",
+   "th": "ไปหากลองที่หุบเขากลอง แล้วจะได้เจอหมีนะ!"
+  },
+  {
+   "key": "orchestra_find_rabbit",
+   "en": "Find the piano in Piano Paradise to meet Rabbit!",
+   "th": "ไปหาเปียโนที่สวรรค์เปียโน แล้วจะได้เจอกระต่ายนะ!"
+  },
+  {
+   "key": "studio_record",
+   "en": "Press the red button, then play your music!",
+   "th": "กดปุ่มสีแดง แล้วเล่นดนตรีของหนูเลย!"
+  },
+  {
+   "key": "studio_saved",
+   "en": "Your song is saved!",
+   "th": "บันทึกเพลงของหนูแล้วจ้ะ!"
+  },
+  {
+   "key": "game_rhythm",
+   "en": "Listen to the drum, then copy it!",
+   "th": "ฟังเสียงกลอง แล้วตีตามนะ!"
+  },
+  {
+   "key": "game_detective",
+   "en": "Which instrument is playing?",
+   "th": "เครื่องดนตรีอะไรกำลังเล่นอยู่นะ?"
+  },
+  {
+   "key": "game_beat",
+   "en": "Tap the drum with the beat!",
+   "th": "ตีกลองตามจังหวะนะ!"
+  },
+  {
+   "key": "game_memory",
+   "en": "Watch the bells, then play them back!",
+   "th": "ดูระฆังให้ดี แล้วเล่นตามนะ!"
+  },
+  {
+   "key": "game_highlow",
+   "en": "Is the second note higher or lower?",
+   "th": "เสียงที่สองสูงขึ้นหรือต่ำลงนะ?"
+  },
+  {
+   "key": "game_orchestra",
+   "en": "Who is playing? Pick them all!",
+   "th": "ใครกำลังเล่นอยู่บ้าง? เลือกให้ครบเลย!"
+  },
+  {
+   "key": "game_builder",
+   "en": "Make your own melody with the colourful notes!",
+   "th": "แต่งทำนองของหนูเองด้วยตัวโน้ตหลากสีเลย!"
+  },
+  {
+   "key": "game_listen",
+   "en": "Listen!",
+   "th": "ฟังนะ!"
+  },
+  {
+   "key": "game_your_turn",
+   "en": "Your turn!",
+   "th": "ถึงตาหนูแล้ว!"
+  },
+  {
+   "key": "game_again",
+   "en": "Let's try again!",
+   "th": "ลองอีกครั้งนะ!"
+  },
+  {
+   "key": "game_try_other",
+   "en": "Hmm, try another one!",
+   "th": "อืม ลองอันอื่นดูนะ!"
+  },
+  {
+   "key": "game_listen_again",
+   "en": "Let's listen again!",
+   "th": "มาฟังอีกครั้งนะ!"
+  },
+  {
+   "key": "game_tap_with",
+   "en": "Now tap with me!",
+   "th": "ทีนี้ตีไปพร้อมกับฉันนะ!"
+  },
+  {
+   "key": "game_fill",
+   "en": "Fill all the circles first!",
+   "th": "เติมวงกลมให้ครบก่อนนะ!"
+  },
+  {
+   "key": "stickers",
+   "en": "Look at everything you found!",
+   "th": "ดูสิ่งที่หนูค้นพบทั้งหมดสิ!"
+  },
+  {
+   "key": "locked_soon",
+   "en": "Let's explore here soon!",
+   "th": "เดี๋ยวเรามาสำรวจที่นี่กันนะ!"
+  }
+ ]
 }
