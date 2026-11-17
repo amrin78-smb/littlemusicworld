@@ -18,6 +18,19 @@ namespace LittleMusicWorld.Core
     public sealed class DeviceSelfTest : MonoBehaviour
     {
         private readonly StringBuilder report = new StringBuilder();
+        private System.Action<string> onDone;
+        private System.Action<string> onLine;
+
+        /// <summary>Runs the measurements from the parent area (no adb needed); reports progress and the final text.</summary>
+        public static DeviceSelfTest Run(System.Action<string> line, System.Action<string> done)
+        {
+            var go = new GameObject("LMW Self Test");
+            DontDestroyOnLoad(go);
+            var t = go.AddComponent<DeviceSelfTest>();
+            t.onLine = line;
+            t.onDone = done;
+            return t;
+        }
         private readonly List<float> frameMs = new List<float>(4096);
         private bool recordFrames;
 
@@ -51,6 +64,7 @@ namespace LittleMusicWorld.Core
         {
             report.AppendLine(s);
             Debug.Log("[LMW SelfTest] " + s);
+            onLine?.Invoke(s);
         }
 
         private void Update()
@@ -60,7 +74,7 @@ namespace LittleMusicWorld.Core
 
         private IEnumerator Start()
         {
-            yield return new WaitForSecondsRealtime(3f); // let the first scene settle
+            yield return new WaitForSecondsRealtime(onDone != null ? 0.5f : 3f); // let the first scene settle
             MusicalAudioEngine e = Services.Engine;
             InstrumentLibrary lib = Services.Instruments;
             Line($"device={SystemInfo.deviceModel} os={SystemInfo.operatingSystem} gpu={SystemInfo.graphicsDeviceName} " +
@@ -140,6 +154,8 @@ namespace LittleMusicWorld.Core
                  $"reserved={UnityEngine.Profiling.Profiler.GetTotalReservedMemoryLong() / 1048576f:0}MB mono={UnityEngine.Profiling.Profiler.GetMonoUsedSizeLong() / 1048576f:0}MB");
             System.IO.File.WriteAllText(System.IO.Path.Combine(Application.persistentDataPath, "selftest.txt"), report.ToString());
             Line("DONE");
+            onDone?.Invoke(report.ToString());
+            if (onDone != null) Destroy(gameObject);
         }
 
         private void Report(string name, MusicalAudioEngine.Stats s)

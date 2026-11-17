@@ -164,10 +164,10 @@ def bowed(name, scale, endpin):
     span = 0.011 * scale
     strings(v, [(-1.5 * span + i * span, -1.2 * span + i * 0.8 * span) for i in range(4)], y0 + L_ * 0.25, y0 + L_ + neck,
             -0.052 * scale, 0.0025 * scale)
-    if endpin > 0.05:
+    if scale > 2.0:  # cello stands on its endpin
         v.add(L.cyl("Endpin", 0.01, endpin, (0, endpin / 2, 0), axis="y", segs=8, bevel=0.003, radius2=0.004), "Body", "P", chrome)
-    else:
-        display_stand(v, 0, 0.1, 0.25)
+    else:            # violin rests on a display stand
+        display_stand(v, 0, 0.06, endpin)
     b = v.node("Bow", "Body", (0.22 * scale, y0 + L_ * 0.5, -0.1 * scale))
     bl = 0.75 * scale
     v.add(L.cyl("BowStick", 0.006 * scale, bl, (0.22 * scale, y0 + L_ * 0.5, -0.1 * scale), axis="y", segs=8, bevel=0.002,

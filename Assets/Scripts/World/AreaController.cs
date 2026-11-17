@@ -35,6 +35,8 @@ namespace LittleMusicWorld.World
         [SerializeField] private Image progressFill;
 
         private InstrumentStation current;
+        private readonly System.Collections.Generic.Dictionary<InstrumentStation, Vector3> baseScale =
+            new System.Collections.Generic.Dictionary<InstrumentStation, Vector3>();
         private Vector3 camFromPos, camToPos;
         private Quaternion camFromRot, camToRot;
         private float camT = 1f;
@@ -95,8 +97,9 @@ namespace LittleMusicWorld.World
             foreach (InstrumentStation s in stations)
                 if (s.bounce != null)
                 {
+                    if (!baseScale.TryGetValue(s, out Vector3 b0)) baseScale[s] = b0 = s.bounce.localScale;
                     bool fresh = current == null && p != null && !p.discoveredInstruments.Contains(s.instrumentId);
-                    s.bounce.localScale = Vector3.one * (fresh ? 1f + 0.03f * Mathf.Max(0, bob) : 1f);
+                    s.bounce.localScale = b0 * (fresh ? 1f + 0.03f * Mathf.Max(0, bob) : 1f);
                 }
             if (current == null) HandleTap();
         }

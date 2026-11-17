@@ -134,6 +134,18 @@ namespace LittleMusicWorld.EditorTools
             E.Set(sp, "credits", cr);
             E.Set(sp, "creditsPanel", credits.gameObject);
             E.Set(sp, "info", info);
+            Button check = UIKit.Pebble("CheckDevice", panel, new Vector2(0.5f, 0.5f), new Vector2(-560, -310), new Vector2(200, 110), "#5B7CFA", null);
+            UIKit.Text("Label", check.transform, "Check", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(190, 80));
+            RectTransform checkPanel = UIKit.Stretch("Check Panel", panel);
+            UIKit.Image("Bg", checkPanel, "Panel", Color.white, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1500, 900), true);
+            TextMeshProUGUI report = UIKit.Text("Report", checkPanel, "", 22, UIKit.Ink, new Vector2(0.5f, 0.5f), new Vector2(0, -20), new Vector2(1420, 780),
+                TextAlignmentOptions.TopLeft);
+            Button closeCheck = UIKit.Pebble("CloseCheck", checkPanel, new Vector2(0.5f, 0.5f), new Vector2(680, 390), new Vector2(110, 100), "#8BD346", "IconCheck");
+            UnityEditor.Events.UnityEventTools.AddBoolPersistentListener(closeCheck.onClick, checkPanel.gameObject.SetActive, false);
+            checkPanel.gameObject.SetActive(false);
+            E.Set(sp, "checkDevice", check);
+            E.Set(sp, "checkReport", report);
+            E.Set(sp, "checkPanel", checkPanel.gameObject);
             panel.gameObject.SetActive(false);
             var gate = gear.gameObject.AddComponent<ParentGate>();
             E.Set(gate, "ring", ring);
@@ -187,7 +199,7 @@ namespace LittleMusicWorld.EditorTools
             Place("Hub/TreeBlossom", new Vector3(7.5f, 0, 4.5f), 80f, 1.1f);
             Place("Hub/TreeRound", new Vector3(10f, 0, 10f), 140f, 1.3f);
             Place("Hub/FlowerBed", new Vector3(-3.2f, 0.12f, -2.6f));
-            Place("Hub/LampNote", new Vector3(4.2f, 0.12f, -1.5f), 200f);
+            Place("Hub/LampNote", new Vector3(5.6f, 0.12f, 2.8f), 200f);
             Place("Hub/Bush", new Vector3(-5.5f, 0, 1.5f), 10f, 1.2f);
             MascotController melo = PlaceMelo(new Vector3(-0.6f, 0.12f, -3.6f), 165f);
             melo.transform.localScale = Vector3.one * 1.15f;

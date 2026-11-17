@@ -15,6 +15,9 @@ namespace LittleMusicWorld.UI
         [SerializeField] private Button english, thai, quality, close, credits, resetProgress;
         [SerializeField] private TMP_Text qualityLabel, info;
         [SerializeField] private GameObject creditsPanel;
+        [SerializeField] private Button checkDevice;
+        [SerializeField] private TMP_Text checkReport;
+        [SerializeField] private GameObject checkPanel;
 
         private SaveSystem.SettingsData S => Services.Save.Data.settings;
 
@@ -40,6 +43,22 @@ namespace LittleMusicWorld.UI
             close.onClick.AddListener(() => { Services.Save.Save(); gameObject.SetActive(false); });
             if (credits != null) credits.onClick.AddListener(() => creditsPanel.SetActive(!creditsPanel.activeSelf));
             if (resetProgress != null) resetProgress.onClick.AddListener(() => Services.Save.ResetProgress(false));
+            if (checkDevice != null) checkDevice.onClick.AddListener(RunCheck);
+        }
+
+        /// <summary>Grown-up diagnostic: the audio/performance self-test, results shown on screen for a screenshot.</summary>
+        private void RunCheck()
+        {
+            if (checkPanel == null) return;
+            checkPanel.SetActive(true);
+            checkReport.text = "Checking… (about 25 seconds, sounds will play)";
+            var lines = new System.Text.StringBuilder();
+            DeviceSelfTest.Run(line =>
+            {
+                if (line.StartsWith("load ")) return; // keep the screen short
+                lines.AppendLine(line);
+                checkReport.text = lines.ToString();
+            }, report => checkReport.text = lines + "\nDone — please take a screenshot.");
         }
 
         private void SetLanguage(string lang)

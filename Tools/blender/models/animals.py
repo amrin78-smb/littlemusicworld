@@ -66,38 +66,51 @@ def build(name, a):
     by = 0.42 * H
     part(L.lathe("Torso", [(0.0, 0.0), (0.22 * G, 0.02), (0.3 * G, 0.12), (0.31 * G, 0.24), (0.27 * G, 0.36), (0.2 * G, 0.44),
                            (0.0, 0.46)], (0, 0.14 * H, 0), axis="y", segs=28), "body", fur)
-    part(L.sphere("Belly", 0.24 * G, (0, 0.33 * H, 0.1 * G), scale=(0.95, 1.05, 0.6), segs=20, rings=12), "body", belly)
+    part(L.sphere("Belly", 0.24 * G, (0, 0.33 * H, 0.175 * G), scale=(0.95, 1.05, 0.6), segs=20, rings=12), "body", belly)
     # head
     hy = 0.82 * H
     hr = 0.3 * H
     part(L.sphere("Head", hr, (0, hy, 0.02), scale=(1.08, 0.95, 1.0), segs=28, rings=18), "head", fur)
-    part(L.sphere("Face", hr * 0.62, (0, hy - 0.05 * H, hr * 0.55), scale=(1.1, 0.85, 0.6), segs=20, rings=12), "head",
-         belly if a["snout"] != "beak" else belly)
+
+    def surf(x, y, inset=0.0):
+        """Front (+z) surface of the head ellipsoid at (x, y): seat facial features ON the head, not inside it."""
+        q = 1.0 - (x / (1.08 * hr)) ** 2 - ((y - hy) / (0.95 * hr)) ** 2
+        return 0.02 + hr * math.sqrt(max(0.0, q)) - inset
+    part(L.sphere("Face", hr * 0.62, (0, hy - 0.05 * H, surf(0, hy - 0.05 * H, hr * 0.62 * 0.6 * 0.55)), scale=(1.1, 0.85, 0.6),
+                  segs=20, rings=12), "head", belly)
     for side, sx in (("L", -1), ("R", 1)):
         x = sx * hr * 0.38
-        part(L.sphere(f"Eye{side}", hr * 0.17, (x, hy + 0.04 * H, hr * 0.84), scale=(0.9, 1.1, 0.5), segs=16, rings=10), f"eye_{side}", ink)
-        part(L.sphere(f"Hi{side}", hr * 0.055, (x + hr * 0.05, hy + 0.07 * H, hr * 0.93), segs=8, rings=5), f"eye_{side}", white)
-        part(L.sphere(f"Cheek{side}", hr * 0.12, (sx * hr * 0.62, hy - 0.06 * H, hr * 0.72), scale=(1, 0.65, 0.4), segs=10, rings=6), "head", blush)
+        ey = hy + 0.04 * H
+        ez = surf(x, ey, hr * 0.17 * 0.5 * 0.35) + 0.01
+        part(L.sphere(f"Eye{side}", hr * 0.17, (x, ey, ez), scale=(0.9, 1.1, 0.5), segs=16, rings=10), f"eye_{side}", ink)
+        part(L.sphere(f"Hi{side}", hr * 0.055, (x + hr * 0.05, ey + hr * 0.07, ez + hr * 0.07), segs=8, rings=5), f"eye_{side}", white)
+        cy = hy - 0.06 * H
+        part(L.sphere(f"Cheek{side}", hr * 0.12, (sx * hr * 0.62, cy, surf(sx * hr * 0.62, cy, 0.0)), scale=(1, 0.65, 0.4), segs=10, rings=6),
+             "head", blush)
 
     # snout / nose / beak / trunk
     sn = a["snout"]
     if sn == "muzzle":
-        part(L.sphere("Muzzle", hr * 0.36, (0, hy - 0.08 * H, hr * 0.85), scale=(1.15, 0.85, 0.75), segs=18, rings=10), "head", belly)
-        part(L.sphere("Nose", hr * 0.13, (0, hy - 0.03 * H, hr * 1.1), scale=(1.3, 0.8, 0.8), segs=12, rings=8), "head", nose)
+        mz = surf(0, hy - 0.08 * H, hr * 0.12)
+        part(L.sphere("Muzzle", hr * 0.36, (0, hy - 0.08 * H, mz), scale=(1.15, 0.85, 0.75), segs=18, rings=10), "head", belly)
+        part(L.sphere("Nose", hr * 0.13, (0, hy - 0.03 * H, mz + hr * 0.25), scale=(1.3, 0.8, 0.8), segs=12, rings=8), "head", nose)
     elif sn == "long":
-        part(L.cyl("Snout", hr * 0.24, hr * 0.55, (0, hy - 0.07 * H, hr * 1.0), axis="z", segs=16, bevel=0.03, radius2=hr * 0.12), "head", belly)
-        part(L.sphere("Nose", hr * 0.09, (0, hy - 0.06 * H, hr * 1.28), segs=10, rings=6), "head", nose)
+        sy_ = hy - 0.1 * H
+        sz = surf(0, sy_, hr * 0.05)
+        part(L.cyl("Snout", hr * 0.3, hr * 0.32, (0, sy_, sz + hr * 0.1), axis="z", segs=16, bevel=0.04, radius2=hr * 0.16), "head", belly)
+        part(L.sphere("Nose", hr * 0.1, (0, sy_ + hr * 0.02, sz + hr * 0.28), segs=10, rings=6), "head", nose)
     elif sn == "small":
-        part(L.sphere("Nose", hr * 0.08, (0, hy - 0.03 * H, hr * 0.98), scale=(1.3, 0.9, 0.8), segs=10, rings=6), "head", nose)
-        part(L.sphere("Mouth", hr * 0.14, (0, hy - 0.1 * H, hr * 0.9), scale=(1.4, 0.6, 0.5), segs=12, rings=6), "jaw", belly)
+        part(L.sphere("Nose", hr * 0.08, (0, hy - 0.03 * H, surf(0, hy - 0.03 * H) + 0.005), scale=(1.3, 0.9, 0.8), segs=10, rings=6), "head", nose)
+        part(L.sphere("Mouth", hr * 0.14, (0, hy - 0.1 * H, surf(0, hy - 0.1 * H, hr * 0.03)), scale=(1.4, 0.6, 0.5), segs=12, rings=6), "jaw", belly)
     elif sn == "beak":
-        part(L.cyl("Beak", hr * 0.2, hr * 0.32, (0, hy - 0.05 * H, hr * 1.0), axis="z", segs=14, bevel=0.02, radius2=hr * 0.04), "head", nose)
-        part(L.cyl("BeakLow", hr * 0.14, hr * 0.22, (0, hy - 0.1 * H, hr * 0.95), axis="z", segs=12, bevel=0.015, radius2=hr * 0.03), "jaw", nose)
+        bz = surf(0, hy - 0.05 * H)
+        part(L.cyl("Beak", hr * 0.2, hr * 0.32, (0, hy - 0.05 * H, bz + hr * 0.1), axis="z", segs=14, bevel=0.02, radius2=hr * 0.04), "head", nose)
+        part(L.cyl("BeakLow", hr * 0.14, hr * 0.22, (0, hy - 0.1 * H, bz + hr * 0.05), axis="z", segs=12, bevel=0.015, radius2=hr * 0.03), "jaw", nose)
     elif sn == "trunk":
         pts = []
         for i in range(14):
             t = i / 13
-            pts.append((0.0, hy - 0.05 * H - 0.32 * H * t + 0.1 * H * t ** 3, hr * 0.85 + 0.18 * H * math.sin(t * 2.2)))
+            pts.append((0.0, hy - 0.05 * H - 0.32 * H * t + 0.1 * H * t ** 3, surf(0, hy - 0.05 * H, hr * 0.1) + 0.18 * H * math.sin(t * 2.2)))
         part(L.sweep("Trunk", pts, L.circle(hr * 0.17, 12), ref=(1, 0, 0), taper=lambda t: (1 - 0.45 * t, 1 - 0.45 * t)), "jaw", fur)
         part(L.cyl("TrunkTip", hr * 0.1, 0.03, pts[-1], axis="y", segs=12, bevel=0.01), "jaw", nose)
 

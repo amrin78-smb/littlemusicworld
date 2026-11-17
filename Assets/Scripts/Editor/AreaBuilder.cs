@@ -25,6 +25,7 @@ namespace LittleMusicWorld.EditorTools
             public Vector3 pos;
             public float rotY;
             public float scale = 1f;
+            public float viewYaw;      // camera angle relative to the instrument's front (profile views)
         }
 
         public sealed class Spec
@@ -108,7 +109,7 @@ namespace LittleMusicWorld.EditorTools
                 // Camera view: in front of the instrument, a little above, framing it in the top half of the screen
                 // (the play panel covers the bottom half).
                 float size = Mathf.Max(b.size.x, b.size.y * 1.3f, 0.7f);
-                Vector3 front = Quaternion.Euler(0, st.rotY, 0) * Vector3.back;
+                Vector3 front = Quaternion.Euler(0, st.rotY + st.viewYaw, 0) * Vector3.back;
                 Vector3 focus = b.center + Vector3.down * size * 0.45f;
                 var view = new GameObject("View").transform;
                 view.SetParent(go.transform, true);
@@ -276,8 +277,8 @@ namespace LittleMusicWorld.EditorTools
                 meloPos = new Vector3(0f, 0.13f, -2.2f), meloRot = 180f,
                 stations =
                 {
-                    St("Saxophone", -0.6f, 1.2f, 10f), St("Trumpet", 0.6f, 1.2f, -10f), St("Flute", -2.0f, 0.6f, 25f),
-                    St("Trombone", 2.1f, 0.6f, -25f), St("Clarinet", -2.6f, -0.6f, 35f), St("Recorder", 2.6f, -0.6f, -35f),
+                    St("Saxophone", -0.6f, 1.2f, 10f), new Station { id = "Trumpet", pos = new Vector3(0.6f, 0.13f, 1.2f), rotY = 80f, viewYaw = -90f }, St("Flute", -2.0f, 0.6f, 25f),
+                    new Station { id = "Trombone", pos = new Vector3(2.1f, 0.13f, 0.6f), rotY = 65f, viewYaw = -90f }, St("Clarinet", -2.6f, -0.6f, 35f), St("Recorder", 2.6f, -0.6f, -35f),
                 },
                 decorate = w => Decor(w, "TreeBlossom", "LampNote")
             }));
