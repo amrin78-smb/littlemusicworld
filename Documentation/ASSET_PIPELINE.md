@@ -28,12 +28,20 @@ tangents, characters Generic rig with 2-bone skinning. `ArtLibrary` builds URP L
 atlas, LOD groups, colliders and prefabs; character Animator controllers get one state per clip.
 
 ### Assets created
-| Asset | Script | Tris (approx.) | Atlas | Notes |
+| Asset | Script | Faces (approx.) | Atlas | Notes |
 |---|---|---|---|---|
-| Grand Piano | `grand_piano.py` | ~18k | 1024² | 49 pivoted keys (C2–C6), propped lid, lyre, casters |
-| Melo (mascot) | `melo.py` | ~9.5k | 1024² + emission | 12 bones, 10 clips |
-| Hub props | `hub_env.py` | varies | shared 2048² | Bandstand (LOD), GatePiano, LampNote, TreeRound/Blossom (LOD), Bush, FlowerBed, Bench, Plaza, PathSegment |
-| Hub ground | `hub_env.py` | ~37k | 1024² | rising hills hide the horizon |
+| Grand Piano | `grand_piano.py` | 9.1k | 1024² | 49 pivoted keys (C2–C6), propped lid, lyre, casters |
+| Upright Piano, Digital Keyboard | `instruments_keys.py` | 5–6k each | shared 1024² | 37 pivoted keys each; candle sconces / X-stand, screen, speakers |
+| Drum Kit, Snare, Bass Drum, Cymbals, Bongos, Congas, Tambourine, Maracas, Xylophone | `instruments_drums.py` | 0.3–6k | shared 2048² | `Pad_<note>` pivots per playable part |
+| Acoustic/Electric Guitar, Ukulele, Banjo, Violin, Cello, Harp | `instruments_strings.py` | 0.6–2.8k | shared 2048² | `String_<i>` pivots, bows |
+| Flute, Trumpet, Saxophone, Clarinet, Trombone, Recorder | `instruments_winds.py` | 1–2k | shared 1024² | `Key_<i>` keys/valves/holes, trombone `Slide` |
+| Melo (mascot) | `melo.py` | 5k | 1024² + emission | 12 bones, 10 clips |
+| Bear, Rabbit, Fox, Elephant, Cat, Penguin | `animals.py` | 3–3.5k each | 1024² each | parametric generator, 15 bones, 18 clips (Idle, Walk, Dance, Celebrate, Rest, React, Hold/Play × 6 styles) |
+| Hub props: Bandstand (LOD), 7 themed gates, LampNote, TreeRound/Blossom (LOD), Bush, FlowerBed, Bench, Plaza, PathSegment | `hub_env.py` | 0.2–5k | shared 2048² | baked spread apart (no cross-AO), bottom faces culled |
+| Hub ground | `hub_env.py` | 10k | 1024² | grid with rolling hills past the playable radius |
+| Golden note collectible | `collectibles.py` | 0.6k | 256² + emission | |
+| Portraits (25 instruments, 7 characters) | `PortraitRenderer` (Unity) | — | 256² sprites | rendered from the real prefabs |
+| Branding: logo, icon layers, splash logo, loading background | `build_branding.py` | — | — | rendered from Melo + Fredoka 3D text |
 
 ## Audio
 ```

@@ -102,7 +102,7 @@ namespace LittleMusicWorld.Characters
 
         private void Play(string state, float fade = 0.18f, bool restart = false)
         {
-            if (animator == null || animator.runtimeAnimatorController == null) return;
+            if (animator == null || animator.runtimeAnimatorController == null || !animator.isActiveAndEnabled) return;
             if (!restart && current == state) return;
             current = state;
             animator.CrossFadeInFixedTime(state, fade);

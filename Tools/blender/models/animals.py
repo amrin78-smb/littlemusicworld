@@ -76,8 +76,15 @@ def build(name, a):
         """Front (+z) surface of the head ellipsoid at (x, y): seat facial features ON the head, not inside it."""
         q = 1.0 - (x / (1.08 * hr)) ** 2 - ((y - hy) / (0.95 * hr)) ** 2
         return 0.02 + hr * math.sqrt(max(0.0, q)) - inset
-    part(L.sphere("Face", hr * 0.62, (0, hy - 0.05 * H, surf(0, hy - 0.05 * H, hr * 0.62 * 0.6 * 0.55)), scale=(1.1, 0.85, 0.6),
-                  segs=20, rings=12), "head", belly)
+    fy, fr = hy - 0.05 * H, hr * 0.62
+    fz = surf(0, fy, fr * 0.6 * 0.55)
+    part(L.sphere("Face", fr, (0, fy, fz), scale=(1.1, 0.85, 0.6), segs=20, rings=12), "head", belly)
+    head_surf = surf
+
+    def surf(x, y, inset=0.0):  # noqa: F811 — frontmost of head and face patch
+        q = 1.0 - (x / (1.1 * fr)) ** 2 - ((y - fy) / (0.85 * fr)) ** 2
+        face = fz + 0.6 * fr * math.sqrt(q) - inset if q > 0 else -1.0
+        return max(head_surf(x, y, inset), face)
     for side, sx in (("L", -1), ("R", 1)):
         x = sx * hr * 0.38
         ey = hy + 0.04 * H

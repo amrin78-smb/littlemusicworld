@@ -25,7 +25,10 @@ Only tests that were actually run are marked with a result. "Not yet run" means 
 | Install + launch | Galaxy S23 Ultra, Android 17, ARM64 | ✔ 60 fps, ~330 MB PSS |
 | Self-test | S23 Ultra, ARM64 | 48 kHz, 256×4 buffer; 40-voice burst: mixer 3.1 % (peak 0.24 ms of 5.33 ms); 16ths @ 180 bpm ×3 tracks: 240 scheduled, 0 late; held loops 0.7 %; 60 fps p95 16.7 ms |
 | Self-test | S23 Ultra, **ARMv7** (`--abi armeabi-v7a`, primaryCpuAbi verified) | Low tier, 512×4 buffer, 28 voices; mixer 5.2 %; 0 late of 240; 30 fps, max frame 41.7 ms |
-| Redmi A3 | — | **not yet run** (owner's device) |
+| Self-test **in the Hub** (background music, full hub art) | S23 Ultra, ARM64, High tier | 60 fps (p95 16.7 ms, max 16.7 ms); 40-note burst 3.6 % mixer; 16ths ×3 tracks: 270 scheduled, 0 late, limiter idle |
+| Self-test **in the Hub** | S23 Ultra, **ARMv7**, Low tier | 30 fps locked (max frame 33.4 ms); mixer 4.8 % at the 28-voice cap; 0 late; limiter idle |
+| Device walkthrough (all 10 scenes) | S23 Ultra, release | every scene loads and renders; no errors/exceptions in logcat |
+| Redmi A3 | — | **not yet run** (owner's device) — use Parent area ▸ Check and send a screenshot |
 
 ### Branding verification (gate)
 | Check | Status |

@@ -148,7 +148,10 @@ namespace LittleMusicWorld.World
             if (listenButton != null) listenButton.gameObject.SetActive(false);
             if (progressFill != null) progressFill.transform.parent.gameObject.SetActive(false);
             UISound.Plink(88, 60);
-            melo?.SetBase(MascotController.Base.Idle);
+            // Only the chosen instrument stays visible in the close-up (others would block the camera).
+            foreach (InstrumentStation o in stations) if (o != s) o.gameObject.SetActive(false);
+            // Melo steps out of the close-up so the instrument is never hidden; the voice and bubble still speak.
+            if (melo != null) melo.gameObject.SetActive(false);
         }
 
         public void Leave()
@@ -159,6 +162,8 @@ namespace LittleMusicWorld.World
             panel.Hide();
             playBar.SetActive(false);
             if (overviewBar != null) overviewBar.SetActive(true);
+            if (melo != null) melo.gameObject.SetActive(true);
+            foreach (InstrumentStation o in stations) o.gameObject.SetActive(true);
             MoveCamera(overview);
         }
 

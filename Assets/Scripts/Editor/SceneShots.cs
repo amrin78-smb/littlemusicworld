@@ -45,6 +45,24 @@ namespace LittleMusicWorld.EditorTools
                     Object.DestroyImmediate(tex);
                     Debug.Log($"[LMW Shots] {name}{tag}");
                 }
+                // Instrument close-up framings (area scenes): render each station's view at the phone aspect.
+                foreach (var st in Object.FindObjectsByType<LittleMusicWorld.World.InstrumentStation>(FindObjectsSortMode.None))
+                {
+                    if (st.view == null) continue;
+                    cam.transform.SetPositionAndRotation(st.view.position, st.view.rotation);
+                    var rt2 = new RenderTexture(1158, 540, 24, RenderTextureFormat.ARGB32) { antiAliasing = 4 };
+                    cam.targetTexture = rt2;
+                    cam.Render();
+                    RenderTexture.active = rt2;
+                    var t2 = new Texture2D(1158, 540, TextureFormat.RGB24, false);
+                    t2.ReadPixels(new Rect(0, 0, 1158, 540), 0, 0);
+                    t2.Apply();
+                    File.WriteAllBytes($"Logs/Shots/View_{st.instrumentId}.png", t2.EncodeToPNG());
+                    RenderTexture.active = null;
+                    cam.targetTexture = null;
+                    Object.DestroyImmediate(rt2);
+                    Object.DestroyImmediate(t2);
+                }
             }
             EditorApplication.Exit(0);
         }

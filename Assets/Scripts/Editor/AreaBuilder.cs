@@ -108,13 +108,17 @@ namespace LittleMusicWorld.EditorTools
                 station.bounce = go.transform;
                 // Camera view: in front of the instrument, a little above, framing it in the top half of the screen
                 // (the play panel covers the bottom half).
-                float size = Mathf.Max(b.size.x, b.size.y * 1.3f, 0.7f);
+                // While playing, the visible 3D band is between the top buttons and the play panel (~32 % of the
+                // screen height, centred ~63 % up). Fit the instrument into that band by height and by width.
+                float tanHalf = Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+                float visH = 2f * tanHalf;                    // visible height per metre of distance
+                float d = Mathf.Max(b.size.y / (0.5f * visH), b.size.x / (0.55f * visH * 2.14f), 1.3f);
                 Vector3 front = Quaternion.Euler(0, st.rotY + st.viewYaw, 0) * Vector3.back;
-                Vector3 focus = b.center + Vector3.down * size * 0.45f;
                 var view = new GameObject("View").transform;
                 view.SetParent(go.transform, true);
-                view.position = focus + front * size * 1.45f + Vector3.up * size * 0.55f;
-                view.rotation = Quaternion.LookRotation(focus - view.position);
+                view.position = b.center + front * d + Vector3.up * (0.08f * d);
+                // aim below the centre so the instrument appears at ~63 % of the screen height
+                view.rotation = Quaternion.LookRotation(b.center + Vector3.down * (0.3f * tanHalf * d) - view.position);
                 station.view = view;
                 stations.Add(station);
             }
@@ -160,7 +164,7 @@ namespace LittleMusicWorld.EditorTools
             fill.sprite = UISprites.Get("Circle");
 
             SongPicker picker = BuildSongPicker(c);
-            UIKit.Bubble(c.transform, new Vector2(0.5f, 1f), new Vector2(0, -280), 1000);
+            UIKit.Bubble(c.transform, new Vector2(0f, 1f), new Vector2(700, -100), 860); // in the top bar, never over the instrument
 
             var guideGo = new GameObject("Melody Guide");
             MelodyGuide guide = guideGo.AddComponent<MelodyGuide>();
