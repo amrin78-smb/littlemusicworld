@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c9271df03a6791aa3ed1db2ee2dee5, type: 3}
+  m_Name: InstrumentLibrary
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.Audio.InstrumentLibrary
+  instruments:
+  - {fileID: 11400000, guid: 0d229c766e7c860b7b67714c7659afce, type: 2}
+  - {fileID: 11400000, guid: fc12e3e5488e1614a980637383c29913, type: 2}
+  - {fileID: 11400000, guid: 886a80a61a5a52da2a4fc2df56dfe01e, type: 2}
+  - {fileID: 11400000, guid: d1e992cafb3364ec386404e554467825, type: 2}
+  - {fileID: 11400000, guid: 4421afec752406f1294ca7b646c365f5, type: 2}
+  - {fileID: 11400000, guid: 72e6fa148cfc1b9b99dbda753c70701f, type: 2}
+  - {fileID: 11400000, guid: 5b36e47707c3ea7f8ae045130f997e55, type: 2}
+  - {fileID: 11400000, guid: 32d76d9965d78d241bda4a3aff0cf661, type: 2}
+  - {fileID: 11400000, guid: 7a32da2952d9c6b6d85adeced086104f, type: 2}
+  - {fileID: 11400000, guid: c5ac1b969ceec0a6687d9f0827f29696, type: 2}
+  - {fileID: 11400000, guid: 479644ddeb30701ff81b4227e9b79c4d, type: 2}
+  - {fileID: 11400000, guid: 998c6862162f7c16f934482ed0ee3cfd, type: 2}
+  - {fileID: 11400000, guid: 9faf25cb37a332cbfa5eaa2a400b8f88, type: 2}
+  - {fileID: 11400000, guid: 608cf771875e0b65399a9e44291d5b59, type: 2}
+  - {fileID: 11400000, guid: 86f5e04e2cae73fca84fb0cba66d21fc, type: 2}
+  - {fileID: 11400000, guid: 4f99b6aaf3b327039a5c0dd99884a1f5, type: 2}
+  - {fileID: 11400000, guid: b27e25e7b16808f04b2445a96f9f3c54, type: 2}
+  - {fileID: 11400000, guid: fa0dee15017761c8aa158ce818486dba, type: 2}
+  - {fileID: 11400000, guid: a611eb1e761c55c80819ff5a548df2cb, type: 2}
+  - {fileID: 11400000, guid: 38a907f5102f510fa8920510dc37f768, type: 2}
+  - {fileID: 11400000, guid: 19786b6770c24bcf78d386071f6a4047, type: 2}
+  - {fileID: 11400000, guid: 6c66295cdb9335c2d9957e0b7f20a94a, type: 2}
+  - {fileID: 11400000, guid: ae01bfcac97ba318f9f3261276f2c0d2, type: 2}
+  - {fileID: 11400000, guid: 2f177b5705cb66ba3b5aa64e7767219f, type: 2}
+  - {fileID: 11400000, guid: 0ea270434ca3a13c0a772d4b3f457b55, type: 2}

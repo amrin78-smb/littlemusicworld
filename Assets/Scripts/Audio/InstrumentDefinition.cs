@@ -46,6 +46,8 @@ namespace LittleMusicWorld.Audio
         public int highestNote = 84;
         [Tooltip("Notes shown on the child-sized interface (keys, strings, holes or pads).")]
         public int[] playableNotes = Array.Empty<int>();
+        [Tooltip("Open-string tuning for strummed instruments, lowest string first.")]
+        public int[] openStrings = Array.Empty<int>();
 
         [Header("Envelope")]
         [Tooltip("Seconds. Short fade-in avoids clicks; longer for bowed/blown swells.")] public float attack = 0.004f;

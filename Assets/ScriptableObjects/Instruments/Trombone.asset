@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0750d641f163c3d784bb69f2a9ded51, type: 3}
+  m_Name: Trombone
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.Audio.InstrumentDefinition
+  id: Trombone
+  displayName: Trombone
+  family: 3
+  playStyle: 5
+  color: {r: 0.8784314, g: 0.6431373, b: 0.34509805, a: 1}
+  icon: {fileID: 0}
+  lowestNote: 22
+  highestNote: 53
+  playableNotes: 3000000032000000340000003500000037000000390000003b0000003c000000
+  openStrings: 
+  attack: 0.04
+  release: 0.18
+  oneShot: 0
+  sustainLoop: 1
+  volume: 0.75
+  maxVoices: 4
+  chokeGroups: 
+  zones:
+  - clip: {fileID: 8300000, guid: 0c15dfd354688176c8a43c9b9878538d, type: 3}
+    rootNote: 22
+    lowNote: 0
+    highNote: 23
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 72398
+    loopEnd: 84480
+    tuneCents: 0.8
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 746beb45f713c8d07b6cc5ff8528a58e, type: 3}
+    rootNote: 25
+    lowNote: 24
+    highNote: 26
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 74320
+    loopEnd: 84480
+    tuneCents: -0.3
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: e149fffced4ce8516bfe4fc74345b8b1, type: 3}
+    rootNote: 27
+    lowNote: 27
+    highNote: 28
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 66374
+    loopEnd: 84480
+    tuneCents: -0.4
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 38ae482c7adca2ee1aad76fa5fc7831f, type: 3}
+    rootNote: 29
+    lowNote: 29
+    highNote: 31
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 70183
+    loopEnd: 84480
+    tuneCents: 0.4
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: e1eb19f070b381ca2a59a2f0142575b7, type: 3}
+    rootNote: 34
+    lowNote: 32
+    highNote: 36
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 72396
+    loopEnd: 84480
+    tuneCents: -0.2
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: ba21271fdda0df233a22008603c297ea, type: 3}
+    rootNote: 38
+    lowNote: 37
+    highNote: 39
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 74454
+    loopEnd: 84480
+    tuneCents: -0.2
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 3a04d041070f2fcad9581dd36098c3f0, type: 3}
+    rootNote: 41
+    lowNote: 40
+    highNote: 44
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 71835
+    loopEnd: 84480
+    tuneCents: 0.1
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: b7274b9f94ea9149dacb7cfce4a33ce0, type: 3}
+    rootNote: 48
+    lowNote: 45
+    highNote: 48
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 70903
+    loopEnd: 84480
+    tuneCents: 0.2
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: a9d17f9421adc9528a9ccec3fe4c8900, type: 3}
+    rootNote: 49
+    lowNote: 49
+    highNote: 50
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 71319
+    loopEnd: 84480
+    tuneCents: -0.2
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: f3c67e829c5fc2b458e2a709a02e111d, type: 3}
+    rootNote: 51
+    lowNote: 51
+    highNote: 52
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 56193
+    loopEnd: 84480
+    tuneCents: -0.1
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: a18da417337d00a438e4c4bf55c93d01, type: 3}
+    rootNote: 53
+    lowNote: 53
+    highNote: 127
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: 60381
+    loopEnd: 84480
+    tuneCents: 0
+    gain: 1
+    label: 

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0750d641f163c3d784bb69f2a9ded51, type: 3}
+  m_Name: Maracas
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.Audio.InstrumentDefinition
+  id: Maracas
+  displayName: Maracas
+  family: 1
+  playStyle: 1
+  color: {r: 0.96862745, g: 0.49803922, b: 0, a: 1}
+  icon: {fileID: 0}
+  lowestNote: 70
+  highestNote: 82
+  playableNotes: 4600000052000000
+  openStrings: 
+  attack: 0.002
+  release: 0.3
+  oneShot: 1
+  sustainLoop: 0
+  volume: 1
+  maxVoices: 6
+  chokeGroups: 
+  zones:
+  - clip: {fileID: 8300000, guid: 2788760d622c804ea822e8daab1457f6, type: 3}
+    rootNote: 70
+    lowNote: 70
+    highNote: 70
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: Shake
+  - clip: {fileID: 8300000, guid: e307db38d9b86012587604df6c19df83, type: 3}
+    rootNote: 82
+    lowNote: 82
+    highNote: 82
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: Shaker

@@ -1,0 +1,285 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0750d641f163c3d784bb69f2a9ded51, type: 3}
+  m_Name: Harp
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.Audio.InstrumentDefinition
+  id: Harp
+  displayName: Harp
+  family: 2
+  playStyle: 4
+  color: {r: 0.83137256, g: 0.6392157, b: 0.4509804, a: 1}
+  icon: {fileID: 0}
+  lowestNote: 28
+  highestNote: 101
+  playableNotes: 3000000032000000340000003500000037000000390000003b0000003c0000003e0000004000000041000000430000004500000047000000480000004a0000004c0000004d0000004f000000510000005300000054000000
+  openStrings: 
+  attack: 0.002
+  release: 0.3
+  oneShot: 1
+  sustainLoop: 0
+  volume: 0.95
+  maxVoices: 24
+  chokeGroups: 
+  zones:
+  - clip: {fileID: 8300000, guid: 4cb0dd70e019c2c54ba975fc241ea0af, type: 3}
+    rootNote: 28
+    lowNote: 0
+    highNote: 29
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 66c09f9af818ef3d79fcff7448ca932a, type: 3}
+    rootNote: 31
+    lowNote: 30
+    highNote: 33
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 9353b7962699d89d2a6cd81310440e5c, type: 3}
+    rootNote: 35
+    lowNote: 34
+    highNote: 36
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 95bfc3f2b088f23ab8f2924fa4c14ccf, type: 3}
+    rootNote: 38
+    lowNote: 37
+    highNote: 39
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 8e52f1aac3b716640ad8428d87c67761, type: 3}
+    rootNote: 41
+    lowNote: 40
+    highNote: 43
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 26672601bcbcdd5ffa3a82e8fe47d23f, type: 3}
+    rootNote: 45
+    lowNote: 44
+    highNote: 46
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 1c8c73dc243d8024da48819acb7e1435, type: 3}
+    rootNote: 48
+    lowNote: 47
+    highNote: 50
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: ce656651fa11afd2e9ea90e5ca454a3f, type: 3}
+    rootNote: 52
+    lowNote: 51
+    highNote: 53
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 99e12c3c79d0714e5b3eb2d589939123, type: 3}
+    rootNote: 55
+    lowNote: 54
+    highNote: 57
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 97372857222b170c892c09f972d57985, type: 3}
+    rootNote: 59
+    lowNote: 58
+    highNote: 60
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 8b6dae43eff6a5be9a250b659f23a4a8, type: 3}
+    rootNote: 62
+    lowNote: 61
+    highNote: 63
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: b3b34154e3011e80f81d054f1d779e95, type: 3}
+    rootNote: 65
+    lowNote: 64
+    highNote: 67
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: e8ddff0f9c3d76be19029902122ab88b, type: 3}
+    rootNote: 69
+    lowNote: 68
+    highNote: 70
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 5dc53402c5905d4278ad3894cc8a3a51, type: 3}
+    rootNote: 72
+    lowNote: 71
+    highNote: 74
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 20da254de49a8d925bd84ba3b3fb46be, type: 3}
+    rootNote: 76
+    lowNote: 75
+    highNote: 77
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 49fdcf1e98d0bddbc836befb0d855c44, type: 3}
+    rootNote: 79
+    lowNote: 78
+    highNote: 81
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 7f4f8ee3aa1b543789938da614f24488, type: 3}
+    rootNote: 83
+    lowNote: 82
+    highNote: 84
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: e1a6778e17dca60df8cef940fdbc99fd, type: 3}
+    rootNote: 86
+    lowNote: 85
+    highNote: 87
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 43250cdb255c0adb087ae0fcf061b4dd, type: 3}
+    rootNote: 89
+    lowNote: 88
+    highNote: 91
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 31b0696b39f7ab36d944cca8f4563bf6, type: 3}
+    rootNote: 93
+    lowNote: 92
+    highNote: 94
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 2fd3271f79a04efaa84fd54072deacda, type: 3}
+    rootNote: 95
+    lowNote: 95
+    highNote: 96
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 8ad6dec81083a6a07905c61f65abab0e, type: 3}
+    rootNote: 98
+    lowNote: 97
+    highNote: 99
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 06ea5a2633d7499d6a1fe1364686066e, type: 3}
+    rootNote: 101
+    lowNote: 100
+    highNote: 127
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 

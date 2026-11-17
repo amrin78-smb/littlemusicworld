@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0750d641f163c3d784bb69f2a9ded51, type: 3}
+  m_Name: Snare
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.Audio.InstrumentDefinition
+  id: Snare
+  displayName: Snare Drum
+  family: 1
+  playStyle: 1
+  color: {r: 0.94509804, g: 0.98039216, b: 0.93333334, a: 1}
+  icon: {fileID: 0}
+  lowestNote: 38
+  highestNote: 40
+  playableNotes: 2600000028000000
+  openStrings: 
+  attack: 0.002
+  release: 0.3
+  oneShot: 1
+  sustainLoop: 0
+  volume: 1
+  maxVoices: 8
+  chokeGroups: 
+  zones:
+  - clip: {fileID: 8300000, guid: 911b8eddad86111249e310ca9b532f84, type: 3}
+    rootNote: 38
+    lowNote: 38
+    highNote: 38
+    lowVelocity: 71
+    highVelocity: 105
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: Hit
+  - clip: {fileID: 8300000, guid: 7c52a00d4a0d7fa70b0b3afd0c905260, type: 3}
+    rootNote: 38
+    lowNote: 38
+    highNote: 38
+    lowVelocity: 106
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: Hit
+  - clip: {fileID: 8300000, guid: 34b1119296942cfd79e00ebf4f5751ad, type: 3}
+    rootNote: 40
+    lowNote: 40
+    highNote: 40
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: Roll
+  - clip: {fileID: 8300000, guid: ed030878a72a6334c9ab4d18fa8c19fa, type: 3}
+    rootNote: 38
+    lowNote: 38
+    highNote: 38
+    lowVelocity: 0
+    highVelocity: 70
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: Tap

@@ -957,3 +957,224 @@ def sweep(name, path, profile, ref=(0.0, 0.0, 1.0), taper=None, caps=True):
 
 def circle(radius, segs=10, cx=0.0, cy=0.0):
     return [(cx + math.cos(2 * math.pi * i / segs) * radius, cy + math.sin(2 * math.pi * i / segs) * radius) for i in range(segs)]
+
+
+# ================================================================================================================
+# Little Music World additions: outline extrusion, pivots, FBX export with baked atlas, LODs, preview renders.
+# ================================================================================================================
+ART_DIR = REPO + "/Assets/Art"
+
+
+def catmull(points, steps=6, closed=True):
+    """Smooth a 2D polyline (Catmull-Rom). points: [(a, b)]."""
+    out = []
+    n = len(points)
+    rng = range(n) if closed else range(n - 1)
+    for i in rng:
+        p0 = Vector(points[(i - 1) % n] if closed or i > 0 else points[i])
+        p1 = Vector(points[i])
+        p2 = Vector(points[(i + 1) % n])
+        p3 = Vector(points[(i + 2) % n] if closed or i + 2 < n else points[(i + 1) % n])
+        for s in range(steps):
+            t = s / steps
+            t2, t3 = t * t, t * t * t
+            p = 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+            out.append((p.x, p.y))
+    if not closed:
+        out.append(tuple(points[-1]))
+    return out
+
+
+def outline_extrude(name, outline_xz, y0, height, bevel=0.02, segs=2, inset=None):
+    """Extrudes a closed Unity-XZ outline [(x, z)] upward from y0 by height. inset>0 makes it a hollow rim wall."""
+    bm = bmesh.new()
+    verts = [bm.verts.new(U(x, y0, z)) for x, z in outline_xz]
+    face = bm.faces.new(verts)
+    bmesh.ops.recalc_face_normals(bm, faces=[face])
+    if face.normal.z > 0:
+        face.normal_flip()
+    ext = bmesh.ops.extrude_face_region(bm, geom=[face])
+    top = [e for e in ext["geom"] if isinstance(e, bmesh.types.BMVert)]
+    bmesh.ops.translate(bm, verts=top, vec=Vector((0, 0, height)))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    obj = _link(name, bm)
+    if inset:
+        sol = obj.modifiers.new("Solid", "SOLIDIFY")
+        sol.thickness = inset
+    _bake_modifiers(obj, bevel, segs, angle=50)
+    return obj
+
+
+def offset_outline(outline, d):
+    """Offsets a closed 2D outline: d < 0 insets (shrinks), d > 0 grows (approximate, via vertex normals)."""
+    n = len(outline)
+    area = sum(outline[i][0] * outline[(i + 1) % n][1] - outline[(i + 1) % n][0] * outline[i][1] for i in range(n))
+    sign = 1 if area > 0 else -1
+    out = []
+    for i in range(n):
+        a, b, c = Vector(outline[i - 1]), Vector(outline[i]), Vector(outline[(i + 1) % n])
+        t = ((c - a).normalized())
+        nrm = Vector((t.y, -t.x)) * sign
+        p = b + nrm * d
+        out.append((p.x, p.y))
+    return out
+
+
+def set_origin(obj, unity_point):
+    """Moves an object's origin (pivot) to a Unity-space point without moving its geometry."""
+    target = U(*unity_point)
+    local = obj.matrix_world.inverted() @ target
+    obj.data.transform(Matrix.Translation(-local))
+    obj.matrix_world = obj.matrix_world @ Matrix.Translation(local)
+    return obj
+
+
+def join(objs, name):
+    """Joins objects (keeps UVs/material). Returns the joined object."""
+    objs = [o for o in objs if o is not None]
+    if not objs:
+        return None
+    if len(objs) == 1:
+        objs[0].name = name
+        return objs[0]
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in objs:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = objs[0]
+    bpy.ops.object.join()
+    o = bpy.context.view_layer.objects.active
+    o.name = name
+    return o
+
+
+def final_material(name, tex, em=None, emit_strength=1.0):
+    """Material showing the baked atlas (used for preview renders and named in the FBX for Unity remapping)."""
+    m = bpy.data.materials.new(name)
+    nodes, links = m.node_tree.nodes, m.node_tree.links
+    bsdf = nodes["Principled BSDF"]
+    t = nodes.new("ShaderNodeTexImage")
+    t.image = tex
+    links.new(t.outputs["Color"], bsdf.inputs["Base Color"])
+    inv = nodes.new("ShaderNodeMath")
+    inv.operation = "SUBTRACT"
+    inv.inputs[0].default_value = 1.0
+    links.new(t.outputs["Alpha"], inv.inputs[1])
+    links.new(inv.outputs[0], bsdf.inputs["Roughness"])
+    if em is not None:
+        e = nodes.new("ShaderNodeTexImage")
+        e.image = em
+        links.new(e.outputs["Color"], bsdf.inputs["Emission Color"])
+        bsdf.inputs["Emission Strength"].default_value = emit_strength
+    return m
+
+
+def build_hierarchy(model, root_name):
+    """Empties for every node (Unity pivot), parts joined per (node) and parented. Returns {node: object}."""
+    empties = {}
+    root = bpy.data.objects.new(root_name, None)
+    bpy.context.scene.collection.objects.link(root)
+    root.matrix_world = Matrix.Translation(U(*model.world["Body"]))
+    empties["Body"] = root
+    for name, (parent, pos) in model.nodes.items():
+        e = bpy.data.objects.new(name, None)
+        bpy.context.scene.collection.objects.link(e)
+        e.matrix_world = Matrix.Translation(U(*model.world[name]))
+        empties[name] = e
+    for name, (parent, pos) in model.nodes.items():
+        e = empties[name]
+        mw = e.matrix_world.copy()
+        e.parent = empties[parent]
+        e.matrix_world = mw
+    by_node = OrderedDict()
+    for obj, node, slot in model.parts:
+        by_node.setdefault(node, []).append(obj)
+    meshes = {}
+    for node, objs in by_node.items():
+        o = join(objs, f"{node}_Mesh" if node != "Body" else f"{root_name}_Body")
+        mw = o.matrix_world.copy()
+        # pivot of the mesh = node position (so Unity transforms animate around the node)
+        set_origin(o, tuple(model.world[node]))
+        mw = o.matrix_world.copy()
+        o.parent = empties[node]
+        o.matrix_world = mw
+        meshes[node] = o
+    return root, empties, meshes
+
+
+def add_lod(obj, ratio, suffix="_LOD1"):
+    """Decimated copy for a Unity LODGroup (Unity builds the group from _LOD0/_LOD1 names)."""
+    c = obj.copy()
+    c.data = obj.data.copy()
+    bpy.context.scene.collection.objects.link(c)
+    c.parent = obj.parent
+    c.matrix_world = obj.matrix_world.copy()
+    d = c.modifiers.new("Dec", "DECIMATE")
+    d.ratio = ratio
+    _bake_modifiers(c, None, weighted=False)
+    base = obj.name
+    obj.name = base + "_LOD0"
+    c.name = base + suffix
+    return c
+
+
+def export_fbx(root, path, extra=None):
+    """Exports root + descendants. Built with U() (Unity axes) so the axis settings map Blender → Unity 1:1."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    bpy.ops.object.select_all(action="DESELECT")
+    objs = [root] + list(root.children_recursive) + list(extra or [])
+    for o in objs:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = root
+    bpy.ops.export_scene.fbx(
+        filepath=path, use_selection=True, object_types={"EMPTY", "MESH", "ARMATURE"},
+        apply_unit_scale=True, apply_scale_options="FBX_SCALE_ALL", axis_forward="Z", axis_up="Y",
+        bake_space_transform=False, use_mesh_modifiers=True, mesh_smooth_type="FACE",
+        add_leaf_bones=False, primary_bone_axis="Y", secondary_bone_axis="X",
+        bake_anim=True, bake_anim_use_all_actions=True, bake_anim_use_nla_strips=False,
+        bake_anim_force_startend_keying=True, bake_anim_simplify_factor=0.0, path_mode="STRIP")
+    print(f"[LMW] exported {path}")
+
+
+def save_source(name):
+    os.makedirs(SOURCE_DIR, exist_ok=True)
+    bpy.ops.wm.save_as_mainfile(filepath=f"{SOURCE_DIR}/{name}.blend")
+
+
+def render_preview(path, views, size=(960, 640), ground="#FFF4E0", sky="#BFE6FF", samples=24):
+    """Cycles preview of the current scene (baked materials applied) for art review."""
+    scene = bpy.context.scene
+    scene.render.engine = "CYCLES"
+    scene.cycles.samples = samples
+    scene.cycles.use_denoising = True
+    scene.render.resolution_x, scene.render.resolution_y = size
+    scene.view_settings.view_transform = "Standard"
+    if "LMW_Ground" not in bpy.data.objects:
+        bpy.ops.mesh.primitive_plane_add(size=60, location=(0, 0, 0))
+        g = bpy.context.active_object
+        g.name = "LMW_Ground"
+        gm = bpy.data.materials.new("Ground")
+        gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = lin(ground)
+        g.data.materials.append(gm)
+        sun_data = bpy.data.lights.new("Sun", "SUN")
+        sun_data.energy = 3.0
+        sun_data.angle = math.radians(10)
+        sun = bpy.data.objects.new("Sun", sun_data)
+        scene.collection.objects.link(sun)
+        sun.rotation_euler = (math.radians(-42), math.radians(8), math.radians(30))
+        scene.world.use_nodes = True
+        scene.world.node_tree.nodes["Background"].inputs["Color"].default_value = lin(sky)
+        scene.world.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.9
+        cam_data = bpy.data.cameras.new("Cam")
+        cam_data.lens = 45
+        cam = bpy.data.objects.new("Cam", cam_data)
+        scene.collection.objects.link(cam)
+        scene.camera = cam
+    cam = scene.camera
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    for i, (pos, look) in enumerate(views):
+        cam.location = U(*pos)
+        d = U(*look) - cam.location
+        cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+        scene.render.filepath = f"{path}_{i}.png"
+        bpy.ops.render.render(write_still=True)
+        print(f"[LMW] preview {scene.render.filepath}")

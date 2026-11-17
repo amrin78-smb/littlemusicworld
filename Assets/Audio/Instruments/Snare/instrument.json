@@ -17,7 +17,6 @@
   40
  ],
  "openStrings": [],
- "choke": {},
  "rate": 44100,
  "zones": [
   {
@@ -72,5 +71,7 @@
    "gain": 1.0,
    "label": "Tap"
   }
- ]
+ ],
+ "chokeNotes": [],
+ "chokeIds": []
 }

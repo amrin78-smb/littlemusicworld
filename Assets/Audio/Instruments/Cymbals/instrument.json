@@ -19,7 +19,6 @@
   57
  ],
  "openStrings": [],
- "choke": {},
  "rate": 44100,
  "zones": [
   {
@@ -74,5 +73,7 @@
    "gain": 1.0,
    "label": "Swell"
   }
- ]
+ ],
+ "chokeNotes": [],
+ "chokeIds": []
 }

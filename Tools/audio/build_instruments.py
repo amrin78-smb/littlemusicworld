@@ -386,7 +386,7 @@ def build(inst):
         sustainLoop=inst.get("sustain_loop", False), volume=inst.get("volume", 1.0), voices=inst.get("voices", 12),
         lowest=min(lows), highest=max(lows), playable=inst.get("playable", sorted(set(lows))),
         openStrings=inst.get("open_strings", []),
-        choke={str(k): v for k, v in choke.items()}, rate=rate, zones=zj)
+        chokeNotes=sorted(choke.keys()), chokeIds=[choke[k] for k in sorted(choke.keys())], rate=rate, zones=zj)
     with open(os.path.join(d, "instrument.json"), "w") as f:
         json.dump(meta, f, indent=1)
     log(f"{iid}: {len(zj)} zones, {total / rate:.1f}s audio, {total * 2 / 1e6:.1f} MB PCM")

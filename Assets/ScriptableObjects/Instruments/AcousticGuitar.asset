@@ -1,0 +1,164 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0750d641f163c3d784bb69f2a9ded51, type: 3}
+  m_Name: AcousticGuitar
+  m_EditorClassIdentifier: LittleMusicWorld.Runtime::LittleMusicWorld.Audio.InstrumentDefinition
+  id: AcousticGuitar
+  displayName: Acoustic Guitar
+  family: 2
+  playStyle: 2
+  color: {r: 0.7764706, g: 0.54509807, b: 0.34901962, a: 1}
+  icon: {fileID: 0}
+  lowestNote: 40
+  highestNote: 84
+  playableNotes: 28000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c000000
+  openStrings: 280000002d00000032000000370000003b00000040000000
+  attack: 0.002
+  release: 0.25
+  oneShot: 0
+  sustainLoop: 0
+  volume: 1
+  maxVoices: 18
+  chokeGroups: 
+  zones:
+  - clip: {fileID: 8300000, guid: 41c104f80bc34f9f3970f71924e0669d, type: 3}
+    rootNote: 40
+    lowNote: 0
+    highNote: 42
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0.7
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: b9c20dd4c32859da68a1d54520d82d1d, type: 3}
+    rootNote: 44
+    lowNote: 43
+    highNote: 46
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 2
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 900034a036dd17c8bba29891369dc0ac, type: 3}
+    rootNote: 48
+    lowNote: 47
+    highNote: 50
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 1.1
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 6c90946530ea00e0f817827663775de8, type: 3}
+    rootNote: 52
+    lowNote: 51
+    highNote: 54
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 757daad1cb23f2c15909810a943a7e5e, type: 3}
+    rootNote: 56
+    lowNote: 55
+    highNote: 58
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 36bcd58decf85cadf9ab94a843da2262, type: 3}
+    rootNote: 60
+    lowNote: 59
+    highNote: 62
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0.8
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 3185cc09fbc87bb9f82373fb85e8e7a9, type: 3}
+    rootNote: 64
+    lowNote: 63
+    highNote: 66
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0.3
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: dc0ccbea47db36bc5b2099fa4a10cb77, type: 3}
+    rootNote: 68
+    lowNote: 67
+    highNote: 70
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0.2
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 04c7210137a3f56e5abf7012c39bf721, type: 3}
+    rootNote: 72
+    lowNote: 71
+    highNote: 74
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0.4
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 4c150886f1af57f44bc16d948d754b72, type: 3}
+    rootNote: 76
+    lowNote: 75
+    highNote: 78
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -0.1
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: 63d1e4f36bf8019eb86b9fe81973fd91, type: 3}
+    rootNote: 80
+    lowNote: 79
+    highNote: 82
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: 0.4
+    gain: 1
+    label: 
+  - clip: {fileID: 8300000, guid: f473c019fbb0f9e8a971f5094fae60f7, type: 3}
+    rootNote: 84
+    lowNote: 83
+    highNote: 127
+    lowVelocity: 0
+    highVelocity: 127
+    loopStart: -1
+    loopEnd: -1
+    tuneCents: -1.5
+    gain: 1
+    label: 

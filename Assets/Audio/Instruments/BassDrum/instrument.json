@@ -16,7 +16,6 @@
   36
  ],
  "openStrings": [],
- "choke": {},
  "rate": 32000,
  "zones": [
   {
@@ -45,5 +44,7 @@
    "gain": 1.0,
    "label": "Boom"
   }
- ]
+ ],
+ "chokeNotes": [],
+ "chokeIds": []
 }

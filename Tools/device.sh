@@ -10,7 +10,10 @@ cd "$(dirname "$0")/.."
 HOST="${LMW_DEVICE_HOST:-192.168.31.96}"
 PKG="${LMW_PACKAGE:-com.nocvault.littlemusicworld}"
 mkdir -p Logs/Device
-serial() { adb devices | awk -v h="$HOST" '$1 ~ "^"h":" && $2=="device"{print $1; exit}'; }
+# The phone may appear as host:port or under its auto-connected mDNS TLS name; accept either (never the emulator).
+serial() {
+  adb devices | awk -v h="$HOST" '$2=="device" && ($1 ~ "^"h":" || $1 ~ "_adb-tls-connect") {print $1; exit}'
+}
 connect() {
   S=$(serial); [ -n "$S" ] && { echo "$S"; return 0; }
   adb connect "$HOST:5555" >/dev/null 2>&1; S=$(serial); [ -n "$S" ] && { echo "$S"; return 0; }

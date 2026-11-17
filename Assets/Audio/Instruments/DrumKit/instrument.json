@@ -24,10 +24,6 @@
   51
  ],
  "openStrings": [],
- "choke": {
-  "42": 1,
-  "46": 1
- },
  "rate": 44100,
  "zones": [
   {
@@ -147,5 +143,13 @@
    "gain": 1.0,
    "label": "Ride"
   }
+ ],
+ "chokeNotes": [
+  42,
+  46
+ ],
+ "chokeIds": [
+  1,
+  1
  ]
 }

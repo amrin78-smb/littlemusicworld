@@ -103,6 +103,42 @@ namespace LittleMusicWorld.Audio
         private readonly bool[] channelMute = new bool[ChannelCount];
         private volatile int activeVoiceCount;
 
+        // ---- instrumentation (read by the self-test / debug overlay; written by the audio thread) ----
+        private long statBuffers, statTicksTotal, statTicksPeak, statFrames;
+        private int statPeakVoices;
+        private long statLateNotes, statScheduledNotes, statMaxLateSamples;
+        private int statClipped;
+
+        public struct Stats
+        {
+            public long buffers, frames;
+            public double mixMsAverage, mixMsPeak, bufferMs, loadPercent;
+            public int peakVoices, clippedBuffers;
+            public long scheduledNotes, lateNotes, maxLateSamples;
+        }
+
+        public Stats ReadStats()
+        {
+            double tickMs = 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+            long b = Math.Max(1, Interlocked.Read(ref statBuffers));
+            double bufferMs = statFrames > 0 ? (double)statFrames / b / outputRate * 1000.0 : 0;
+            double avg = Interlocked.Read(ref statTicksTotal) * tickMs / b;
+            return new Stats
+            {
+                buffers = statBuffers, frames = statFrames, mixMsAverage = avg, mixMsPeak = statTicksPeak * tickMs,
+                bufferMs = bufferMs, loadPercent = bufferMs > 0 ? avg / bufferMs * 100.0 : 0, peakVoices = statPeakVoices,
+                clippedBuffers = statClipped, scheduledNotes = statScheduledNotes, lateNotes = statLateNotes,
+                maxLateSamples = statMaxLateSamples
+            };
+        }
+
+        public void ResetStats()
+        {
+            statBuffers = statTicksTotal = statTicksPeak = statFrames = 0;
+            statPeakVoices = 0; statLateNotes = statScheduledNotes = statMaxLateSamples = 0; statClipped = 0;
+        }
+
+        public const float Headroom = 0.55f;
         public int ActiveVoices => activeVoiceCount;
         public int OutputRate => outputRate;
         public float MasterVolume { get => masterVolume; set => masterVolume = Mathf.Clamp(value, 0f, 1.5f); }
@@ -125,6 +161,23 @@ namespace LittleMusicWorld.Audio
             src.bypassReverbZones = true;
             src.playOnAwake = true;
             src.Play();
+            dspSample = (long)(AudioSettings.dspTime * outputRate);
+        }
+
+        private void OnEnable() => AudioSettings.OnAudioConfigurationChanged += OnAudioConfigChanged;
+
+        private void OnDisable() => AudioSettings.OnAudioConfigurationChanged -= OnAudioConfigChanged;
+
+        /// <summary>Headphones plugged/unplugged or Bluetooth route changes reset Unity audio: re-sync and restart.</summary>
+        private void OnAudioConfigChanged(bool deviceWasChanged)
+        {
+            outputRate = AudioSettings.outputSampleRate;
+            dspSample = (long)(AudioSettings.dspTime * outputRate);
+            for (int i = 0; i < voices.Length; i++) voices[i].active = false;
+            pendingCount = 0;
+            AudioSource src = GetComponent<AudioSource>();
+            if (src != null && !src.isPlaying) src.Play();
+            Debug.Log($"[LMW Audio] output reconfigured: {outputRate} Hz (device changed: {deviceWasChanged})");
         }
 
         private void OnDestroy()
@@ -263,9 +316,24 @@ namespace LittleMusicWorld.Audio
 
         private void OnAudioFilterRead(float[] data, int channels)
         {
+            // Anchor each buffer to Unity's DSP clock (valid on the audio thread) so scheduled notes never drift.
+            Render(data, channels, (long)Math.Round(AudioSettings.dspTime * outputRate));
+        }
+
+        /// <summary>Test hook: a usable engine without an AudioSource or audio device.</summary>
+        internal void InitForTest(int rate, int voiceCount)
+        {
+            outputRate = rate;
+            voices = new Voice[voiceCount];
+            for (int i = 0; i < ChannelCount; i++) channelVolume[i] = 1f;
+        }
+
+        /// <summary>Mixes one buffer that starts at absolute sample <paramref name="bufferStart"/>.</summary>
+        internal void Render(float[] data, int channels, long bufferStart)
+        {
             if (voices == null) return;
+            long t0 = System.Diagnostics.Stopwatch.GetTimestamp();
             int frames = data.Length / channels;
-            long bufferStart = dspSample;
             long bufferEnd = bufferStart + frames;
             Bank[] bk = bankArray;
 
@@ -276,6 +344,15 @@ namespace LittleMusicWorld.Audio
             {
                 Command c = ring[r];
                 r = (r + 1) & (RingSize - 1);
+                if (c.atSample > 0 && c.type == CmdType.NoteOn)
+                {
+                    statScheduledNotes++;
+                    if (c.atSample < bufferStart)
+                    {
+                        statLateNotes++;
+                        statMaxLateSamples = Math.Max(statMaxLateSamples, bufferStart - c.atSample);
+                    }
+                }
                 if (c.atSample <= 0 || c.atSample < bufferEnd) Execute(ref c, bk, (int)Math.Max(0, c.atSample - bufferStart));
                 else if (pendingCount < pending.Length) pending[pendingCount++] = c;
             }
@@ -293,7 +370,9 @@ namespace LittleMusicWorld.Audio
             }
 
             // 3. mix
-            float master = masterVolume;
+            // Headroom: one full-velocity note peaks around -6 dBFS, so chords and multi-track songs stay clean and
+            // the limiter only catches the loudest moments (measured on device by the self-test).
+            float master = masterVolume * Headroom;
             int active = 0;
             for (int v = 0; v < voices.Length; v++)
             {
@@ -319,6 +398,13 @@ namespace LittleMusicWorld.Audio
             }
 
             dspSample = bufferEnd;
+            long dt = System.Diagnostics.Stopwatch.GetTimestamp() - t0;
+            statBuffers++;
+            statFrames += frames;
+            statTicksTotal += dt;
+            if (dt > statTicksPeak) statTicksPeak = dt;
+            if (active > statPeakVoices) statPeakVoices = active;
+            if (limiterGain < 0.999f) statClipped++;
         }
 
         private void Execute(ref Command c, Bank[] bk, int offset)

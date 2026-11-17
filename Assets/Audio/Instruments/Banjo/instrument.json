@@ -51,7 +51,6 @@
   59,
   62
  ],
- "choke": {},
  "rate": 32000,
  "zones": [
   {
@@ -184,5 +183,7 @@
    "gain": 1.0,
    "label": ""
   }
- ]
+ ],
+ "chokeNotes": [],
+ "chokeIds": []
 }
