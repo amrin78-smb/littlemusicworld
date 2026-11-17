@@ -1,0 +1,78 @@
+{
+ "id": "Congas",
+ "name": "Congas",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#B5651D",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 1.0,
+ "voices": 8,
+ "lowest": 62,
+ "highest": 65,
+ "playable": [
+  62,
+  63,
+  64,
+  65
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 44100,
+ "zones": [
+  {
+   "file": "Congas_D4_v127.wav",
+   "root": 62,
+   "lo": 62,
+   "hi": 62,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Tap"
+  },
+  {
+   "file": "Congas_Ds4_v127.wav",
+   "root": 63,
+   "lo": 63,
+   "hi": 63,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "High"
+  },
+  {
+   "file": "Congas_E4_v127.wav",
+   "root": 64,
+   "lo": 64,
+   "hi": 64,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Middle"
+  },
+  {
+   "file": "Congas_F4_v127.wav",
+   "root": 65,
+   "lo": 65,
+   "hi": 65,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Low"
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "id": "Tambourine",
+ "name": "Tambourine",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#E9C46A",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 0.85,
+ "voices": 6,
+ "lowest": 54,
+ "highest": 56,
+ "playable": [
+  54,
+  55,
+  56
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 44100,
+ "zones": [
+  {
+   "file": "Tambourine_Fs3_v127.wav",
+   "root": 54,
+   "lo": 54,
+   "hi": 54,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Hit"
+  },
+  {
+   "file": "Tambourine_G3_v127.wav",
+   "root": 55,
+   "lo": 55,
+   "hi": 55,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Shake"
+  },
+  {
+   "file": "Tambourine_Gs3_v127.wav",
+   "root": 56,
+   "lo": 56,
+   "hi": 56,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Roll"
+  }
+ ]
+}

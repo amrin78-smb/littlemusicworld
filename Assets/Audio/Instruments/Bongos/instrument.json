@@ -1,0 +1,50 @@
+{
+ "id": "Bongos",
+ "name": "Bongos",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#D98E04",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 1.0,
+ "voices": 8,
+ "lowest": 60,
+ "highest": 61,
+ "playable": [
+  60,
+  61
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 44100,
+ "zones": [
+  {
+   "file": "Bongos_C4_v.wav",
+   "root": 60,
+   "lo": 60,
+   "hi": 60,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "High"
+  },
+  {
+   "file": "Bongos_Cs4_v.wav",
+   "root": 61,
+   "lo": 61,
+   "hi": 61,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Low"
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "id": "Cymbals",
+ "name": "Cymbals",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#F4C430",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 0.8,
+ "voices": 8,
+ "lowest": 49,
+ "highest": 57,
+ "playable": [
+  49,
+  51,
+  53,
+  57
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 44100,
+ "zones": [
+  {
+   "file": "Cymbals_Cs3_v127.wav",
+   "root": 49,
+   "lo": 49,
+   "hi": 49,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Crash"
+  },
+  {
+   "file": "Cymbals_Ds3_v127.wav",
+   "root": 51,
+   "lo": 51,
+   "hi": 51,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Ride"
+  },
+  {
+   "file": "Cymbals_F3_v127.wav",
+   "root": 53,
+   "lo": 53,
+   "hi": 53,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Bell"
+  },
+  {
+   "file": "Cymbals_A3_v127.wav",
+   "root": 57,
+   "lo": 57,
+   "hi": 57,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Swell"
+  }
+ ]
+}

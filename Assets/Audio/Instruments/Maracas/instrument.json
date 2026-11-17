@@ -1,0 +1,50 @@
+{
+ "id": "Maracas",
+ "name": "Maracas",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#F77F00",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 1.0,
+ "voices": 6,
+ "lowest": 70,
+ "highest": 82,
+ "playable": [
+  70,
+  82
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 44100,
+ "zones": [
+  {
+   "file": "Maracas_As4_v.wav",
+   "root": 70,
+   "lo": 70,
+   "hi": 70,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Shake"
+  },
+  {
+   "file": "Maracas_As5_v.wav",
+   "root": 82,
+   "lo": 82,
+   "hi": 82,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Shaker"
+  }
+ ]
+}

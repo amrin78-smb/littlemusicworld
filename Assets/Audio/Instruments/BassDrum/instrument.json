@@ -1,0 +1,49 @@
+{
+ "id": "BassDrum",
+ "name": "Bass Drum",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#1D3557",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 1.1,
+ "voices": 6,
+ "lowest": 36,
+ "highest": 36,
+ "playable": [
+  36
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 32000,
+ "zones": [
+  {
+   "file": "BassDrum_C2_v127.wav",
+   "root": 36,
+   "lo": 36,
+   "hi": 36,
+   "loVel": 91,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Boom"
+  },
+  {
+   "file": "BassDrum_C2_v90.wav",
+   "root": 36,
+   "lo": 36,
+   "hi": 36,
+   "loVel": 0,
+   "hiVel": 90,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Boom"
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "id": "Snare",
+ "name": "Snare Drum",
+ "family": "Percussion",
+ "style": "DrumPads",
+ "color": "#F1FAEE",
+ "attack": 0.002,
+ "release": 0.3,
+ "oneShot": true,
+ "sustainLoop": false,
+ "volume": 1.0,
+ "voices": 8,
+ "lowest": 38,
+ "highest": 40,
+ "playable": [
+  38,
+  40
+ ],
+ "openStrings": [],
+ "choke": {},
+ "rate": 44100,
+ "zones": [
+  {
+   "file": "Snare_D2_v105.wav",
+   "root": 38,
+   "lo": 38,
+   "hi": 38,
+   "loVel": 71,
+   "hiVel": 105,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Hit"
+  },
+  {
+   "file": "Snare_D2_v127.wav",
+   "root": 38,
+   "lo": 38,
+   "hi": 38,
+   "loVel": 106,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Hit"
+  },
+  {
+   "file": "Snare_E2_v127.wav",
+   "root": 40,
+   "lo": 40,
+   "hi": 40,
+   "loVel": 0,
+   "hiVel": 127,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Roll"
+  },
+  {
+   "file": "Snare_D2_v70.wav",
+   "root": 38,
+   "lo": 38,
+   "hi": 38,
+   "loVel": 0,
+   "hiVel": 70,
+   "loopStart": -1,
+   "loopEnd": -1,
+   "tune": 0.0,
+   "gain": 1.0,
+   "label": "Tap"
+  }
+ ]
+}
