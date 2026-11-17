@@ -20,6 +20,7 @@ namespace LittleMusicWorld.UI
         [SerializeField] private Sprite[] songIcons; // named "Icon<Picture>"
 
         private Action<SongLibrary.Lesson> onPick;
+        private Func<SongLibrary.Lesson, bool> filter;
         private List<SongLibrary.Lesson> lessons;
         private int tier;
         private readonly List<GameObject> cards = new List<GameObject>();
@@ -35,9 +36,10 @@ namespace LittleMusicWorld.UI
             closeButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
 
-        public void Open(Action<SongLibrary.Lesson> pick)
+        public void Open(Action<SongLibrary.Lesson> pick, Func<SongLibrary.Lesson, bool> canPlay = null)
         {
             onPick = pick;
+            filter = canPlay;
             gameObject.SetActive(true);
             Show(tier);
             Guide.Say("piano_pick_song");
@@ -51,7 +53,7 @@ namespace LittleMusicWorld.UI
             for (int i = 0; i < tierButtons.Length; i++) tierButtons[i].transform.localScale = Vector3.one * (i == t ? 1.12f : 0.92f);
             SaveSystem.ProgressData p = Services.Save?.Data.progress;
             foreach (SongLibrary.Lesson l in lessons)
-                if (l.tier == t) cards.Add(Card(l, p != null && p.completedSongs.Contains(l.Key)));
+                if (l.tier == t && (filter == null || filter(l))) cards.Add(Card(l, p != null && p.completedSongs.Contains(l.Key)));
         }
 
         private GameObject Card(SongLibrary.Lesson l, bool done)

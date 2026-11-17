@@ -37,6 +37,9 @@ namespace LittleMusicWorld.EditorTools
             ArtLibrary.Prop("Assets/Art/Environments/Hub/HubGround.fbx", $"{P}/Hub/HubGround.prefab", ArtLibrary.AtlasMaterial("HubGround", false));
             ArtLibrary.Prop("Assets/Art/Instruments/GrandPiano.fbx", $"{P}/Instruments/GrandPiano.prefab", ArtLibrary.AtlasMaterial("GrandPiano"),
                 collider: false, isStatic: false);
+            if (AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Art/Props/GoldNote.fbx") != null)
+                ArtLibrary.Prop("Assets/Art/Props/GoldNote.fbx", $"{P}/Props/GoldNote.prefab", ArtLibrary.AtlasMaterial("GoldNote", true, 1.5f),
+                    collider: false, isStatic: false);
             ArtLibrary.Character("Assets/Art/Characters/Melo.fbx", $"{P}/Characters/Melo.prefab", ArtLibrary.AtlasMaterial("Melo", true, 0.6f));
         }
 
@@ -290,6 +293,19 @@ namespace LittleMusicWorld.EditorTools
                 Place(kind, Quaternion.Euler(0, ang, 0) * Vector3.forward * r, (float)rnd.NextDouble() * 360f, 0.9f + (float)rnd.NextDouble() * 0.5f, world);
             }
 
+            // Optional golden notes to find around the hub (between the routes, near benches and trees).
+            if (AssetDatabase.LoadAssetAtPath<GameObject>($"{P}/Props/GoldNote.prefab") != null)
+                for (int i = 0; i < 10; i++)
+                {
+                    float a = i * 36f + 18f;
+                    float r = i % 2 == 0 ? 9.6f : 12.2f;
+                    GameObject n = Place("Props/GoldNote", Quaternion.Euler(0, a, 0) * Vector3.forward * r + Vector3.up * 1.1f, 0, 1.4f, world);
+                    n.name = "GoldNote" + i;
+                    var sc = n.AddComponent<SphereCollider>();
+                    sc.center = new Vector3(0.1f, 0.4f, 0f);
+                    sc.radius = 0.6f;   // generous for small fingers
+                    n.AddComponent<Collectible>().id = "note_" + i;
+                }
             MascotController melo = PlaceMelo(new Vector3(0, 0.12f, -4.2f), 180f);
             var marker = GameObject.CreatePrimitive(PrimitiveType.Quad);
             marker.name = "Tap Marker";

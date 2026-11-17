@@ -9,7 +9,7 @@ cd "$(dirname "$0")/../.."
 mkdir -p Logs/Blender
 PREVIEW=""; NAMES=()
 for a in "$@"; do [ "$a" = "--preview" ] && PREVIEW="--preview" || NAMES+=("$a"); done
-ALL=(grand_piano melo hub_env instruments_keys instruments_drums instruments_strings instruments_winds animals)
+ALL=(grand_piano melo hub_env collectibles instruments_keys instruments_drums instruments_strings instruments_winds animals)
 [ ${#NAMES[@]} -eq 0 ] && NAMES=("${ALL[@]}")
 rc=0
 for n in "${NAMES[@]}"; do

@@ -96,6 +96,13 @@ namespace LittleMusicWorld.World
             Ray ray = cam.ScreenPointToRay(screen);
             if (Physics.Raycast(ray, out RaycastHit hit, 200f))
             {
+                Collectible note = hit.collider.GetComponentInParent<Collectible>();
+                if (note != null)
+                {
+                    note.Collect();
+                    melo.Do("React");
+                    return;
+                }
                 AreaPortal portal = hit.collider.GetComponentInParent<AreaPortal>();
                 if (portal != null)
                 {

@@ -4,6 +4,42 @@ Newest first. Each milestone lists features, assets, systems, tools, tests (actu
 
 ---
 
+## Milestones 2–10 — World, characters, engine, instruments, orchestra, studio, carnival, UI, saves (2026-11-18)
+
+### Built
+- **M2 Musical world:** hub with seven themed gates (piano keys, drum stack, guitar neck, wind pipes, orchestra shell,
+  headphones, carnival stripes), plaza, lamps, benches, flower beds, tree ring, rolling-hill ground; tap-to-walk with
+  routing around the bandstand; ten optional golden-note collectibles. Areas: Piano Paradise, Drum Valley, String Town,
+  Wind Village (shared `AreaController`: overview → tap instrument → camera glides to it → play panel),
+  Orchestra Park, Music Studio, Rhythm Carnival. Gentle background music in menu/hub only.
+- **M3 Characters:** Melo (12 bones, 10 clips) + six original animal musicians from a parametric generator
+  (15 bones, 18 clips each: Idle, Walk, Dance, Celebrate, Rest, React, Hold/Play × 6 playing styles); playing clips are
+  re-triggered on each sequenced note (`MusicianController.Hit`).
+- **M4 Engine:** see Milestone 1; plus `Arranger` (melody/harmony/chords/bass/beat/groove from any song for any
+  instrument), `Sequencer.Looped`, audio-route recovery.
+- **M5 Instruments (25 playable):** 3D models with animated parts (keys, pads, strings, wind keys, slide, bow) and
+  runtime play panels: keyboard (3 pianos), drum pads (kit laid out like a real kit, snare, bass drum, cymbals,
+  bongos, congas, tambourine, maracas), mallet bars (xylophone), strings with chord buttons (acoustic/electric guitar,
+  ukulele, banjo), harp strings, hold-to-play bowed notes (violin, cello) and wind holes (flute, trumpet, saxophone,
+  clarinet, trombone, recorder). Follow the Melody works on every melodic instrument (songs filtered to fit).
+- **M6 Orchestra Park:** six musicians (Bear drums, Rabbit piano, Fox violin, Elephant trumpet, Cat guitar, Penguin
+  maracas); invite/remove, reassign instruments, song cards, tempo (turtle↔rabbit 0.7–1.3×), coordinated playback,
+  musicians animate on their own notes, confetti + celebration; musicians unlock by discovering their instrument.
+- **M7 Music Studio:** 4 tracks × 4-bar loop, count-in, overdub recording of note events (eighth-note quantise),
+  timeline lanes with tap-to-delete notes, mute/volume/clear/remove, tempo, save/load/delete (hold) of compositions.
+- **M8 Learning:** Follow the Melody (4 tiers: 3–4, 5–6, 7–10 notes, whole song) + Rhythm Carnival: Rhythm Match,
+  Sound Detective, Follow the Beat, Musical Memory, High or Low, Instrument Orchestra, Melody Builder — each with
+  gentle levels, demonstrations instead of failure.
+- **M9 UI/UX:** consistent pebble buttons, SDF icons, rendered portraits of every instrument/character, speech
+  bubble + voice (EN/TH) for every instruction, sticker book (discoveries, musicians, areas, stars), parent area
+  (hold gear: volumes, language, quality, credits, on-screen device check), Android back navigation.
+- **M10 Saves/offline:** versioned JSON, atomic writes + backup recovery, compositions per file; no INTERNET.
+
+### Tests (editor)
+- EditMode 23/23; PlayMode 15/16 before the drum models were rebuilt (all scenes load; every area instrument builds
+  a panel and sounds; Follow the Melody completes; orchestra musicians animate on notes; studio records/saves/loads;
+  all seven carnival games start and clean up).
+
 ## Milestone 1 — Vertical slice (complete, 2026-11-18)
 
 ### Built so far

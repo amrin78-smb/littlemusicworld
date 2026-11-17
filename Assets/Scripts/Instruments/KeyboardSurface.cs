@@ -13,7 +13,7 @@ namespace LittleMusicWorld.Instruments
     /// system in the path) and the key dips, darkens and shows its pitch colour. Keys can also glow as guide prompts
     /// (Follow the Melody) or light up when played back by a sequence.
     /// </summary>
-    public sealed class KeyboardSurface : MonoBehaviour, ITouchSurface
+    public sealed class KeyboardSurface : MonoBehaviour, ITouchSurface, ISongSurface
     {
         [SerializeField] private InstrumentDefinition instrument;
         [SerializeField] private RectTransform area;
@@ -41,6 +41,9 @@ namespace LittleMusicWorld.Instruments
             }
         }
 
+        public event Action<int, int> NoteDown { add => KeyDown += value; remove => KeyDown -= value; }
+        public bool Interactable { get => interactable; set => interactable = value; }
+        public bool Has(int note) => byNote.ContainsKey(note);
         public int LowNote => lowNote;
         public int HighNote { get; private set; }
         public bool SurfaceActive => isActiveAndEnabled && instrument != null && interactable;

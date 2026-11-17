@@ -32,14 +32,14 @@ namespace LittleMusicWorld.Gameplay
         [SerializeField] private float hintAfterSeconds = 6f;
         [SerializeField] private int hintAfterWrong = 3;
 
-        private KeyboardSurface keyboard;
+        private ISongSurface keyboard;
         private Sequencer seq;
         private readonly List<NoteEvent> notes = new List<NoteEvent>();
         private int wrongCount;
         private float idleTime;
         private Coroutine running;
 
-        public void Begin(KeyboardSurface kb, SongLibrary.Lesson lesson)
+        public void Begin(ISongSurface kb, SongLibrary.Lesson lesson)
         {
             Stop();
             keyboard = kb;
@@ -52,7 +52,7 @@ namespace LittleMusicWorld.Gameplay
                 seq = gameObject.AddComponent<Sequencer>();
                 seq.NoteVisual += (track, ev) => { if (track == 0) keyboard.Flash(ev.note); };
             }
-            keyboard.KeyDown += OnKey;
+            keyboard.NoteDown += OnKey;
             running = StartCoroutine(Demonstrate(true));
         }
 
@@ -63,9 +63,9 @@ namespace LittleMusicWorld.Gameplay
             if (seq != null) seq.Stop();
             if (keyboard != null)
             {
-                keyboard.KeyDown -= OnKey;
+                keyboard.NoteDown -= OnKey;
                 keyboard.ClearGuides();
-                keyboard.interactable = true;
+                keyboard.Interactable = true;
             }
             SetPhase(Phase.Idle);
         }
@@ -80,7 +80,14 @@ namespace LittleMusicWorld.Gameplay
         }
 
         /// <summary>Moves the melody by octaves so every note is on the visible keyboard.</summary>
-        public static List<NoteEvent> FitToKeyboard(List<NoteEvent> src, KeyboardSurface kb)
+        /// <summary>True when every note of the melody exists on the surface after octave fitting.</summary>
+        public static bool Fits(List<NoteEvent> src, ISongSurface kb)
+        {
+            foreach (NoteEvent e in FitToKeyboard(src, kb)) if (!kb.Has(e.note)) return false;
+            return true;
+        }
+
+        public static List<NoteEvent> FitToKeyboard(List<NoteEvent> src, ISongSurface kb)
         {
             var list = new List<NoteEvent>(src);
             if (list.Count == 0) return list;
@@ -109,7 +116,7 @@ namespace LittleMusicWorld.Gameplay
         {
             SetPhase(Phase.Demonstrating);
             keyboard.ClearGuides();
-            keyboard.interactable = false;
+            keyboard.Interactable = false;
             yield return new WaitForSeconds(first ? 1.0f : 0.3f);
             seq.Clear();
             float tempo = Lesson.song.tempo * (Lesson.tier == 0 ? 0.75f : Lesson.tier == 1 ? 0.85f : 0.95f);
@@ -118,7 +125,7 @@ namespace LittleMusicWorld.Gameplay
             seq.Play();
             while (seq.IsPlaying) yield return null;
             yield return new WaitForSeconds(0.35f);
-            keyboard.interactable = true;
+            keyboard.Interactable = true;
             BeginFollowing();
         }
 
@@ -203,7 +210,7 @@ namespace LittleMusicWorld.Gameplay
             seq.Play();
             while (seq.IsPlaying) yield return null;
             SetPhase(Phase.Idle);
-            keyboard.KeyDown -= OnKey;
+            keyboard.NoteDown -= OnKey;
             running = null;
         }
     }

@@ -51,7 +51,7 @@ namespace LittleMusicWorld.World
             playBar.SetActive(false);
             if (overviewBar != null) overviewBar.SetActive(true);
             backButton.onClick.AddListener(Leave);
-            if (songsButton != null) songsButton.onClick.AddListener(() => songPicker.Open(StartLesson));
+            if (songsButton != null) songsButton.onClick.AddListener(() => songPicker.Open(StartLesson, l => MelodyGuide.Fits(l.notes, Surface)));
             if (listenButton != null) listenButton.onClick.AddListener(() => guide.Replay());
             panel.Played += OnPlayed;
             foreach (InstrumentStation s in stations)
@@ -142,8 +142,9 @@ namespace LittleMusicWorld.World
             panel.Show(def);
             playBar.SetActive(true);
             if (overviewBar != null) overviewBar.SetActive(false);
-            bool keys = def != null && def.playStyle == PlayStyle.Keyboard && guide != null;
-            if (songsButton != null) songsButton.gameObject.SetActive(keys);
+            // Songs on anything with notes: keys, wind holes, bowed notes, bars, harp strings (not drums or strums).
+            bool melodic = def != null && guide != null && def.playStyle != PlayStyle.DrumPads && def.playStyle != PlayStyle.Strum;
+            if (songsButton != null) songsButton.gameObject.SetActive(melodic);
             if (listenButton != null) listenButton.gameObject.SetActive(false);
             if (progressFill != null) progressFill.transform.parent.gameObject.SetActive(false);
             UISound.Plink(88, 60);
@@ -181,14 +182,17 @@ namespace LittleMusicWorld.World
             }
         }
 
+        private ISongSurface Surface => panel.Keyboard != null ? panel.Keyboard : (ISongSurface)panel.Pads;
+
         private void StartLesson(SongLibrary.Lesson l)
         {
-            if (panel.Keyboard == null) return;
+            ISongSurface surface = Surface;
+            if (surface == null) return;
             if (listenButton != null) listenButton.gameObject.SetActive(true);
             if (progressFill != null) progressFill.transform.parent.gameObject.SetActive(true);
-            panel.Keyboard.Flashed -= Pulse;
-            panel.Keyboard.Flashed += Pulse;
-            guide.Begin(panel.Keyboard, l);
+            surface.Flashed -= Pulse;
+            surface.Flashed += Pulse;
+            guide.Begin(surface, l);
         }
 
         private void Pulse(int note) => current?.model?.Hit(note);

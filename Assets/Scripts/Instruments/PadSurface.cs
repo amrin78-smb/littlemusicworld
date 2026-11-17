@@ -16,7 +16,7 @@ namespace LittleMusicWorld.Instruments
     ///  - Bowed strings / winds: holding a pad sustains the note (looped samples) until the finger lifts.
     /// Every pad gives visual feedback (glow, squash, string wobble) the instant it sounds.
     /// </summary>
-    public sealed class PadSurface : MonoBehaviour, ITouchSurface
+    public sealed class PadSurface : MonoBehaviour, ITouchSurface, ISongSurface
     {
         public enum Mode { Tap, Hold, Strum }
 
@@ -45,6 +45,16 @@ namespace LittleMusicWorld.Instruments
         public bool interactable = true;
 
         public bool Vertical { get => vertical; set => vertical = value; }
+
+        // ---- ISongSurface (melodies on wind holes, bars, harp strings)
+        public event Action<int, int> NoteDown;
+        public event Action<int> Flashed;
+        public bool Interactable { get => interactable; set => interactable = value; }
+        public bool Has(int note) => IndexOfNote(note) >= 0;
+        public int LowNote { get { int m = int.MaxValue; foreach (Pad p in pads) m = Mathf.Min(m, p.note); return m; } }
+        public int HighNote { get { int m = int.MinValue; foreach (Pad p in pads) m = Mathf.Max(m, p.note); return m; } }
+        void ISongSurface.SetGuide(int note, bool on) => SetGuide(IndexOfNote(note), on);
+        void ISongSurface.Flash(int note) { Flash(IndexOfNote(note)); Flashed?.Invoke(note); }
 
         public InstrumentDefinition Instrument
         {
@@ -112,6 +122,7 @@ namespace LittleMusicWorld.Instruments
             p.wobble = 1f;
             Services.Engine?.NoteOn(instrument, p.note, velocity, channel);
             PadDown?.Invoke(target, velocity);
+            NoteDown?.Invoke(p.note, velocity);
         }
 
         public void Release(int target, int finger)
