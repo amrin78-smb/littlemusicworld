@@ -17,6 +17,8 @@ namespace LittleMusicWorld.EditorTools
         public const string Folder = "Assets/Art/UI/Portraits";
         public const int Size = 256;
 
+        public static void RenderBatch() { RenderAll(); EditorApplication.Exit(0); }
+
         public static List<Sprite> RenderAll()
         {
             E.EnsureFolder(Folder);
@@ -39,23 +41,24 @@ namespace LittleMusicWorld.EditorTools
             RenderSettings.ambientGroundColor = E.Hex("#C8B8A0");
             RenderSettings.fog = false;
 
-            var ids = new List<(string id, string prefab, float yaw)>();
-            foreach (string id in AreaBuilder.AtlasOf.Keys) ids.Add((id, $"{ArtLibrary.PrefabFolder}/Instruments/{id}.prefab", 200f));
+            var ids = new List<(string id, string prefab)>();
+            foreach (string id in AreaBuilder.AtlasOf.Keys) ids.Add((id, $"{ArtLibrary.PrefabFolder}/Instruments/{id}.prefab"));
             foreach (string a in new[] { "Melo", "Bear", "Rabbit", "Fox", "Elephant", "Cat", "Penguin" })
-                ids.Add((a, $"{ArtLibrary.PrefabFolder}/Characters/{a}.prefab", 160f));
+                ids.Add((a, $"{ArtLibrary.PrefabFolder}/Characters/{a}.prefab"));
 
             var sprites = new List<Sprite>();
-            var rt = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32) { antiAliasing = 8 };
-            foreach (var (id, path, yaw) in ids)
+            var rt = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32) { antiAliasing = 4 };
+            foreach (var (id, path) in ids)
             {
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                 if (prefab == null) continue;
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-                go.transform.rotation = Quaternion.Euler(0, yaw, 0);
                 Bounds b = AreaBuilder.WorldBounds(go);
                 float radius = b.extents.magnitude;
-                Vector3 dir = Quaternion.Euler(18f, 25f, 0) * Vector3.back;
-                cam.transform.position = b.center - dir * radius / Mathf.Sin(cam.fieldOfView * 0.5f * Mathf.Deg2Rad) * 0.92f;
+                // Instruments face −Z, characters face +Z: look at the front from a friendly three-quarter angle, a bit above.
+                bool character = path.Contains("/Characters/");
+                Vector3 offset = new Vector3(0.45f, 0.35f, character ? 1f : -1f).normalized;
+                cam.transform.position = b.center + offset * radius / Mathf.Sin(cam.fieldOfView * 0.5f * Mathf.Deg2Rad) * 0.95f;
                 cam.transform.LookAt(b.center);
                 cam.targetTexture = rt;
                 cam.Render();
