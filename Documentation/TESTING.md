@@ -28,6 +28,7 @@ Only tests that were actually run are marked with a result. "Not yet run" means 
 | Self-test **in the Hub** (background music, full hub art) | S23 Ultra, ARM64, High tier | 60 fps (p95 16.7 ms, max 16.7 ms); 40-note burst 3.6 % mixer; 16ths ×3 tracks: 270 scheduled, 0 late, limiter idle |
 | Self-test **in the Hub** | S23 Ultra, **ARMv7**, Low tier | 30 fps locked (max frame 33.4 ms); mixer 4.8 % at the 28-voice cap; 0 late; limiter idle |
 | Device walkthrough (all 10 scenes) | S23 Ultra, release | every scene loads and renders; no errors/exceptions in logcat |
+| Final build on emulator (cold boot) | `lmw_api36`, SwiftShader + arm64 translation | installs, launches, branded boot → main menu renders correctly; heavier 3D scenes overwhelm the software GPU on this 4-core host and the emulator stops responding (host limitation, not a game fault) — full scene coverage done on the S23 |
 | Redmi A3 | — | **not yet run** (owner's device) — use Parent area ▸ Check and send a screenshot |
 
 ### Branding verification (gate)
@@ -36,8 +37,8 @@ Only tests that were actually run are marked with a result. "Not yet run" means 
 | Logo/wordmark inspected at full size | done (`Assets/Art/Branding/Logo_Master.png`) |
 | Icon legibility 48/72/96/144 px + adaptive circle | done (`Blender/Renders/Icon_SmallSizes.png`) |
 | Adaptive (bg + fg), round, legacy icons configured | done by `ProjectConfigurator.ConfigureIcons` |
-| Installed launcher icon inspected on a device | pending next device build |
-| Branded launch sequence on device | pending next device build |
+| Installed launcher icon inspected on a device | done — S23 App info shows the Melo icon (no Unity default) |
+| Branded launch sequence on device | done — Unity Personal splash (our sky blue + logo) → branded Boot → Main Menu |
 | Unity licence limitation | Unity **Personal**: "Made with Unity" splash cannot be removed; configured sky-blue background, our logo shown alongside, then our branded Boot scene |
 
 ## Manual checklist (each milestone build)
