@@ -45,6 +45,7 @@ namespace LittleMusicWorld.EditorTools
             foreach (string id in AreaBuilder.AtlasOf.Keys) ids.Add((id, $"{ArtLibrary.PrefabFolder}/Instruments/{id}.prefab"));
             foreach (string a in new[] { "Melo", "Bear", "Rabbit", "Fox", "Elephant", "Cat", "Penguin" })
                 ids.Add((a, $"{ArtLibrary.PrefabFolder}/Characters/{a}.prefab"));
+            ids.Add(("MeloFace", $"{ArtLibrary.PrefabFolder}/Characters/Melo.prefab")); // dialog-box head shot
 
             var sprites = new List<Sprite>();
             var rt = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32) { antiAliasing = 4 };
@@ -55,9 +56,16 @@ namespace LittleMusicWorld.EditorTools
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
                 Bounds b = AreaBuilder.WorldBounds(go);
                 float radius = b.extents.magnitude;
+                if (id == "MeloFace")
+                {
+                    // Head and shoulders: aim at the upper body, frame about half the height.
+                    b = new Bounds(b.center + Vector3.up * b.extents.y * 0.42f, b.size * 0.62f);
+                    radius = b.extents.magnitude;
+                }
                 // Instruments face −Z, characters face +Z: look at the front from a friendly three-quarter angle, a bit above.
                 bool character = path.Contains("/Characters/");
-                Vector3 offset = new Vector3(0.45f, 0.35f, character ? 1f : -1f).normalized;
+                Vector3 offset = id == "MeloFace" ? new Vector3(0.18f, 0.1f, 1f).normalized
+                    : new Vector3(0.45f, 0.35f, character ? 1f : -1f).normalized;
                 cam.transform.position = b.center + offset * radius / Mathf.Sin(cam.fieldOfView * 0.5f * Mathf.Deg2Rad) * 0.95f;
                 cam.transform.LookAt(b.center);
                 cam.targetTexture = rt;

@@ -18,8 +18,24 @@ namespace LittleMusicWorld.Core
         private void OnApplicationQuit() => Services.Save?.Save();
 
         /// <summary>Android back: area → hub → main menu; on the menu it does nothing (no accidental exits).</summary>
+        private const float AwakeAfterTouchSeconds = 600f;
+        private float lastTouch;
+        private bool keepAwake;
+
+        /// <summary>Screen stays on while the child plays or listens; the phone's own timeout returns after 10 idle minutes.</summary>
+        private void KeepScreenAwake()
+        {
+            var p = UnityEngine.InputSystem.Pointer.current;
+            if (p != null && p.press.isPressed) lastTouch = Time.unscaledTime;
+            bool want = Time.unscaledTime - lastTouch < AwakeAfterTouchSeconds;
+            if (want == keepAwake) return;
+            keepAwake = want;
+            Screen.sleepTimeout = want ? SleepTimeout.NeverSleep : SleepTimeout.SystemSetting;
+        }
+
         private void Update()
         {
+            KeepScreenAwake();
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null || !kb.escapeKey.wasPressedThisFrame || Services.Scenes == null || Services.Scenes.Busy) return;
             string cur = Services.Scenes.Current;

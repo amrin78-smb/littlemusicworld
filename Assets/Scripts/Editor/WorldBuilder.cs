@@ -108,8 +108,11 @@ namespace LittleMusicWorld.EditorTools
             Button cr = UIKit.Pebble("Credits", panel, new Vector2(0.5f, 0.5f), new Vector2(-300, -310), new Vector2(300, 110), "#D46CE0", null);
             UIKit.Text("Label", cr.transform, "Credits", 38, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(280, 80));
             Button close = UIKit.Pebble("Close", panel, new Vector2(0.5f, 0.5f), new Vector2(480, 330), new Vector2(140, 130), "#8BD346", "IconCheck");
-            TextMeshProUGUI info = UIKit.Text("Info", panel, "", 26, new Color(0.18f, 0.16f, 0.29f, 0.7f), new Vector2(0.5f, 0.5f), new Vector2(150, -310),
-                new Vector2(700, 80));
+            TextMeshProUGUI info = UIKit.Text("Info", panel, "", 26, new Color(0.18f, 0.16f, 0.29f, 0.7f), new Vector2(0.5f, 0.5f), new Vector2(400, -310),
+                new Vector2(440, 80));
+            Button tut = UIKit.Pebble("ReplayTutorial", panel, new Vector2(0.5f, 0.5f), new Vector2(30, -310), new Vector2(260, 110), "#FFC93C", null);
+            UIKit.Text("Label", tut.transform, "Tutorial", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(250, 80));
+            E.Set(sp, "replayTutorial", tut);
 
             RectTransform credits = UIKit.Stretch("Credits Panel", panel);
             UIKit.Image("Bg", credits, "Panel", Color.white, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1240, 800), true);
@@ -328,7 +331,7 @@ namespace LittleMusicWorld.EditorTools
             Canvas c = Hud("Hub Canvas");
             Button home = UIKit.Pebble("Home", c.transform, new Vector2(0, 1), new Vector2(110, -100), new Vector2(160, 150), "#FFC93C", "IconHome");
             home.gameObject.AddComponent<SceneButton>().scene = SceneFlow.MainMenu;
-            UIKit.Bubble(c.transform, new Vector2(0.5f, 1f), new Vector2(0, -110), 1000);
+            UIKit.Bubble(c.transform, new Vector2(0.5f, 0f), new Vector2(0, 120), 1000); // bottom: the way ahead (gates) stays visible
             ActivityBuilder.AddStickerBook(c);
             ParentArea(c);
             new GameObject("Ambient Music").AddComponent<Audio.AmbientMusic>();

@@ -66,6 +66,27 @@ namespace LittleMusicWorld.Tests
             for (int t = 0; t < 4; t++) Assert.GreaterOrEqual(perTier[t], 3, $"tier {t} needs songs");
         }
 
+        [Test] public void ChordsLastAsLongAsTheMelody()
+        {
+            foreach (SongLibrary.Song s in SongLibrary.Songs)
+            {
+                if (string.IsNullOrEmpty(s.chords)) continue;
+                float melody = 0f, chords = 0f;
+                foreach (NoteEvent e in s.Melody) melody = System.Math.Max(melody, e.beat + e.length);
+                foreach (string t in s.chords.Split(' '))
+                    chords += float.Parse(t.Split(':')[1], System.Globalization.CultureInfo.InvariantCulture);
+                Assert.AreEqual(melody, chords, 0.01f, s.id);
+            }
+        }
+
+        [Test] public void WheelsOnTheBusIsInTheSongBook()
+        {
+            SongLibrary.Song bus = SongLibrary.Get("wheelsbus");
+            Assert.NotNull(bus);
+            Assert.AreEqual(28, bus.NoteCount);
+            Assert.IsTrue(SongLibrary.Lessons().Exists(l => l.song == bus && l.tier == 3));
+        }
+
         [Test] public void AccompanimentStaysUnderTheMelody()
         {
             foreach (SongLibrary.Song s in SongLibrary.Songs)
@@ -87,6 +108,28 @@ namespace LittleMusicWorld.Tests
             Assert.AreEqual("th", r.settings.language);
             Assert.AreEqual(3, r.progress.stars);
             Assert.Contains("twinkle:0", r.progress.completedSongs);
+        }
+
+        [Test] public void TutorialStepSavesAndOldSavesStartTheTutorial()
+        {
+            SaveData old = SaveSerializer.Deserialize("{\"version\":1,\"progress\":{\"stars\":2,\"introSeen\":true}}", out _);
+            Assert.AreEqual(0, old.progress.tutorialStep);
+            var d = new SaveData();
+            d.progress.tutorialStep = 2;
+            Assert.AreEqual(2, SaveSerializer.Deserialize(SaveSerializer.Serialize(d), out _).progress.tutorialStep);
+        }
+
+        [Test] public void EveryTutorialLineHasWordsInBothLanguages()
+        {
+            var ta = UnityEngine.Resources.Load<UnityEngine.TextAsset>("Voice/voice_lines");
+            Assert.NotNull(ta);
+            foreach (string k in new[] { "tut_welcome", "tut_walk", "tut_walk_good", "tut_notes", "tut_gate", "tut_instrument", "tut_play",
+                         "tut_play_good", "tut_songs", "tut_back", "tut_done" })
+            {
+                StringAssert.Contains("\"key\": \"" + k + "\"", ta.text);
+                Assert.NotNull(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Voice/en/" + k), k);
+                Assert.NotNull(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Voice/th/" + k), k);
+            }
         }
 
         [Test] public void CorruptAndMissingAreSafe()

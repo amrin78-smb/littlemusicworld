@@ -203,18 +203,18 @@ namespace LittleMusicWorld.EditorTools
             }
             RectTransform grid = UIKit.Rect("Cards", panel, new Vector2(0.5f, 0.5f), new Vector2(0, -90), new Vector2(1480, 520));
             var gl = grid.gameObject.AddComponent<GridLayoutGroup>();
-            gl.cellSize = new Vector2(230, 230);
-            gl.spacing = new Vector2(34, 34);
+            gl.cellSize = new Vector2(190, 190);
+            gl.spacing = new Vector2(24, 24);
             gl.childAlignment = TextAnchor.MiddleCenter;
             gl.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gl.constraintCount = 5;
+            gl.constraintCount = 7; // 14 cards per tier
             Button close = UIKit.Pebble("Close", panel, new Vector2(0.5f, 0.5f), new Vector2(720, 330), new Vector2(130, 120), "#8BD346", "IconBack");
             var picker = panel.gameObject.AddComponent<SongPicker>();
             E.Set(picker, "cardGrid", grid);
             E.SetArray(picker, "tierButtons", tiers);
             E.Set(picker, "closeButton", close);
             var icons = new List<Object>();
-            foreach (string n in new[] { "IconStar", "IconLamb", "IconBell", "IconBun", "IconSun", "IconBoat", "IconHeart" }) icons.Add(UISprites.Get(n));
+            foreach (string n in new[] { "IconStar", "IconLamb", "IconBell", "IconBun", "IconSun", "IconBoat", "IconHeart", "IconBus" }) icons.Add(UISprites.Get(n));
             E.SetArray(picker, "songIcons", icons.ToArray());
             panel.gameObject.SetActive(false);
             return picker;

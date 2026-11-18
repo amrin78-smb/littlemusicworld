@@ -29,7 +29,11 @@ namespace LittleMusicWorld.UI
             Invoke(nameof(Prompt), t + 2.5f);
         }
 
-        private void Prompt() => Guide.Say("menu_play");
+        private void Prompt()
+        {
+            Guide.Say("menu_play");
+            if (Gameplay.Tutorial.Active) Gameplay.TutorialPointer.Create(play)?.PointAt((RectTransform)play.transform);
+        }
 
         private void Update()
         {

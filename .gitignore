@@ -26,3 +26,4 @@ Tools/.venv/
 *.blend1
 *.blend2
 /Blender/Exports/
+.utmp/

@@ -16,6 +16,7 @@ namespace LittleMusicWorld.UI
         [SerializeField] private TMP_Text qualityLabel, info;
         [SerializeField] private GameObject creditsPanel;
         [SerializeField] private Button checkDevice;
+        [SerializeField] private Button replayTutorial;
         [SerializeField] private TMP_Text checkReport;
         [SerializeField] private GameObject checkPanel;
 
@@ -44,6 +45,12 @@ namespace LittleMusicWorld.UI
             if (credits != null) credits.onClick.AddListener(() => creditsPanel.SetActive(!creditsPanel.activeSelf));
             if (resetProgress != null) resetProgress.onClick.AddListener(() => Services.Save.ResetProgress(false));
             if (checkDevice != null) checkDevice.onClick.AddListener(RunCheck);
+            if (replayTutorial != null) replayTutorial.onClick.AddListener(() =>
+            {
+                Gameplay.Tutorial.Restart();
+                gameObject.SetActive(false);
+                Services.Scenes.Load(SceneFlow.Hub);
+            });
         }
 
         /// <summary>Grown-up diagnostic: the audio/performance self-test, results shown on screen for a screenshot.</summary>

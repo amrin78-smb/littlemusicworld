@@ -30,9 +30,21 @@ namespace LittleMusicWorld.Characters
             return Language == "th" && !string.IsNullOrEmpty(l.th) ? l.th : l.en;
         }
 
+        /// <summary>True while the last line is a tutorial instruction that stays on screen until the next line.</summary>
+        public static bool Holding { get; private set; }
+
+        /// <summary>Says a line; with hold, its text stays in the dialog box until another line replaces it.</summary>
+        public static float Say(string key, bool hold)
+        {
+            float t = Say(key);
+            Holding = hold;
+            return t;
+        }
+
         public static float Say(string key)
         {
             Load();
+            Holding = false;
             string text = Text(key);
             AudioClip clip = Clip(key);
             float seconds = clip != null ? clip.length : Mathf.Clamp(text.Length * 0.06f, 1.2f, 4f);

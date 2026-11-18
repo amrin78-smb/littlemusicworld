@@ -31,6 +31,17 @@ Only tests that were actually run are marked with a result. "Not yet run" means 
 | Final build on emulator (cold boot) | `lmw_api36`, SwiftShader + arm64 translation | installs, launches, branded boot → main menu renders correctly; heavier 3D scenes overwhelm the software GPU on this 4-core host and the emulator stops responding (host limitation, not a game fault) — full scene coverage done on the S23 |
 | Redmi A3 | — | **not yet run** (owner's device) — use Parent area ▸ Check and send a screenshot |
 
+### 2026-11-18 — Owner requests (Wheels on the Bus, dialog box, tutorial)
+| Test | Device / build | Result |
+|---|---|---|
+| EditMode / PlayMode | Unity batch | **27/27**, **16/16** |
+| APK verification | release | arm64 + armv7, PowerVR filter, landscape, no INTERNET ✔ |
+| Dialog box on menu, hub, Piano Paradise | S23 Ultra | text shows with Melo's portrait, readable, stays on screen ✔ |
+| Tutorial: menu → hub (ground, gate) → Piano Paradise (instrument, play, songs, back, done) | S23 Ultra | completes ✔ (quick taps work after the TapInput fix) |
+| Screen stays awake while playing | S23 Ultra | found sleeping at 30 s → fixed; **re-check on device pending** |
+| Hub dialog at the bottom, pointer beside songs button (last build) | — | **not yet run** (S23 offline for adb; emulator crashes in the hub) |
+| Replay tutorial from Parent area | — | **not yet run** on a device |
+
 ### Branding verification (gate)
 | Check | Status |
 |---|---|

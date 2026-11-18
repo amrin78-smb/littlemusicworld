@@ -1,5 +1,0 @@
-/home/amrin/development/Nocvault/littlemusicworld/.utmp/RelWithDebInfo/5n4d682d/armeabi-v7a/CMakeFiles/edit_cache.dir
-/home/amrin/development/Nocvault/littlemusicworld/.utmp/RelWithDebInfo/5n4d682d/armeabi-v7a/CMakeFiles/rebuild_cache.dir
-/home/amrin/development/Nocvault/littlemusicworld/.utmp/RelWithDebInfo/5n4d682d/armeabi-v7a/GameActivity/CMakeFiles/game.dir
-/home/amrin/development/Nocvault/littlemusicworld/.utmp/RelWithDebInfo/5n4d682d/armeabi-v7a/GameActivity/CMakeFiles/edit_cache.dir
-/home/amrin/development/Nocvault/littlemusicworld/.utmp/RelWithDebInfo/5n4d682d/armeabi-v7a/GameActivity/CMakeFiles/rebuild_cache.dir

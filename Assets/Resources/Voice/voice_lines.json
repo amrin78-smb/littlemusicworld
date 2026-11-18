@@ -262,6 +262,61 @@
    "key": "locked_soon",
    "en": "Let's explore here soon!",
    "th": "เดี๋ยวเรามาสำรวจที่นี่กันนะ!"
+  },
+  {
+   "key": "tut_welcome",
+   "en": "Welcome to Music World! Let me show you how to play.",
+   "th": "ยินดีต้อนรับสู่โลกดนตรี! เดี๋ยวฉันจะสอนวิธีเล่นให้นะ"
+  },
+  {
+   "key": "tut_walk",
+   "en": "Tap the ground where the arrow is, and I'll walk there!",
+   "th": "แตะพื้นตรงลูกศร แล้วฉันจะเดินไปตรงนั้น!"
+  },
+  {
+   "key": "tut_walk_good",
+   "en": "Great! Tap anywhere to take me for a walk.",
+   "th": "เก่งมาก! แตะตรงไหนก็ได้ พาฉันไปเดินเล่นนะ"
+  },
+  {
+   "key": "tut_notes",
+   "en": "Golden notes are hidden all around. Tap them to collect them!",
+   "th": "มีโน้ตสีทองซ่อนอยู่รอบ ๆ แตะเพื่อเก็บมันนะ!"
+  },
+  {
+   "key": "tut_gate",
+   "en": "Each gate takes you to a music land. Tap the piano gate!",
+   "th": "ประตูแต่ละบานพาไปดินแดนดนตรี แตะประตูเปียโนเลย!"
+  },
+  {
+   "key": "tut_instrument",
+   "en": "Tap an instrument to play it!",
+   "th": "แตะเครื่องดนตรีเพื่อเล่นเลย!"
+  },
+  {
+   "key": "tut_play",
+   "en": "Touch the colours to make music. You can use lots of fingers!",
+   "th": "แตะสีต่าง ๆ เพื่อเล่นดนตรี ใช้หลายนิ้วพร้อมกันได้นะ!"
+  },
+  {
+   "key": "tut_play_good",
+   "en": "Beautiful music!",
+   "th": "เพลงเพราะมากเลย!"
+  },
+  {
+   "key": "tut_songs",
+   "en": "Tap the star to learn a song with me.",
+   "th": "แตะรูปดาวเพื่อหัดเล่นเพลงกับฉันนะ"
+  },
+  {
+   "key": "tut_back",
+   "en": "Tap the arrow to go back and try another instrument.",
+   "th": "แตะลูกศรเพื่อกลับไปลองเครื่องดนตรีอื่น"
+  },
+  {
+   "key": "tut_done",
+   "en": "Now you know how to play! Have fun making music!",
+   "th": "ตอนนี้รู้วิธีเล่นแล้ว! สนุกกับการเล่นดนตรีนะ!"
   }
  ]
 }

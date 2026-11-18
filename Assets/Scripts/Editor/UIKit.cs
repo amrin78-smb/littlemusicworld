@@ -149,15 +149,35 @@ namespace LittleMusicWorld.EditorTools
             return s;
         }
 
-        public static SpeechBubble Bubble(Transform parent, Vector2 anchor, Vector2 pos, float width = 900f)
+        /// <summary>
+        /// Melo's dialog box: coral frame, Melo's portrait in a round window on the left, the line's words on the right
+        /// (left-aligned, auto-sized to fit). Text-only; never takes touches.
+        /// </summary>
+        public static SpeechBubble Bubble(Transform parent, Vector2 anchor, Vector2 pos, float width = 900f, float height = 170f)
         {
-            RectTransform rt = Rect("Speech Bubble", parent, anchor, pos, new Vector2(width, 150));
+            RectTransform rt = Rect("Dialog Box", parent, anchor, pos, new Vector2(width, height));
             var cg = rt.gameObject.AddComponent<CanvasGroup>();
             cg.blocksRaycasts = false;
-            Image("Shadow", rt, "Panel", new Color(0.18f, 0.16f, 0.29f, 0.25f), new Vector2(0.5f, 0.5f), new Vector2(0, -8), new Vector2(width, 150));
-            Image("Panel", rt, "Panel", Color.white, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(width, 150));
-            Image("Tail", rt, "Circle", Color.white, new Vector2(0f, 0f), new Vector2(60, -14), new Vector2(46, 46));
-            TextMeshProUGUI t = Text("Text", rt, "", 46, Ink, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(width - 60, 130));
+            cg.interactable = false;
+            Color coral = E.Hex("#FF7A59");
+            Image("Shadow", rt, "Panel", new Color(0.18f, 0.16f, 0.29f, 0.28f), new Vector2(0.5f, 0.5f), new Vector2(0, -9), new Vector2(width + 12, height + 12));
+            Image("Frame", rt, "Panel", coral, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(width + 12, height + 12));
+            Image("Panel", rt, "Panel", new Color(1f, 0.985f, 0.95f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(width, height));
+            float px = -width / 2f + height / 2f + 4f;
+            float pd = height - 34f;
+            Image("PortraitRing", rt, "Circle", coral, new Vector2(0.5f, 0.5f), new Vector2(px, 0), new Vector2(pd + 12, pd + 12));
+            Image("PortraitBg", rt, "Circle", E.Hex("#BFE6FF"), new Vector2(0.5f, 0.5f), new Vector2(px, 0), new Vector2(pd, pd));
+            Image face = Image("Portrait", rt, null, Color.white, new Vector2(0.5f, 0.5f), new Vector2(px, -2), new Vector2(pd * 0.98f, pd * 0.98f));
+            face.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PortraitRenderer.Folder + "/Portrait_MeloFace.png");
+            if (face.sprite == null) face.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PortraitRenderer.Folder + "/Portrait_Melo.png");
+            face.preserveAspect = true;
+            if (face.sprite == null) face.enabled = false;
+            float left = px + pd / 2f + 26f, right = width / 2f - 30f;
+            TextMeshProUGUI t = Text("Text", rt, "", 46, Ink, new Vector2(0.5f, 0.5f), new Vector2((left + right) / 2f, 0), new Vector2(right - left, height - 30),
+                TextAlignmentOptions.MidlineLeft);
+            t.enableAutoSizing = true;
+            t.fontSizeMin = 30;
+            t.fontSizeMax = 46;
             var bubble = rt.gameObject.AddComponent<SpeechBubble>();
             E.Set(bubble, "label", t);
             E.Set(bubble, "group", cg);

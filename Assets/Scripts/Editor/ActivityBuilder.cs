@@ -241,7 +241,7 @@ namespace LittleMusicWorld.EditorTools
             E.Set(mgr, "instrumentGrid", instGrid);
             E.Set(mgr, "instrumentPanel", instPanel.gameObject);
             E.SetArray(mgr, "instrumentIcons", PortraitRenderer.All());
-            E.SetArray(mgr, "songIcons", Icons("IconStar", "IconLamb", "IconBell", "IconBun", "IconSun", "IconBoat", "IconHeart"));
+            E.SetArray(mgr, "songIcons", Icons("IconStar", "IconLamb", "IconBell", "IconBun", "IconSun", "IconBoat", "IconHeart", "IconBus"));
             var prefabs = new List<Object>();
             foreach (string id in AreaBuilder.AtlasOf.Keys)
             {

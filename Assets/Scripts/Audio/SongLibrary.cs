@@ -66,6 +66,10 @@ namespace LittleMusicWorld.Audio
             new Song { id = "thisoldman", title = "This Old Man", picture = "drum", tempo = 112,
                 melody = "G4 E4 G4:2 | G4 E4 G4:2 | A4 G4 F4 E4 | D4 E4 F4:2 | E4 F4 G4 C4 | C4 C4:0.5 C4:0.5 C4 D4 | E4 F4 G4:2 | G4 D4 F4 E4 | D4 C4:3",
                 chords = "C:4 C:4 F:4 G:4 C:4 C:4 C:4 G:4 C:4", origin = "English traditional counting song" },
+            new Song { id = "wheelsbus", title = "The Wheels on the Bus", picture = "bus", tempo = 112,
+                melody = "G3 | C4 C4:0.5 C4:0.5 C4 E4 | G4 E4 C4:2 | D4 B3 G3:2 | G4 E4 C4 G3 | C4 C4:0.5 C4:0.5 C4 E4 | G4 E4 C4:2 | D4:2 G3 G3 | C4:3",
+                chords = "N:1 C:4 C:4 G:4 C:4 C:4 C:4 G:4 C:3",
+                origin = "Verna Hills (1939); included at the owner's request (2026-11-18), melody transcribed by us" },
         };
 
         public static Song Get(string id) => Songs.Find(s => s.id == id);

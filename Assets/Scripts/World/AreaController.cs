@@ -40,8 +40,6 @@ namespace LittleMusicWorld.World
         private Vector3 camFromPos, camToPos;
         private Quaternion camFromRot, camToRot;
         private float camT = 1f;
-        private Vector2 downPos;
-        private bool pressing;
 
         private void Start()
         {
@@ -81,7 +79,78 @@ namespace LittleMusicWorld.World
         private void Intro()
         {
             melo?.Wave();
-            Guide.Say(introVoice);
+            float t = Guide.Say(introVoice);
+            if (Tutorial.Step == Tutorial.AreaPart && string.IsNullOrEmpty(DeviceArgs.Get("lmw_station")))
+                tutorial = StartCoroutine(TutorialArea(t));
+        }
+
+        // ------------------------------------------------------------------ first-play tutorial (area part)
+
+        private Coroutine tutorial;
+        private TutorialPointer pointer;
+        private int tutNotes;
+
+        private System.Collections.IEnumerator TutorialArea(float introSeconds)
+        {
+            pointer = TutorialPointer.Create(playBar.transform);
+            yield return new WaitForSeconds(introSeconds + 0.5f);
+
+            // 1. Choose an instrument.
+            InstrumentStation first = stations.Length > 0 ? stations[0] : null;
+            if (first != null && current == null)
+            {
+                pointer?.PointAt(AreaBuilderBoundsCentre(first));
+                float wait = 0f;
+                Guide.Say("tut_instrument", true);
+                while (current == null)
+                {
+                    wait += Time.deltaTime;
+                    if (wait > 14f) { wait = 0f; Guide.Say("tut_instrument", true); melo?.Point(); }
+                    yield return null;
+                }
+                pointer?.Hide();
+            }
+            yield return new WaitForSeconds(0.8f);
+
+            // 2. Play it.
+            tutNotes = 0;
+            float idle = 0f;
+            Guide.Say("tut_play", true);
+            while (current != null && tutNotes < 6)
+            {
+                idle += Time.deltaTime;
+                if (idle > 14f && tutNotes == 0) { idle = 0f; Guide.Say("tut_play", true); }
+                yield return null;
+            }
+            if (current != null)
+            {
+                UISound.Sparkle();
+                yield return new WaitForSeconds(Guide.Say("tut_play_good") + 0.4f);
+            }
+
+            // 3. Songs (melodic instruments) and the way back.
+            if (current != null && songsButton != null && songsButton.gameObject.activeInHierarchy)
+            {
+                pointer?.PointAt((RectTransform)songsButton.transform);
+                yield return new WaitForSeconds(Guide.Say("tut_songs") + 1f);
+            }
+            if (current != null)
+            {
+                pointer?.PointAt((RectTransform)backButton.transform);
+                yield return new WaitForSeconds(Guide.Say("tut_back") + 1f);
+            }
+            pointer?.Hide();
+            Guide.Say("tut_done");
+            melo?.Celebrate();
+            Tutorial.Step = Tutorial.Done;
+            tutorial = null;
+        }
+
+        private static Vector3 AreaBuilderBoundsCentre(InstrumentStation s)
+        {
+            var b = new Bounds(s.transform.position, Vector3.zero);
+            foreach (Renderer r in s.GetComponentsInChildren<Renderer>()) b.Encapsulate(r.bounds);
+            return b.center + Vector3.up * b.extents.y * 0.6f;
         }
 
         private void Update()
@@ -106,30 +175,12 @@ namespace LittleMusicWorld.World
 
         private void HandleTap()
         {
-            Pointer ptr = Pointer.current;
-            if (ptr == null || Services.Scenes == null || Services.Scenes.Busy) return;
-            if (ptr.press.wasPressedThisFrame)
+            if (Services.Scenes == null || Services.Scenes.Busy || !TapInput.Poll(out Vector2 up)) return;
+            if (Physics.Raycast(cam.ScreenPointToRay(up), out RaycastHit hit, 100f))
             {
-                pressing = EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject(PointerId());
-                downPos = ptr.position.ReadValue();
+                InstrumentStation s = hit.collider.GetComponentInParent<InstrumentStation>();
+                if (s != null) Enter(s);
             }
-            else if (ptr.press.wasReleasedThisFrame && pressing)
-            {
-                pressing = false;
-                Vector2 up = ptr.position.ReadValue();
-                if ((up - downPos).magnitude > 40f) return;
-                if (Physics.Raycast(cam.ScreenPointToRay(up), out RaycastHit hit, 100f))
-                {
-                    InstrumentStation s = hit.collider.GetComponentInParent<InstrumentStation>();
-                    if (s != null) Enter(s);
-                }
-            }
-        }
-
-        private static int PointerId()
-        {
-            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed) return Touchscreen.current.primaryTouch.touchId.ReadValue();
-            return PointerInputModule.kMouseLeftId;
         }
 
         public InstrumentStation[] Stations => stations;
@@ -179,10 +230,11 @@ namespace LittleMusicWorld.World
         private void OnPlayed(int note)
         {
             if (current == null) return;
+            tutNotes++;
             if (Services.Discover(Services.Save?.Data.progress.discoveredInstruments, current.instrumentId))
             {
                 melo?.Celebrate();
-                Guide.Say("new_instrument");
+                if (tutorial == null) Guide.Say("new_instrument");
                 UISound.Sparkle();
             }
         }

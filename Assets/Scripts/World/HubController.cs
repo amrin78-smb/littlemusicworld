@@ -20,9 +20,6 @@ namespace LittleMusicWorld.World
         [SerializeField] private float cameraLag = 3.5f;
         [SerializeField] private Transform tapMarker;
 
-        private Vector2 downPos;
-        private float downTime;
-        private bool pressing;
         private AreaPortal pending;
         private readonly System.Collections.Generic.Queue<Vector3> route = new System.Collections.Generic.Queue<Vector3>();
         private const float BandstandRadius = 3.3f;
@@ -51,6 +48,12 @@ namespace LittleMusicWorld.World
 
         private void Welcome()
         {
+            if (Gameplay.Tutorial.Active)
+            {
+                pointer = Gameplay.TutorialPointer.Create(FindAnyObjectByType<SpeechBubble>());
+                tutorial = StartCoroutine(Gameplay.Tutorial.Step == Gameplay.Tutorial.HubPart ? TutorialHub() : TutorialGate());
+                return;
+            }
             bool first = Services.Save != null && !Services.Save.Data.progress.introSeen;
             melo.Wave();
             Guide.Say(first ? "hub_welcome" : "hub_tap_path");
@@ -61,34 +64,101 @@ namespace LittleMusicWorld.World
             }
         }
 
-        private void Update()
+        // ------------------------------------------------------------------ first-play tutorial
+
+        private Gameplay.TutorialPointer pointer;
+        private Coroutine tutorial;
+        private bool tutWalked;
+
+        private System.Collections.IEnumerator SayWait(string key, float after = 0.4f)
         {
-            Pointer p = Pointer.current;
-            if (p != null && Services.Scenes != null && !Services.Scenes.Busy)
-            {
-                if (p.press.wasPressedThisFrame)
-                {
-                    pressing = !OverUI();
-                    downPos = p.position.ReadValue();
-                    downTime = Time.unscaledTime;
-                }
-                else if (p.press.wasReleasedThisFrame && pressing)
-                {
-                    pressing = false;
-                    Vector2 up = p.position.ReadValue();
-                    if ((up - downPos).magnitude < Screen.dpi * 0.15f + 12f && Time.unscaledTime - downTime < 0.8f) Tap(up);
-                }
-            }
-            FollowCamera();
+            yield return new WaitForSeconds(Guide.Say(key) + after);
         }
 
-        private static bool OverUI()
+        private System.Collections.IEnumerator TutorialHub()
         {
-            EventSystem es = EventSystem.current;
-            if (es == null) return false;
-            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
-                return es.IsPointerOverGameObject(Touchscreen.current.primaryTouch.touchId.ReadValue());
-            return es.IsPointerOverGameObject();
+            melo.Wave();
+            if (Services.Save != null) Services.Save.Data.progress.introSeen = true;
+            yield return SayWait("tut_welcome");
+
+            // 1. Tap the ground: Melo walks there.
+            Vector3 m = melo.transform.position;
+            Vector3 spot = new Vector3(m.x + 2.6f, 0f, m.z + 1.2f);
+            if (new Vector3(spot.x, 0, spot.z).magnitude < BandstandRadius + 1f) spot = new Vector3(m.x - 2.6f, 0f, m.z - 0.5f);
+            pointer?.PointAt(spot + Vector3.up * 0.1f);
+            tutWalked = false;
+            float wait = 0f;
+            Guide.Say("tut_walk", true);
+            while (!tutWalked)
+            {
+                wait += Time.deltaTime;
+                if (wait > 14f) { wait = 0f; Guide.Say("tut_walk", true); melo.Point(); }
+                yield return null;
+            }
+            pointer?.Hide();
+            melo.Celebrate();
+            yield return SayWait("tut_walk_good", 0.6f);
+
+            // 2. Golden notes.
+            Collectible near = null;
+            float best = float.MaxValue;
+            foreach (Collectible c in FindObjectsByType<Collectible>(FindObjectsSortMode.None))
+            {
+                if (!c.isActiveAndEnabled) continue;
+                Vector3 sp = cam.WorldToViewportPoint(c.transform.position);
+                float d = (c.transform.position - melo.transform.position).sqrMagnitude;
+                if (sp.z > 0 && sp.x > 0.08f && sp.x < 0.92f && sp.y > 0.1f && sp.y < 0.85f && d < best) { best = d; near = c; }
+            }
+            if (near != null)
+            {
+                pointer?.PointAt(near.transform);
+                yield return SayWait("tut_notes", 1.2f);
+                pointer?.Hide();
+            }
+
+            // 3. Choose a gate.
+            Gameplay.Tutorial.Step = Gameplay.Tutorial.AreaPart;
+            yield return TutorialGate();
+        }
+
+        private System.Collections.IEnumerator TutorialGate()
+        {
+            AreaPortal target = null;
+            foreach (AreaPortal p in FindObjectsByType<AreaPortal>(FindObjectsSortMode.None))
+                if (p.open && (target == null || p.sceneName == SceneFlow.PianoParadise)) target = p;
+            if (target == null) yield break;
+            // Walk most of the way so the camera brings the gate into view, then point at it.
+            Vector3 near = target.ApproachPoint * 0.6f;
+            if (new Vector3(near.x, 0, near.z).magnitude < BandstandRadius + 0.5f) near = near.normalized * (BandstandRadius + 0.5f);
+            Route(near);
+            yield return new WaitForSeconds(0.3f);
+            float walk = 0f;
+            while ((melo.Walking || route.Count > 0) && walk < 8f) { walk += Time.deltaTime; yield return null; }
+            melo.FaceTowards(target.transform.position, true);
+            yield return new WaitForSeconds(0.6f);
+            pointer?.PointAt(target.transform.position + Vector3.up * 1.2f);
+            float wait = 0f;
+            Guide.Say("tut_gate", true);
+            while (true)
+            {
+                wait += Time.deltaTime;
+                if (wait > 16f) { wait = 0f; Guide.Say("tut_gate", true); }
+                yield return null;
+            }
+        }
+
+        private void EndHubTutorial()
+        {
+            if (tutorial != null) StopCoroutine(tutorial);
+            tutorial = null;
+            pointer?.Hide();
+            if (Gameplay.Tutorial.Step == Gameplay.Tutorial.HubPart) Gameplay.Tutorial.Step = Gameplay.Tutorial.AreaPart;
+        }
+
+        private void Update()
+        {
+            if (Services.Scenes != null && !Services.Scenes.Busy && TapInput.Poll(out Vector2 up)) Tap(up);
+            FollowCamera();
         }
 
         private void Tap(Vector2 screen)
@@ -116,6 +186,7 @@ namespace LittleMusicWorld.World
                 if (flat.magnitude < BandstandRadius) flat = flat.normalized * BandstandRadius;
                 Route(flat);
                 ShowMarker(flat);
+                tutWalked = true;
                 UI.UISound.Plink(79, 50);
             }
         }
@@ -128,6 +199,7 @@ namespace LittleMusicWorld.World
                 Guide.Say(portal.voiceKey);
                 return;
             }
+            if (tutorial != null) EndHubTutorial();
             pending = portal;
             Route(portal.ApproachPoint);
             ShowMarker(portal.ApproachPoint);

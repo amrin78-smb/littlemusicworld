@@ -59,6 +59,7 @@ namespace LittleMusicWorld.SaveSystem
         public List<string> collectibles = new List<string>();
         public int stars;
         public bool introSeen;
+        public int tutorialStep;          // 0 hub part, 1 area part, 2 done (see Gameplay.Tutorial)
 
         public void Sanitise()
         {

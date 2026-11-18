@@ -65,10 +65,10 @@ namespace LittleMusicWorld.UI
             img.sprite = skin.pebble;
             img.type = Image.Type.Sliced;
             img.color = NoteUtil.ColorOf(l.notes[0].note + l.song.id.Length * 2);
-            Child(go.transform, "Icon", Icon(l.song.picture), Color.white, new Vector2(0, 18), new Vector2(150, 150));
+            Child(go.transform, "Icon", Icon(l.song.picture), Color.white, new Vector2(0, 14), new Vector2(124, 124));
             for (int d = 0; d <= l.tier; d++)
-                Child(go.transform, "Dot", skin.circle, Color.white, new Vector2((d - l.tier * 0.5f) * 30f, -82), new Vector2(22, 22));
-            if (done) Child(go.transform, "Star", skin.iconStar, new Color(1f, 0.82f, 0.25f), new Vector2(88, 88), new Vector2(70, 70));
+                Child(go.transform, "Dot", skin.circle, Color.white, new Vector2((d - l.tier * 0.5f) * 26f, -70), new Vector2(20, 20));
+            if (done) Child(go.transform, "Star", skin.iconStar, new Color(1f, 0.82f, 0.25f), new Vector2(72, 72), new Vector2(60, 60));
             go.GetComponent<Button>().onClick.AddListener(() =>
             {
                 gameObject.SetActive(false);

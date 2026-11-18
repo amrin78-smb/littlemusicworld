@@ -42,7 +42,7 @@ chords are our own.
 | Ode to Joy | Beethoven, Symphony No. 9 (1824) | public domain |
 | Jingle Bells | James Lord Pierpont (1857) | public domain |
 | This Old Man | English traditional | public domain |
-| **Wheels on the Bus** | Verna Hills (1939) — an authored song, not anonymous folk | **not included**: probably public domain in the US (no renewal) but uncertain worldwide. Owner decision pending. |
+| **Wheels on the Bus** | Verna Hills (1939) — an authored song, not anonymous folk | **included at the owner's request (2026-11-18)**; melody transcribed by us, own chords. Probably public domain in the US (no renewal); status elsewhere uncertain — the owner accepted this. |
 
 ## Voice
 Helper speech is generated offline by text-to-speech (Kokoro-82M, Apache-2.0; VachanaTTS, MIT). No voice

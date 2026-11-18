@@ -89,7 +89,7 @@ namespace LittleMusicWorld.EditorTools
 
 
         public static readonly string[] IconNames =
-            { "Play", "Home", "Back", "Gear", "Star", "Lock", "Listen", "Check", "Bell", "Bun", "Sun", "Heart", "Lamb", "Boat", "Up", "Down", "Stop", "Record", "Trash" };
+            { "Play", "Home", "Back", "Gear", "Star", "Lock", "Listen", "Check", "Bell", "Bun", "Sun", "Heart", "Lamb", "Boat", "Up", "Down", "Stop", "Record", "Trash", "Bus" };
 
         /// <summary>White glyphs (tinted in UI), 160² with soft edges. Simple, bold silhouettes readable at 60 px.</summary>
         private static void PaintIcons()
@@ -165,6 +165,15 @@ namespace LittleMusicWorld.EditorTools
             }), Vector4.zero);
             Paint("IconBoat", N, N, W((x, y) => Mathf.Min(Mathf.Max(RoundRect(x, y, C, 46, 62, 20, 16), y - 60),
                 Mathf.Min(Tri(x, y, new Vector2(84, 66), new Vector2(84, 136), new Vector2(132, 66)) - 2, RoundRect(x, y, 80, 92, 4, 48, 2)))), Vector4.zero);
+            Paint("IconBus", N, N, W((x, y) =>
+            {
+                float body = RoundRect(x, y, C, 86, 66, 38, 14);
+                float windows = 99f;
+                foreach (float wx in new[] { 44f, 78f, 112f }) windows = Mathf.Min(windows, RoundRect(x, y, wx, 100, 12, 12, 4));
+                float wheels = Mathf.Min(Mathf.Sqrt(Sq(x - 48) + Sq(y - 44)) - 17, Mathf.Sqrt(Sq(x - 112) + Sq(y - 44)) - 17);
+                float gaps = Mathf.Min(Mathf.Sqrt(Sq(x - 48) + Sq(y - 44)) - 24, Mathf.Sqrt(Sq(x - 112) + Sq(y - 44)) - 24);
+                return Mathf.Min(Mathf.Max(Mathf.Max(body, -windows), -gaps), wheels);
+            }), Vector4.zero);
             Paint("IconTrash", N, N, W((x, y) => Mathf.Min(Mathf.Max(RoundRect(x, y, C, 66, 40, 44, 8), -RoundRect(x, y, C, 66, 6, 30, 3)),
                 Mathf.Min(RoundRect(x, y, C, 118, 54, 7, 4), RoundRect(x, y, C, 128, 16, 8, 4)))), Vector4.zero);
         }

@@ -4,6 +4,35 @@ Newest first. Each milestone lists features, assets, systems, tools, tests (actu
 
 ---
 
+## Owner requests — Wheels on the Bus, dialog box, first-play tutorial (2026-11-18)
+
+### Built
+- **Wheels on the Bus** added (owner's decision; melody transcribed by us, own chords, bus icon). 13 songs; the
+  Follow the Melody song picker now shows 7 cards per row (14 per difficulty) so every song fits.
+- **Dialog box** replaces the small speech bubble: coral frame, Melo's head shot, larger auto-sized text that types in
+  while Melo speaks and stays long enough to read slowly (at least 1.5 s + 1 s per 15 characters, plus 3 s).
+  Tutorial instructions stay on screen until the child does the step. In the hub it sits at the bottom so the way
+  ahead stays visible. EN + TH, same text source as the voice.
+- **First-play tutorial** (saved; old saves see it once; Parent area ▸ Tutorial replays it):
+  menu (pointer on Play) → hub: welcome, tap the ground (Melo walks), golden notes, Melo walks towards the piano gate
+  and the pointer shows it → area: tap an instrument, play six notes, the songs star, the back arrow, done.
+  A golden ring + bouncing arrow marks each target; off-screen targets get an edge arrow. 11 new voice lines (EN/TH).
+- **Fixes found while testing on the S23:**
+  - Very quick taps (press and release inside one frame) were lost in the hub and areas → new `TapInput` uses
+    EnhancedTouch, which keeps those touches.
+  - The screen went to sleep after the phone's 30 s timeout while a child was listening or watching → the game keeps
+    the screen on, and returns to the phone's own timeout after 10 minutes without a touch.
+
+### Tests
+- EditMode 27/27 (new: chords match melody length for every song, Wheels on the Bus lessons, tutorial step save +
+  old-save default, every tutorial line has EN/TH text and clips), PlayMode 16/16, APK checks pass.
+- S23 Ultra (build before the last two layout tweaks): menu pointer on Play; hub tap-the-ground step (quick adb taps
+  now work); gate step with Melo walking to the piano gate; Piano Paradise instrument → play → songs → back → done,
+  no errors in logcat.
+- **Not yet verified on a device:** the hub dialog box at the bottom, the pointer beside the songs button, the
+  screen-awake fix and Replay tutorial (the S23 went offline for adb before the last build; the emulator cannot
+  render the hub on this host).
+
 ## Milestones 11–12 + branding gate — Performance, compatibility, QA (2026-11-18)
 
 ### Performance and compatibility
