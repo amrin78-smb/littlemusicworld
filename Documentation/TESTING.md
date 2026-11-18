@@ -38,9 +38,15 @@ Only tests that were actually run are marked with a result. "Not yet run" means 
 | APK verification | release | arm64 + armv7, PowerVR filter, landscape, no INTERNET ✔ |
 | Dialog box on menu, hub, Piano Paradise | S23 Ultra | text shows with Melo's portrait, readable, stays on screen ✔ |
 | Tutorial: menu → hub (ground, gate) → Piano Paradise (instrument, play, songs, back, done) | S23 Ultra | completes ✔ (quick taps work after the TapInput fix) |
-| Screen stays awake while playing | S23 Ultra | found sleeping at 30 s → fixed; **re-check on device pending** |
-| Hub dialog at the bottom, pointer beside songs button (last build) | — | **not yet run** (S23 offline for adb; emulator crashes in the hub) |
-| Replay tutorial from Parent area | — | **not yet run** on a device |
+| Screen stays awake while playing (v0.2.0) | S23 Ultra (30 s screen timeout) | ✔ still awake 50 s after the last touch; app holds the screen-bright lock |
+| Hub dialog at the bottom; gate visible above it (v0.2.0) | S23 Ultra | ✔ |
+| Pointer on songs button and back button (v0.2.0) | S23 Ultra | ✔ ring on the button, arrow below; each step only ~2–3 s → lengthened by 2 s in 0.2.1 |
+| Replay tutorial from Parent area, from menu and from an area (v0.2.0) | S23 Ultra | ✔ restarts at the hub ground step and runs to "Now you know how to play!" |
+| Thai dialog text (v0.2.0) | S23 Ultra | ✔ Thai renders in the dialog box; switched back to English afterwards |
+| Logcat during the above | S23 Ultra | 0 errors/exceptions |
+| Parent panel: Check button overflowed the panel edge, version label said v0.1.0 | S23 Ultra | found → fixed in 0.2.1 (buttons re-laid, version 0.2.1) |
+| v0.2.1: EditMode / PlayMode / APK checks | Unity batch | **27/27**, **16/16**, arm64 + armv7 ✔ |
+| v0.2.1: install, parent panel layout + version, close-and-relaunch | S23 Ultra | ✔ buttons inside the panel, "v0.2.1"; relaunches, 0 errors; app closed, screen off |
 
 ### Branding verification (gate)
 | Check | Status |

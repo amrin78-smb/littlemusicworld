@@ -132,12 +132,12 @@ namespace LittleMusicWorld.World
             if (current != null && songsButton != null && songsButton.gameObject.activeInHierarchy)
             {
                 pointer?.PointAt((RectTransform)songsButton.transform);
-                yield return new WaitForSeconds(Guide.Say("tut_songs") + 1f);
+                yield return new WaitForSeconds(Guide.Say("tut_songs") + 3f);
             }
             if (current != null)
             {
                 pointer?.PointAt((RectTransform)backButton.transform);
-                yield return new WaitForSeconds(Guide.Say("tut_back") + 1f);
+                yield return new WaitForSeconds(Guide.Say("tut_back") + 3f);
             }
             pointer?.Hide();
             Guide.Say("tut_done");

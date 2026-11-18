@@ -16,8 +16,8 @@ namespace LittleMusicWorld.EditorTools
     /// </summary>
     public static class ProjectConfigurator
     {
-        public const string AppVersion = "0.1.0";
-        public const int AppVersionCode = 1;
+        public const string AppVersion = "0.2.1";
+        public const int AppVersionCode = 3;
         public const string ApplicationId = "com.nocvault.littlemusicworld";
         public const string VulkanFilterPath = "Assets/Settings/VulkanDeviceFilters.asset";
         public const string PowerVrPattern = ".*PowerVR.*";

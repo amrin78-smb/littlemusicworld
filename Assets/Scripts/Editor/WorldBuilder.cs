@@ -105,13 +105,13 @@ namespace LittleMusicWorld.EditorTools
             UIKit.Text("Label", th.transform, "ภาษาไทย", 40, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(230, 90));
             Button q = UIKit.Pebble("Quality", panel, new Vector2(0.5f, 0.5f), new Vector2(200, -150), new Vector2(380, 120), "#8BD346", null);
             TextMeshProUGUI ql = UIKit.Text("Label", q.transform, "Auto", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(360, 90));
-            Button cr = UIKit.Pebble("Credits", panel, new Vector2(0.5f, 0.5f), new Vector2(-300, -310), new Vector2(300, 110), "#D46CE0", null);
-            UIKit.Text("Label", cr.transform, "Credits", 38, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(280, 80));
+            Button cr = UIKit.Pebble("Credits", panel, new Vector2(0.5f, 0.5f), new Vector2(-230, -310), new Vector2(230, 110), "#D46CE0", null);
+            UIKit.Text("Label", cr.transform, "Credits", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(220, 80));
             Button close = UIKit.Pebble("Close", panel, new Vector2(0.5f, 0.5f), new Vector2(480, 330), new Vector2(140, 130), "#8BD346", "IconCheck");
-            TextMeshProUGUI info = UIKit.Text("Info", panel, "", 26, new Color(0.18f, 0.16f, 0.29f, 0.7f), new Vector2(0.5f, 0.5f), new Vector2(400, -310),
-                new Vector2(440, 80));
-            Button tut = UIKit.Pebble("ReplayTutorial", panel, new Vector2(0.5f, 0.5f), new Vector2(30, -310), new Vector2(260, 110), "#FFC93C", null);
-            UIKit.Text("Label", tut.transform, "Tutorial", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(250, 80));
+            TextMeshProUGUI info = UIKit.Text("Info", panel, "", 26, new Color(0.18f, 0.16f, 0.29f, 0.7f), new Vector2(0.5f, 0.5f), new Vector2(355, -310),
+                new Vector2(420, 80));
+            Button tut = UIKit.Pebble("ReplayTutorial", panel, new Vector2(0.5f, 0.5f), new Vector2(15, -310), new Vector2(230, 110), "#FFC93C", null);
+            UIKit.Text("Label", tut.transform, "Tutorial", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(220, 80));
             E.Set(sp, "replayTutorial", tut);
 
             RectTransform credits = UIKit.Stretch("Credits Panel", panel);
@@ -140,8 +140,8 @@ namespace LittleMusicWorld.EditorTools
             E.Set(sp, "credits", cr);
             E.Set(sp, "creditsPanel", credits.gameObject);
             E.Set(sp, "info", info);
-            Button check = UIKit.Pebble("CheckDevice", panel, new Vector2(0.5f, 0.5f), new Vector2(-560, -310), new Vector2(200, 110), "#5B7CFA", null);
-            UIKit.Text("Label", check.transform, "Check", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(190, 80));
+            Button check = UIKit.Pebble("CheckDevice", panel, new Vector2(0.5f, 0.5f), new Vector2(-450, -310), new Vector2(180, 110), "#5B7CFA", null);
+            UIKit.Text("Label", check.transform, "Check", 36, Color.white, new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(170, 80));
             RectTransform checkPanel = UIKit.Stretch("Check Panel", panel);
             UIKit.Image("Bg", checkPanel, "Panel", Color.white, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1500, 900), true);
             TextMeshProUGUI report = UIKit.Text("Report", checkPanel, "", 22, UIKit.Ink, new Vector2(0.5f, 0.5f), new Vector2(0, -20), new Vector2(1420, 780),
