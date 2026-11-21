@@ -47,6 +47,7 @@ Only tests that were actually run are marked with a result. "Not yet run" means 
 | Parent panel: Check button overflowed the panel edge, version label said v0.1.0 | S23 Ultra | found → fixed in 0.2.1 (buttons re-laid, version 0.2.1) |
 | v0.2.1: EditMode / PlayMode / APK checks | Unity batch | **27/27**, **16/16**, arm64 + armv7 ✔ |
 | v0.2.1: install, parent panel layout + version, close-and-relaunch | S23 Ultra | ✔ buttons inside the panel, "v0.2.1"; relaunches, 0 errors; app closed, screen off |
+| v0.2.1 on TCL tablet 8183A (Android 15, Mali-G52 MC2, Vulkan, 3.7 GB, 1280×800 16:10) | fresh install | ✔ Medium tier; menu, hub, gate, Piano Paradise, keyboard and song menu (7 per row) all fit 16:10; tutorial runs; 0 errors; app closed, screen off |
 
 ### Branding verification (gate)
 | Check | Status |
